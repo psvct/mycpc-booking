@@ -31,6 +31,7 @@
             transform: translateY(-100%); 
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             backdrop-filter: blur(12px);
+            background-color: rgba(15, 23, 42, 0.5); /* bg-slate-900 at 50% */
         }
         .sticky-checkout.visible { transform: translateY(0); }
         
@@ -41,8 +42,8 @@
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans pb-24 text-left">
 
-    <!-- STICKY CHECKOUT BAR (50% Transparent) -->
-    <div id="sticky-bar" class="sticky-checkout bg-slate-900/50 text-white shadow-2xl px-6 py-4 flex justify-between items-center border-b border-white/10">
+    <!-- FIXED STICKY CHECKOUT BAR (50% Transparent) -->
+    <div id="sticky-bar" class="sticky-checkout text-white shadow-2xl px-6 py-4 flex justify-between items-center border-b border-white/10">
         <div class="flex items-center gap-4">
             <div class="bg-blue-600 p-2 rounded-xl shadow-lg">
                 <i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i>
@@ -59,12 +60,12 @@
 
     <div class="max-w-3xl mx-auto p-4 flex flex-col min-h-screen text-left">
         
-        <!-- Top Support Bar -->
+        <!-- Support Header Bar -->
         <div class="bg-slate-900 text-white text-[10px] font-bold py-2.5 px-6 rounded-t-3xl flex flex-col md:flex-row justify-between items-center gap-2 uppercase tracking-widest text-center">
             <div class="flex items-center gap-4 text-left">
                 <span class="flex items-center gap-1 font-bold"><i data-lucide="phone" class="w-3 h-3 text-blue-400"></i> 0117 427 8967</span>
                 <a href="https://wa.me/447359941879" target="_blank" class="text-green-400 flex items-center gap-1 font-black underline">
-                    <i data-lucide="message-circle" class="w-3 h-3"></i> WhatsApp Support
+                    <i data-lucide="message-circle" class="w-3 h-3 text-green-400"></i> WhatsApp Support
                 </a>
             </div>
             <span class="opacity-70 leading-none tracking-tight">Invoice & Payment Link provided within 24 hours</span>
@@ -77,7 +78,7 @@
                 </div>
                 <div>
                     <h1 class="text-xl font-bold tracking-tight mb-1 leading-none text-left font-black uppercase tracking-tighter">MyCPC<span class="text-blue-600">.online</span></h1>
-                    <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest leading-none text-left">Professional Driver Standards</p>
+                    <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest leading-none text-left">Built by Bus Drivers</p>
                 </div>
             </div>
             <div class="bg-slate-100 p-3 rounded-2xl flex items-center gap-2 border border-slate-200">
@@ -86,28 +87,27 @@
             </div>
         </header>
 
-        <!-- STEP 1: License Choice -->
+        <!-- STEP 1 -->
         <div id="step-1" class="animate-in space-y-6">
              <div class="text-center py-6">
                 <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter leading-none mb-2 text-center w-full">Driver CPC Portal</h2>
                 <p class="text-slate-500 font-medium text-sm text-center w-full uppercase tracking-widest font-black">Select your industry sector</p>
             </div>
-            
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button onclick="setGlobalLicense('PCV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-purple-600 shadow-sm transition-all group text-center">
                     <i data-lucide="users" class="w-14 h-14 text-purple-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
                     <h3 class="font-black text-xl text-slate-800 uppercase">Passenger</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight">Bus, Coach & Private Hire.</p>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight">Advanced Passenger Safety Standards.</p>
                 </button>
                 <button onclick="setGlobalLicense('HGV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-blue-600 shadow-sm transition-all group text-center">
                     <i data-lucide="truck" class="w-14 h-14 text-blue-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
                     <h3 class="font-black text-xl text-slate-800 uppercase">Freight</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight">Lorry, LGV & Distribution.</p>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight">National & International Compliance.</p>
                 </button>
             </div>
         </div>
 
-        <!-- STEP 2: Browser -->
+        <!-- STEP 2 -->
         <div id="step-2" class="hidden animate-in space-y-6 text-left">
             <div class="flex items-center justify-between">
                 <button onclick="location.reload()" class="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase">
@@ -132,7 +132,7 @@
                         <i data-lucide="clipboard-list" class="text-blue-400"></i>
                         Booking Roster
                     </h3>
-                    <p class="text-[10px] text-white/40 uppercase font-bold mb-8 tracking-widest ml-10">Details can be supplied up to 24h before course start.</p>
+                    <p class="text-[10px] text-white/40 uppercase font-bold mb-8 tracking-widest ml-10">Driver details can be updated up to 24h before start.</p>
                     
                     <div id="roster-list" class="space-y-6 mb-10 text-left roster-container"></div>
 
@@ -141,15 +141,15 @@
                         <i data-lucide="file-text" class="text-blue-400"></i>
                         Invoicing Details
                     </h3>
-                    <div class="bg-blue-500/10 border border-blue-500/30 p-4 rounded-2xl mb-8 text-left">
-                        <p class="text-[11px] text-blue-200 uppercase font-black tracking-widest leading-relaxed">
-                            <i data-lucide="info" class="w-3 h-3 inline mr-1 text-blue-400"></i> Bundle prices and multi-module discounts will be manually applied to your final invoice.
+                    <div class="bg-blue-500/10 border border-blue-500/30 p-4 rounded-2xl mb-8 text-left leading-tight">
+                        <p class="text-[11px] text-blue-200 uppercase font-black tracking-widest">
+                            <i data-lucide="info" class="w-3 h-3 inline mr-1 text-blue-400"></i> Multi-module discounts and bundle prices will be manually applied to your final invoice.
                         </p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-left">
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Invoice To (Company or Name)</label>
+                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Invoice To (Company or Individual Name)</label>
                             <input id="invoice_to" required placeholder="Acme Logistics Ltd" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
                         </div>
                         <div class="space-y-1">
@@ -169,36 +169,26 @@
                             <input id="contact_phone" required placeholder="07123 456789" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
                         </div>
                         <div class="bg-white/5 p-4 rounded-2xl border border-white/10 flex items-center justify-between">
-                            <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Base Total</span>
+                            <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest leading-none">RRP Total (Pre-Discount)</span>
                             <span id="total-price" class="text-2xl font-black text-blue-400 leading-none">£0.00</span>
                         </div>
                     </div>
 
                     <div class="space-y-1 mb-6 text-left">
-                        <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Any other information / Special Requirements</label>
+                        <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Any other information / Specific Notes</label>
                         <textarea id="other_info" rows="3" placeholder="Discounts, specific requirements, or special notes..." class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all"></textarea>
                     </div>
 
                     <label class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10 mb-8 cursor-pointer group transition-all hover:bg-white/10 text-left">
                         <input type="checkbox" id="marketing_opt_in" class="w-5 h-5 rounded border-white/20 bg-transparent text-blue-600 focus:ring-blue-500">
                         <span class="text-xs text-white/70 font-medium leading-tight group-hover:text-white">
-                            I give permission for PSV Compliance and Training to use my information for future marketing and course updates.
+                            I give permission for PSV Compliance and Training to use my information for marketing and course updates.
                         </span>
                     </label>
 
                     <button onclick="submitBooking()" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-[30px] font-black text-xl transition-all active:scale-95 shadow-xl shadow-blue-500/20 uppercase tracking-tighter">
                         Confirm & Request Invoice
                     </button>
-                </div>
-                
-                <div id="safety-charter-box" class="mt-6 bg-purple-900 p-8 rounded-[40px] text-white flex gap-6 items-start text-left">
-                    <i data-lucide="shield-check" class="w-12 h-12 text-purple-300 shrink-0"></i>
-                    <div>
-                        <h4 class="font-black text-sm uppercase mb-2 tracking-widest text-left">Safety Mandate</h4>
-                        <p class="text-xs text-purple-100 leading-relaxed opacity-90 font-medium text-left">
-                            We strictly enforce the **"Seen to Door"** protocol for school sectors: drivers drop on the correct side of the road and ensure children have safely entered their home before departure.
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -220,10 +210,10 @@
         </footer>
     </div>
 
-    <!-- DECISION MODAL -->
+    <!-- MODAL -->
     <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-left">
         <div class="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl animate-in overflow-hidden relative border border-white/20">
-            <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 text-left">Date</div>
+            <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 text-left leading-none">Date</div>
             <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 leading-tight font-black text-left uppercase tracking-tighter">Module Topic</h3>
             <div id="pathway-options" class="space-y-3 mb-8 text-left"></div>
             <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border">
@@ -247,12 +237,11 @@
         const SUPABASE_KEY = 'sb_publishable_Bu0qel0FaGCSq-r4mE9Xsw_M5O_C-DY'; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // WEB3FORMS ACCESS KEY
         const WEB3FORMS_KEY = "eea7a374-f421-4e9e-ba23-e3d0f67ba412";
 
         let liveCourses = [];
         let globalLicense = 'HGV';
-        let currentView = 'calendar'; // DEFAULT VIEW
+        let currentView = 'calendar'; // DEFAULT
         let basket = []; 
         let activeModalCourse = null;
         let selectedOption = null;
@@ -278,11 +267,14 @@
         }
 
         window.toggleDetails = (bIdx, sIdx) => {
-            const isChecked = document.getElementById(`later-${bIdx}-${sIdx}`).checked;
+            const check = document.getElementById(`later-${bIdx}-${sIdx}`);
             const nameInp = document.getElementById(`name-${bIdx}-${sIdx}`);
             const licInp = document.getElementById(`license-${bIdx}-${sIdx}`);
             const phoneInp = document.getElementById(`phone-${bIdx}-${sIdx}`);
-            if (isChecked) {
+            
+            if(!check || !nameInp) return;
+            
+            if (check.checked) {
                 nameInp.value = "TBA (24h before)"; nameInp.disabled = true; nameInp.classList.add('opacity-40');
                 licInp.value = "TBA"; licInp.disabled = true; licInp.classList.add('opacity-40');
                 phoneInp.value = "TBA"; phoneInp.disabled = true; phoneInp.classList.add('opacity-40');
@@ -294,16 +286,7 @@
         };
 
         window.setGlobalLicense = (lic) => { globalLicense = lic; document.getElementById('step-1').classList.add('hidden'); document.getElementById('step-2').classList.remove('hidden'); render(); };
-        window.setView = (view) => { 
-            currentView = view; 
-            const btnCal = document.getElementById('btn-calendar');
-            const btnList = document.getElementById('btn-list');
-            if(btnCal && btnList) {
-                btnCal.className = view === 'calendar' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all';
-                btnList.className = view === 'list' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all';
-            }
-            render(); 
-        };
+        window.setView = (view) => { currentView = view; render(); };
         window.closeModal = () => document.getElementById('modal').classList.add('hidden');
         window.modQty = (dir) => { let val = parseInt(document.getElementById('m-qty').value) + dir; if (val < 1) val = 1; document.getElementById('m-qty').value = val; };
 
@@ -339,7 +322,7 @@
                 document.getElementById('add-to-basket-btn').disabled = false;
                 document.getElementById('add-to-basket-btn').classList.replace('bg-slate-900', 'bg-blue-600');
             };
-            btn.innerHTML = `<div class="flex justify-between items-center text-left"><div><div class="font-black text-sm text-slate-800 leading-none mb-1 text-left font-black">${title}</div><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tight text-left">${desc}</div></div><div class="text-lg font-black text-blue-600 text-right font-black tracking-tight">£${price.replace('£','')}</div></div>`;
+            btn.innerHTML = `<div class="flex justify-between items-center text-left"><div><div class="font-black text-sm text-slate-800 leading-none mb-1 text-left font-black">${title}</div><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tight text-left">${desc}</div></div><div class="text-lg font-black text-blue-600 text-right">£${price.replace('£','')}</div></div>`;
             container.appendChild(btn);
         }
 
@@ -369,7 +352,6 @@
             if(countEl) countEl.innerText = totalSeats;
             if(basketSec) basketSec.classList.toggle('hidden', basket.length === 0);
             
-            // Sticky Bar Logic
             if(stickyBar) {
                 if (totalSeats > 0) {
                     stickyBar.classList.add('visible');
@@ -412,7 +394,7 @@
                 for (let i = 0; i < item.qty; i++) {
                     inputs += `
                         <div class="border-b border-white/5 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center mb-2 text-left">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center mb-2">
                                 <input id="name-${bIdx}-${i}" placeholder="Driver Name" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400">
                                 <input id="license-${bIdx}-${i}" placeholder="License No." class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-400">
                                 <input id="phone-${bIdx}-${i}" placeholder="Driver Phone" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400">
@@ -425,7 +407,7 @@
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer ml-auto">
                                     <input type="checkbox" id="support-${bIdx}-${i}" class="w-4 h-4 rounded border-white/20 bg-transparent text-blue-500">
-                                    <span class="text-[10px] text-blue-400 uppercase font-black tracking-widest">Special Support Required?</span>
+                                    <span class="text-[10px] text-blue-400 uppercase font-black tracking-widest">Support Needed?</span>
                                 </label>
                             </div>
                         </div>`;
@@ -450,6 +432,13 @@
             if(!container) return;
             container.innerHTML = '';
             
+            const btnCal = document.getElementById('btn-calendar');
+            const btnList = document.getElementById('btn-list');
+            if(btnCal && btnList) {
+                btnCal.className = currentView === 'calendar' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all';
+                btnList.className = currentView === 'list' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all';
+            }
+
             if (currentView === 'list') {
                 const filtered = globalLicense === 'HGV' ? liveCourses.filter(c => c.category !== 'PCV Only') : liveCourses;
                 filtered.forEach(c => {
@@ -492,7 +481,7 @@
             const invoice_to = document.getElementById('invoice_to').value;
             const billing_address = document.getElementById('billing_address').value;
             const contact_phone = document.getElementById('contact_phone').value;
-            const other_info = document.getElementById('other_info').value;
+            const other_info = document.getElementById('other_info')?.value || '';
             const marketing_opt_in = document.getElementById('marketing_opt_in').checked;
 
             if(!email || !invoice_to || !billing_address || !contact_phone) { alert("Please complete all invoicing fields."); return; }
@@ -500,11 +489,11 @@
 
             const roster = [];
             let isUrgent = false;
-            let emailBody = `--- LEAD CONTACT ---\nName: ${invoice_to}\nEmail: ${email}\nPhone: ${contact_phone}\nAddress: ${billing_address}\nMarketing Opt-In: ${marketing_opt_in ? 'YES' : 'NO'}\nOther Info: ${other_info}\n\n--- DRIVER ROSTER ---\n`;
+            let emailBody = `--- LEAD CONTACT ---\nName: ${invoice_to}\nEmail: ${email}\nPhone: ${contact_phone}\nAddress: ${billing_address}\nMarketing: ${marketing_opt_in ? 'YES' : 'NO'}\nOther Info: ${other_info}\n\n--- DRIVER ROSTER ---\n`;
 
             basket.forEach((item, bIdx) => {
                 if (isWithin4Days(item.data.date_label)) isUrgent = true;
-                emailBody += `\nCOURSE: ${item.data.date_label} - ${item.data.module_name} (${item.pathway.toUpperCase()})`;
+                emailBody += `\nCOURSE: ${item.data.date_label} - ${item.data.module_name}`;
                 for (let i = 0; i < item.qty; i++) {
                     const nameEl = document.getElementById(`name-${bIdx}-${i}`);
                     const licEl = document.getElementById(`license-${bIdx}-${i}`);
@@ -521,15 +510,13 @@
                     const dLater = laterEl.checked;
                     
                     const entryName = dLater ? "TBA (24h before)" : dName;
-                    const entryLic = dLater ? "TBA" : dLic;
-                    const entryPhone = dLater ? "TBA" : dPhone;
                     
-                    emailBody += `\n > Driver: ${entryName} | Phone: ${entryPhone} | Support: ${dSupport ? 'YES' : 'NO'}`;
+                    emailBody += `\n > Driver: ${entryName} | Phone: ${dPhone} | Support: ${dSupport ? 'YES' : 'NO'}`;
                     
                     roster.push({
                         lead_email: email, invoice_to, billing_address, contact_phone, marketing_opt_in,
                         other_info: other_info,
-                        driver_name: entryName, driver_license: entryLic, driver_phone: entryPhone,
+                        driver_name: entryName, driver_license: dLater ? 'TBA' : dLic, driver_phone: dPhone,
                         support_required: dSupport,
                         course_id: item.courseId, course_date: item.data.date_label,
                         payment_method: 'invoice', status: isUrgent ? 'pending_confirmation' : 'awaiting_invoice'
@@ -543,7 +530,7 @@
             // 2. SEND EMAIL
             const formData = new FormData();
             formData.append("access_key", WEB3FORMS_KEY);
-            formData.append("subject", `New Booking: ${invoice_to} (${isUrgent ? 'URGENT' : 'Standard'})`);
+            formData.append("subject", `New Booking Request: ${invoice_to} (${isUrgent ? 'URGENT' : 'Standard'})`);
             formData.append("message", emailBody);
 
             await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
@@ -554,7 +541,7 @@
                 
                 if (isUrgent) {
                     document.getElementById('success-title').innerText = "Request Received (Urgent)";
-                    document.getElementById('success-txt').innerText = "Thank you. Because your course starts soon, we will manually confirm availability and send your invoice within 12 hours.";
+                    document.getElementById('success-txt').innerText = "Thank you. Because your course starts soon, we will confirm availability and send your discounted invoice within 12 hours.";
                 } else {
                     document.getElementById('success-title').innerText = "Request Successful";
                     document.getElementById('success-txt').innerText = "Thank you. We will manually apply all multi-module discounts and send your invoice and payment link to " + email + " within 24 hours. We will contact you regarding any support requests.";
