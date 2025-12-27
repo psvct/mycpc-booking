@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCPC.online | Professional Driver Booking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .animate-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+        .specialist-dot { width: 6px; height: 6px; background: #9333ea; border-radius: 50%; }
+        .decision-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-width: 2px; }
+        .decision-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); border-color: #2563eb; }
+        .decision-selected { border-color: #2563eb; background-color: #eff6ff; ring: 2px; ring-color: #2563eb; }
+        .roster-container::-webkit-scrollbar { width: 6px; }
+        .roster-container::-webkit-scrollbar-track { background: transparent; }
+        .roster-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans pb-24 text-left">
+
+    <div class="max-w-3xl mx-auto p-4 flex flex-col min-h-screen">
+        
+        <!-- Support Header Bar -->
+        <div class="bg-slate-900 text-white text-[10px] font-bold py-2.5 px-6 rounded-t-3xl flex flex-col md:flex-row justify-between items-center gap-2 uppercase tracking-widest text-center">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1"><i data-lucide="phone" class="w-3 h-3 text-blue-400"></i> 0117 427 8967</span>
+                <a href="https://wa.me/447359941879" target="_blank" class="text-green-400 flex items-center gap-1 font-black underline">
+                    <i data-lucide="message-circle" class="w-3 h-3"></i> WhatsApp Support
+                </a>
+            </div>
+            <span class="opacity-70 leading-none">PSV Compliance and Training Specialists</span>
+        </div>
+
+        <header class="py-6 flex items-center justify-between border-b mb-8 bg-white rounded-b-3xl px-6 shadow-sm border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-600 p-2 rounded-xl shadow-lg">
+                    <i data-lucide="bus" class="text-white w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight mb-1 leading-none">MyCPC<span class="text-blue-600">.online</span></h1>
+                    <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest leading-none text-left">Built by Bus Drivers</p>
+                </div>
+            </div>
+            <div class="bg-slate-100 p-3 rounded-2xl flex items-center gap-2 border border-slate-200">
+                <i data-lucide="shopping-basket" class="w-5 h-5 text-blue-600"></i>
+                <span id="basket-count" class="font-black text-blue-600 text-sm">0</span>
+            </div>
+        </header>
+
+        <!-- STEP 1: License Entry -->
+        <div id="step-1" class="animate-in space-y-6">
+             <div class="text-center py-6">
+                <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter leading-none mb-2">Driver CPC Portal</h2>
+                <p class="text-slate-500 font-medium text-sm">Select your industry sector to view available modules.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button onclick="setGlobalLicense('PCV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-purple-600 shadow-sm transition-all group text-center">
+                    <i data-lucide="users" class="w-14 h-14 text-purple-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-black text-xl text-slate-800">Passenger Transport</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight">Bus, Coach & Private Hire. Advanced Safety Standards.</p>
+                </button>
+                <button onclick="setGlobalLicense('HGV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-blue-600 shadow-sm transition-all group text-center">
+                    <i data-lucide="truck" class="w-14 h-14 text-blue-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-black text-xl text-slate-800">Freight Transport</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight">Lorry & LGV. National & International Compliance.</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- STEP 2: Browser -->
+        <div id="step-2" class="hidden animate-in space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="location.reload()" class="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase">
+                    <i data-lucide="chevron-left" class="w-3 h-3"></i> Change Sector
+                </button>
+                <div class="flex bg-white p-1 rounded-xl shadow-sm border border-slate-100">
+                    <button onclick="setView('list')" id="btn-list" class="px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all">
+                        <i data-lucide="list" class="w-3 h-3"></i> LIST
+                    </button>
+                    <button onclick="setView('calendar')" id="btn-calendar" class="px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all">
+                        <i data-lucide="calendar" class="w-3 h-3"></i> CALENDAR
+                    </button>
+                </div>
+            </div>
+
+            <div id="view-container" class="space-y-3"></div>
+
+            <!-- ROSTER SUMMARY -->
+            <div id="basket-section" class="hidden mt-12 animate-in">
+                <div class="bg-slate-900 rounded-[40px] p-8 text-white shadow-2xl">
+                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
+                        <i data-lucide="users-2" class="text-blue-400"></i>
+                        Confirm Roster
+                    </h3>
+                    
+                    <!-- Last Minute Notice -->
+                    <div id="last-minute-alert" class="hidden bg-orange-500/20 border border-orange-500/50 p-4 rounded-2xl mb-6 flex gap-3 items-start animate-in">
+                        <i data-lucide="clock" class="text-orange-400 shrink-0 w-5 h-5"></i>
+                        <div class="text-left">
+                            <p class="text-[11px] text-orange-100 font-black uppercase tracking-widest mb-1 text-left">Urgent Booking Policy</p>
+                            <p class="text-xs text-orange-200/80 leading-relaxed font-medium text-left">
+                                This course starts in less than 4 days. Online payment is disabled. Booking is <strong>subject to confirmation within 12 hours</strong>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="roster-list" class="space-y-6 mb-8 text-left roster-container"></div>
+
+                    <div class="border-t border-white/10 pt-8 mt-8 flex flex-col md:flex-row justify-between items-end gap-6">
+                        <div class="w-full md:w-auto flex-1 text-left">
+                            <input id="booker_email" required type="email" placeholder="Lead Booker Email Address" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 mb-4">
+                            <div class="flex bg-white/5 p-1 rounded-2xl border border-white/10 w-fit">
+                                <button type="button" onclick="setPayMethod('online')" id="pay-online" class="px-6 py-2 rounded-xl text-[10px] font-black bg-blue-600">STRIPE</button>
+                                <button type="button" onclick="setPayMethod('offline')" id="pay-offline" class="px-6 py-2 rounded-xl text-[10px] font-black text-white/40">BACS / INVOICE</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[10px] font-black text-white/40 uppercase mb-1">Total Order</div>
+                            <div id="total-price" class="text-4xl font-black text-blue-400 leading-none mb-4">£0.00</div>
+                            <button onclick="submitBooking()" id="submit-btn" class="bg-blue-600 hover:bg-blue-500 px-12 py-5 rounded-3xl font-black text-lg transition-all active:scale-95 shadow-xl shadow-blue-500/20 uppercase">
+                                Confirm & Book
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUCCESS SCREEN -->
+        <div id="success" class="hidden text-center py-20 animate-in bg-white rounded-[40px] shadow-xl p-12 mt-10">
+            <div class="bg-green-100 p-8 rounded-full inline-block mb-6 text-green-600">
+                <i data-lucide="check-circle" class="w-16 h-16"></i>
+            </div>
+            <h2 id="success-title" class="text-3xl font-black text-slate-800 mb-2 font-black">Success!</h2>
+            <p id="success-txt" class="text-slate-600 mb-8 px-12 leading-relaxed font-bold text-sm text-center"></p>
+            <button onclick="location.reload()" class="bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all">New Booking</button>
+        </div>
+
+        <footer class="mt-auto pt-12 pb-6 text-center border-t">
+            <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none">
+                Legal Entity: <span class="text-slate-700 font-black">PSV Compliance and Training</span>
+            </p>
+        </footer>
+    </div>
+
+    <!-- DECISION MODAL -->
+    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-left">
+        <div class="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl animate-in overflow-hidden relative">
+            <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1">Date</div>
+            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 leading-tight">Module Name</h3>
+            <div id="pathway-options" class="space-y-3 mb-8"></div>
+            <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border">
+                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Quantity</div>
+                <div class="flex items-center gap-4">
+                    <button onclick="modQty(-1)" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black">-</button>
+                    <input id="m-qty" type="number" value="1" readonly class="bg-transparent text-center font-black text-lg w-8">
+                    <button onclick="modQty(1)" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black">+</button>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="closeModal()" class="flex-1 py-4 rounded-2xl text-xs font-black text-slate-400 uppercase">Cancel</button>
+                <button onclick="confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50" disabled>Select Option</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = 'https://jvbitnykgjasweugqgks.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_Bu0qel0FaGCSq-r4mE9Xsw_M5O_C-DY';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let liveCourses = [];
+        let globalLicense = 'HGV';
+        let currentView = 'list';
+        let payMethod = 'online';
+        let basket = []; 
+        let activeModalCourse = null;
+        let selectedOption = null;
+        let currentMonth = new Date(2026, 0, 1);
+
+        async function init() {
+            try {
+                const { data } = await _supabase.from('courses').select('*').eq('active', true).order('created_at', { ascending: true });
+                if (data) liveCourses = data;
+            } catch (e) {}
+            render();
+            lucide.createIcons();
+        }
+
+        function isWithin4Days(dateLabel) {
+            const months = { 'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5, 'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11 };
+            const parts = dateLabel.split(' ');
+            if (parts.length < 3) return false;
+            const targetDate = new Date(2026, months[parts[2]], parseInt(parts[1]));
+            const now = new Date();
+            now.setHours(0,0,0,0);
+            return (targetDate - now) / (1000 * 60 * 60 * 24) < 4;
+        }
+
+        window.setGlobalLicense = (lic) => { globalLicense = lic; document.getElementById('step-1').classList.add('hidden'); document.getElementById('step-2').classList.remove('hidden'); render(); };
+        window.setView = (view) => { currentView = view; render(); };
+        window.closeModal = () => document.getElementById('modal').classList.add('hidden');
+        window.modQty = (dir) => { let val = parseInt(document.getElementById('m-qty').value) + dir; if (val < 1) val = 1; document.getElementById('m-qty').value = val; };
+
+        window.openModal = (id) => {
+            activeModalCourse = liveCourses.find(c => c.id === id);
+            selectedOption = null;
+            document.getElementById('modal-date').innerText = activeModalCourse.date_label;
+            document.getElementById('modal-title').innerText = activeModalCourse.module_name;
+            document.getElementById('m-qty').value = 1;
+            const optionsBox = document.getElementById('pathway-options');
+            optionsBox.innerHTML = '';
+            if (activeModalCourse.is_7h || activeModalCourse.block_id?.includes('sat')) {
+                addDecision(optionsBox, 'international', 'Full Day (7h)', 'International Compliance Rate', '£38.99');
+            } else if (activeModalCourse.block_id) {
+                const partner = liveCourses.find(c => c.block_id === activeModalCourse.block_id && c.id !== activeModalCourse.id);
+                addDecision(optionsBox, 'national', 'Single Session (3.5h)', 'Standard National rate', '£21.99');
+                addDecision(optionsBox, 'international', `Combined Block (7h)`, `Includes partner date ${partner?.date_label || ''}.`, '£38.99');
+            } else {
+                addDecision(optionsBox, 'national', 'Specialist Session (3.5h)', 'Advanced Professional Standard.', '£21.99');
+            }
+            document.getElementById('modal').classList.remove('hidden');
+        };
+
+        function addDecision(container, type, title, desc, price) {
+            const btn = document.createElement('button');
+            btn.className = `w-full p-4 rounded-3xl border-2 text-left decision-card border-slate-100`;
+            btn.onclick = () => {
+                selectedOption = type;
+                document.querySelectorAll('.decision-card').forEach(el => el.classList.remove('decision-selected'));
+                btn.classList.add('decision-selected');
+                document.getElementById('add-to-basket-btn').disabled = false;
+                document.getElementById('add-to-basket-btn').classList.replace('bg-slate-900', 'bg-blue-600');
+            };
+            btn.innerHTML = `<div class="flex justify-between items-center text-left"><div><div class="font-black text-sm text-slate-800">${title}</div><div class="text-[9px] font-bold text-slate-400 uppercase">${desc}</div></div><div class="text-lg font-black text-blue-600">${price}</div></div>`;
+            container.appendChild(btn);
+        }
+
+        window.confirmAddToBasket = () => {
+            const qty = parseInt(document.getElementById('m-qty').value);
+            if (selectedOption === 'international' && activeModalCourse.block_id && !activeModalCourse.is_7h) {
+                const pair = liveCourses.filter(c => c.block_id === activeModalCourse.block_id);
+                pair.forEach(course => basket.push({ courseId: course.id, pathway: 'international', qty, data: course }));
+            } else {
+                basket.push({ courseId: activeModalCourse.id, pathway: selectedOption, qty, data: activeModalCourse });
+            }
+            closeModal(); updateBasket(); render();
+        };
+
+        function updateBasket() {
+            const totalSeats = basket.reduce((s, b) => s + b.qty, 0);
+            document.getElementById('basket-count').innerText = totalSeats;
+            document.getElementById('basket-section').classList.toggle('hidden', basket.length === 0);
+            const hasUrgent = basket.some(item => isWithin4Days(item.data.date_label));
+            document.getElementById('last-minute-alert').classList.toggle('hidden', !hasUrgent);
+            if (hasUrgent) { setPayMethod('offline'); document.getElementById('pay-online').style.display = 'none'; }
+            else { document.getElementById('pay-online').style.display = 'block'; }
+            let total = 0;
+            const groups = [];
+            basket.forEach(item => {
+                const gid = item.pathway === 'international' ? (item.data.block_id || item.courseId) : item.courseId;
+                let g = groups.find(x => x.id === gid && x.pathway === item.pathway);
+                if (!g) { g = { id: gid, pathway: item.pathway, qty: item.qty }; groups.push(g); }
+            });
+            total = groups.reduce((sum, g) => sum + (g.qty * (g.pathway === 'international' ? 38.99 : 21.99)), 0);
+            document.getElementById('total-price').innerText = `£${total.toFixed(2)}`;
+            renderRoster();
+        }
+
+        function renderRoster() {
+            const list = document.getElementById('roster-list');
+            list.innerHTML = '';
+            basket.forEach((item, bIdx) => {
+                const section = document.createElement('div');
+                section.className = "bg-white/5 p-6 rounded-3xl border border-white/10 mb-4 animate-in text-left";
+                section.innerHTML = `<div class="flex justify-between items-start mb-4 text-left"><div class="text-left"><div class="text-[9px] font-black text-blue-400 uppercase tracking-widest">${item.data.date_label}</div><h4 class="font-bold text-sm text-white">${item.data.module_name}</h4><div class="text-[8px] font-black text-white/30 uppercase mt-1">${item.pathway} | ${item.qty} Driver(s)</div></div><button onclick="removeFromBasket(${bIdx})" class="text-white/20 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="space-y-2" id="fields-${bIdx}"></div>`;
+                list.appendChild(section);
+                for (let i = 0; i < item.qty; i++) {
+                    document.getElementById(`fields-${bIdx}`).innerHTML += `<div class="grid grid-cols-1 md:grid-cols-3 gap-2"><input id="name-${bIdx}-${i}" placeholder="Driver Name" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none"><input id="license-${bIdx}-${i}" placeholder="License No." class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white uppercase outline-none"><select id="type-${bIdx}-${i}" class="bg-slate-800 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none"><option value="HGV" ${globalLicense === 'HGV' ? 'selected' : ''}>HGV</option><option value="PCV" ${globalLicense === 'PCV' ? 'selected' : ''}>PCV</option></select></div>`;
+                }
+            });
+            lucide.createIcons();
+        }
+
+        window.setPayMethod = (m) => { payMethod = m; document.getElementById('pay-online').className = m === 'online' ? 'px-6 py-2 rounded-xl text-[10px] font-black bg-blue-600' : 'px-6 py-2 rounded-xl text-[10px] font-black text-white/40'; document.getElementById('pay-offline').className = m === 'offline' ? 'px-6 py-2 rounded-xl text-[10px] font-black bg-blue-600' : 'px-6 py-2 rounded-xl text-[10px] font-black text-white/40'; };
+        window.removeFromBasket = (idx) => { basket.splice(idx, 1); updateBasket(); render(); };
+
+        function render() {
+            const container = document.getElementById('view-container');
+            if(!container) return;
+            container.innerHTML = '';
+            if (currentView === 'list') {
+                const filtered = globalLicense === 'HGV' ? liveCourses.filter(c => c.category === 'Mixed' || c.category === 'Both' || c.category === 'HGV') : liveCourses;
+                filtered.forEach(c => {
+                    const count = basket.filter(b => b.courseId === c.id).reduce((s, b) => s + b.qty, 0);
+                    container.innerHTML += `<div onclick="openModal('${c.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}"><div class="flex items-center gap-4 text-left"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${count > 0 ? 'bg-blue-600 border-blue-600' : 'border-slate-200'}">${count > 0 ? '<i data-lucide="shopping-cart" class="text-white w-3 h-3"></i>' : ''}</div><div><div class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">${c.date_label}</div><div class="font-bold text-slate-800 text-sm leading-tight">${c.module_name}</div></div></div><div class="flex items-center gap-2 text-right">${c.is_specialist ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg">${count} seats</div>` : ''}</div></div>`;
+                });
+            } else { renderCalendar(container); }
+            lucide.createIcons();
+        }
+
+        function renderCalendar(container) {
+            const year = currentMonth.getFullYear(); const month = currentMonth.getMonth();
+            const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const monthName = currentMonth.toLocaleString('default', { month: 'long' });
+            let html = `<div class="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden animate-in"><div class="flex items-center justify-between p-5 bg-slate-50 border-b"><button onclick="changeMonth(-1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><div class="text-xs font-black uppercase tracking-widest text-slate-600">${monthName} ${year}</div><button onclick="changeMonth(1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div><div class="p-4"><div class="calendar-grid text-[9px] font-black text-slate-400 uppercase text-center mb-4"><div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div></div><div class="calendar-grid">`;
+            for (let i = 0; i < (firstDay === 0 ? 0 : firstDay); i++) html += '<div></div>';
+            for (let d = 1; d <= daysInMonth; d++) {
+                const dateKey = `${d.toString().padStart(2, '0')} ${monthName.substring(0,3)}`;
+                const courses = liveCourses.filter(c => c.date_label.includes(dateKey));
+                const inBasket = courses.some(c => basket.some(b => b.courseId === c.id));
+                const hasCourse = courses.length > 0;
+                const isSpec = courses.some(c => c.is_specialist);
+                html += `<div onclick="${hasCourse ? `openModal('${courses[0].id}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all cursor-pointer relative font-bold text-xs ${inBasket ? 'bg-blue-600 text-white shadow-lg scale-105 z-10' : (hasCourse ? 'bg-blue-50 text-blue-700 border border-blue-100 hover:bg-blue-100' : 'text-slate-200')}"><span>${d}</span>${isSpec && !inBasket ? '<div class="specialist-dot mt-1"></div>' : ''}</div>`;
+            }
+            container.innerHTML = html + '</div></div></div>';
+        }
+
+        window.changeMonth = (dir) => { currentMonth.setMonth(currentMonth.getMonth() + dir); render(); };
+
+        window.submitBooking = async () => {
+            const btn = document.getElementById('submit-btn');
+            const email = document.getElementById('booker_email').value;
+            if(!email) { alert("Please provide lead email address."); return; }
+            btn.disabled = true;
+            const roster = [];
+            let isUrgent = false;
+            basket.forEach((item, bIdx) => {
+                if (isWithin4Days(item.data.date_label)) isUrgent = true;
+                for (let i = 0; i < item.qty; i++) {
+                    roster.push({
+                        lead_email: email,
+                        driver_name: document.getElementById(`name-${bIdx}-${i}`).value,
+                        driver_license: document.getElementById(`license-${bIdx}-${i}`).value,
+                        driver_type: document.getElementById(`type-${bIdx}-${i}`).value,
+                        course_id: item.courseId,
+                        course_date: item.data.date_label,
+                        payment_method: payMethod,
+                        total_order_price: parseFloat(document.getElementById('total-price').innerText.replace('£','')),
+                        status: isUrgent ? 'pending_confirmation' : 'confirmed'
+                    });
+                }
+            });
+            const { error } = await _supabase.from('bookings').insert(roster);
+            if (!error) {
+                document.getElementById('step-2').classList.add('hidden');
+                document.getElementById('success').classList.remove('hidden');
+                document.getElementById('success-txt').innerText = isUrgent 
+                    ? "This is a last-minute request. Please await confirmation via email within 12 hours before making payment."
+                    : "Booking confirmed with PSV Compliance and Training. Check your email for next steps and Zoom links.";
+            } else { alert("Submission failed: " + error.message); btn.disabled = false; }
+        };
+        window.onload = init;
+    </script>
+</body>
+</html>
