@@ -23,13 +23,8 @@
         
         /* 50% Transparent Sticky Bar with Glass Blur */
         .sticky-checkout { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            z-index: 100; 
-            transform: translateY(-100%); 
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100; 
+            transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             backdrop-filter: blur(12px);
             background-color: rgba(15, 23, 42, 0.5); /* 50% Translucent Slate 900 */
         }
@@ -65,7 +60,7 @@
             <div class="flex items-center gap-4 text-left font-bold">
                 <span class="flex items-center gap-1"><i data-lucide="phone" class="w-3 h-3 text-blue-400"></i> 0117 427 8967</span>
                 <a href="https://wa.me/447359941879" target="_blank" class="text-green-400 flex items-center gap-1 underline font-black">
-                    <i data-lucide="message-circle" class="w-3 h-3"></i> WhatsApp Support
+                    <i data-lucide="message-circle" class="w-3 h-3 text-green-400"></i> WhatsApp Support
                 </a>
             </div>
             <span class="opacity-70 leading-none tracking-tight">Invoice & Payment Link provided within 24 hours</span>
@@ -150,7 +145,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-left">
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Invoice To (Company or Individual Name)</label>
+                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Invoice To (Company or Name)</label>
                             <input id="invoice_to" required placeholder="Acme Logistics Ltd" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
                         </div>
                         <div class="space-y-1">
@@ -183,7 +178,7 @@
 
                     <label class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10 mb-8 cursor-pointer group transition-all hover:bg-white/10 text-left">
                         <input type="checkbox" id="marketing_opt_in" class="w-5 h-5 rounded border-white/20 bg-transparent text-blue-600 focus:ring-blue-500">
-                        <span class="text-xs text-white/70 font-medium leading-tight group-hover:text-white">
+                        <span class="text-xs text-white/70 font-medium leading-tight group-hover:text-white text-left">
                             I give permission for PSV Compliance and Training to use my information for future marketing and course updates.
                         </span>
                     </label>
@@ -212,11 +207,11 @@
         </footer>
     </div>
 
-    <!-- MODAL -->
+    <!-- DECISION MODAL -->
     <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-left">
         <div class="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl animate-in relative border border-white/20">
             <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 text-left leading-none">Date</div>
-            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 leading-tight font-black text-left uppercase tracking-tighter">Module Topic</h3>
+            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 leading-tight font-black text-left uppercase tracking-tighter">Course Options</h3>
             <div id="pathway-options" class="space-y-3 mb-8 text-left"></div>
             <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border">
                 <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-left">Quantity of Seats</div>
@@ -245,9 +240,9 @@
         let globalLicense = 'HGV';
         let currentView = 'calendar'; 
         let basket = []; 
-        let activeModalCourse = null;
-        let selectedOption = null;
         let currentMonth = new Date(2026, 0, 1);
+        let activeModalDateCourses = [];
+        let selectedOption = null;
 
         async function init() {
             try {
@@ -294,24 +289,39 @@
         window.closeModal = () => document.getElementById('modal').classList.add('hidden');
         window.modQty = (dir) => { let val = parseInt(document.getElementById('m-qty').value) + dir; if (val < 1) val = 1; document.getElementById('m-qty').value = val; };
 
-        window.openModal = (id) => {
-            activeModalCourse = liveCourses.find(c => c.id === id);
+        // UPDATED MODAL: Handles days with multiple modules
+        window.openModal = (isoDate, shortDate) => {
+            activeModalDateCourses = liveCourses.filter(c => c.date_label.includes(isoDate) || c.date_label.includes(shortDate));
+            if (activeModalDateCourses.length === 0) return;
+
             selectedOption = null;
             document.getElementById('add-to-basket-btn').disabled = true;
-            document.getElementById('modal-date').innerText = activeModalCourse.date_label;
-            document.getElementById('modal-title').innerText = activeModalCourse.module_name;
+            document.getElementById('modal-date').innerText = activeModalDateCourses[0].date_label;
+            document.getElementById('modal-title').innerText = activeModalDateCourses.length > 1 ? "Full Day Session" : activeModalDateCourses[0].module_name;
             document.getElementById('m-qty').value = 1;
+            
             const optionsBox = document.getElementById('pathway-options');
             optionsBox.innerHTML = '';
-            if (activeModalCourse.is_7h === true || activeModalCourse.is_7h === 'Y' || activeModalCourse.block_id?.includes('sat')) {
-                addDecision(optionsBox, 'international', 'Full Day (7h)', 'International CPC Block', '£38.99');
-            } else if (activeModalCourse.block_id) {
-                const partner = liveCourses.find(c => c.block_id === activeModalCourse.block_id && c.id !== activeModalCourse.id);
-                addDecision(optionsBox, 'national', 'Single Session (3.5h)', 'Standard National Module', '£21.99');
-                addDecision(optionsBox, 'international', `Combined Block (7h)`, `Includes partner day ${partner?.date_label || ''}.`, '£38.99');
+
+            // Handle Combined Day (Saturdays or specific blocks)
+            if (activeModalDateCourses.length > 1) {
+                activeModalDateCourses.forEach((c, idx) => {
+                    addDecision(optionsBox, `single_${c.id}`, `Part ${idx+1}: ${c.module_name}`, '3.5h Standalone Module', '£21.99');
+                });
+                addDecision(optionsBox, 'combined_day', 'Full Day (7h Block)', 'Includes both morning and afternoon modules.', '£38.99');
             } else {
-                addDecision(optionsBox, 'national', 'Specialist Session (3.5h)', 'Advanced Professional Standards.', '£21.99');
+                const c = activeModalDateCourses[0];
+                if (c.is_7h === true || c.is_7h === 'Y' || c.block_id?.toString().includes('sat')) {
+                    addDecision(optionsBox, '7h_full', 'Full Day (7h)', 'International CPC Block', '£38.99');
+                } else if (c.block_id) {
+                    const partner = liveCourses.find(p => p.block_id === c.block_id && p.id !== c.id);
+                    addDecision(optionsBox, 'national', 'Single Session (3.5h)', 'Standard National Module', '£21.99');
+                    addDecision(optionsBox, 'international', `Combined Block (7h)`, `Includes partner day ${partner?.date_label || ''}.`, '£38.99');
+                } else {
+                    addDecision(optionsBox, 'national', 'Specialist Session (3.5h)', 'Advanced Professional Standards.', '£21.99');
+                }
             }
+            
             document.getElementById('modal').classList.remove('hidden');
             lucide.createIcons();
         };
@@ -332,18 +342,24 @@
 
         window.confirmAddToBasket = () => {
             const qty = parseInt(document.getElementById('m-qty').value);
-            if (selectedOption === 'international' && activeModalCourse.block_id && !(activeModalCourse.is_7h === true || activeModalCourse.is_7h === 'Y')) {
-                const pair = liveCourses.filter(c => c.block_id === activeModalCourse.block_id);
-                pair.forEach(course => {
-                    const existing = basket.find(b => b.courseId === course.id);
-                    if (existing) existing.qty = qty;
-                    else basket.push({ courseId: course.id, pathway: 'international', qty, data: course });
+            
+            if (selectedOption === 'combined_day') {
+                activeModalDateCourses.forEach(c => {
+                    basket.push({ courseId: c.id, pathway: 'international', qty, data: c });
                 });
+            } else if (selectedOption.startsWith('single_')) {
+                const cid = selectedOption.replace('single_', '');
+                const c = activeModalDateCourses.find(x => x.id === cid);
+                basket.push({ courseId: c.id, pathway: 'national', qty, data: c });
+            } else if (selectedOption === 'international') {
+                const c = activeModalDateCourses[0];
+                const pair = liveCourses.filter(p => p.block_id === c.block_id);
+                pair.forEach(p => basket.push({ courseId: p.id, pathway: 'international', qty, data: p }));
             } else {
-                const existing = basket.find(b => b.courseId === activeModalCourse.id);
-                if (existing) existing.qty = qty;
-                else basket.push({ courseId: activeModalCourse.id, pathway: selectedOption, qty, data: activeModalCourse });
+                const c = activeModalDateCourses[0];
+                basket.push({ courseId: c.id, pathway: selectedOption === '7h_full' ? 'international' : 'national', qty, data: c });
             }
+
             closeModal(); updateBasket(); render();
         };
 
@@ -405,10 +421,10 @@
                 btnList.className = currentView === 'list' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all';
             }
             if (currentView === 'list') {
-                const filtered = globalLicense === 'HGV' ? liveCourses.filter(c => c.category !== 'PSV Only') : liveCourses;
+                const filtered = globalLicense === 'HGV' ? liveCourses.filter(c => !c.category.includes('PSV Only')) : liveCourses;
                 filtered.forEach(c => {
                     const count = basket.filter(b => b.courseId === c.id).reduce((s, b) => s + b.qty, 0);
-                    container.innerHTML += `<div onclick="openModal('${c.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between text-left ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}"><div class="flex items-center gap-4 text-left"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${count > 0 ? 'bg-blue-600 border-blue-600' : 'border-slate-200'}">${count > 0 ? '<i data-lucide="shopping-cart" class="text-white w-3 h-3"></i>' : ''}</div><div class="text-left"><div class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 text-left font-black">${c.date_label}</div><div class="font-bold text-slate-800 text-sm leading-tight text-left font-black uppercase tracking-tighter">${c.module_name}</div></div></div><div class="flex items-center gap-2 text-right">${(c.is_specialist === true || c.is_specialist === 'Y') ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase tracking-tight text-right font-black">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-right font-black">${count} seats</div>` : ''}</div></div>`;
+                    container.innerHTML += `<div onclick="openModal('${c.date_label}','')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between text-left ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}"><div class="flex items-center gap-4 text-left"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${count > 0 ? 'bg-blue-600 border-blue-600' : 'border-slate-200'}">${count > 0 ? '<i data-lucide="shopping-cart" class="text-white w-3 h-3"></i>' : ''}</div><div class="text-left"><div class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 text-left font-black">${c.date_label}</div><div class="font-bold text-slate-800 text-sm leading-tight text-left font-black uppercase tracking-tighter">${c.module_name}</div></div></div><div class="flex items-center gap-2 text-right">${(c.is_specialist === true || c.is_specialist === 'Y') ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase tracking-tight text-right font-black font-black uppercase tracking-tighter">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-right font-black uppercase tracking-tighter">${count} seats</div>` : ''}</div></div>`;
                 });
             } else { renderCalendar(container); }
             lucide.createIcons();
@@ -422,20 +438,21 @@
             for (let i = 0; i < (firstDay === 0 ? 0 : firstDay); i++) html += '<div></div>';
             for (let d = 1; d <= daysInMonth; d++) {
                 const dayDate = new Date(year, month, d);
-                const isoDate = dayDate.toISOString().split('T')[0]; // "2026-01-05"
-                const shortDate = `${d.toString().padStart(2, '0')} ${monthName.substring(0,3)}`; // "05 Jan"
+                const isoDate = dayDate.toISOString().split('T')[0]; 
+                const shortDate = `${d.toString().padStart(2, '0')} ${monthName.substring(0,3)}`; 
                 
                 const courses = liveCourses.filter(c => c.date_label.includes(isoDate) || c.date_label.includes(shortDate));
                 const inBasket = courses.some(c => basket.some(b => b.courseId === c.id));
                 const hasCourse = courses.length > 0;
-                const course = courses[0];
                 
                 let cellClass = inBasket ? 'bg-blue-600 text-white shadow-lg scale-105 z-10' : 'text-slate-200';
+                let label = d;
                 if (hasCourse && !inBasket) {
-                    cellClass = (course.category.includes('PSV')) ? 'cat-psv shadow-sm' : 'cat-mixed shadow-sm';
-                    if (course.is_specialist === true || course.is_specialist === 'Y') cellClass += ' cat-specialist';
+                    const c = courses[0];
+                    cellClass = (c.category.includes('PSV')) ? 'cat-psv shadow-sm' : 'cat-mixed shadow-sm';
+                    if (courses.some(x => x.is_specialist === true || x.is_specialist === 'Y')) cellClass += ' cat-specialist';
                 }
-                html += `<div onclick="${hasCourse ? `openModal('${course.id}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all cursor-pointer relative font-bold text-xs text-center border-transparent border-2 ${cellClass} font-black"><span>${d}</span>${(course?.is_specialist === true || course?.is_specialist === 'Y') && !inBasket ? '<div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-1 mx-auto shadow-sm"></div>' : ''}</div>`;
+                html += `<div onclick="${hasCourse ? `openModal('${isoDate}','${shortDate}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all cursor-pointer relative font-bold text-xs text-center border-transparent border-2 ${cellClass} font-black"><span>${label}</span>${hasCourse && courses.length > 1 && !inBasket ? '<div class="text-[6px] opacity-60 uppercase mt-0.5 leading-none">2 Mod</div>' : ''}${(courses.some(x => x.is_specialist === true || x.is_specialist === 'Y')) && !inBasket ? '<div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-0.5 mx-auto shadow-sm"></div>' : ''}</div>`;
             }
             container.innerHTML = html + '</div></div></div>';
         }
@@ -462,12 +479,12 @@
                 if (isWithin4Days(item.data.date_label)) isUrgent = true;
                 emailBody += `\nCOURSE: ${item.data.date_label} - ${item.data.module_name}`;
                 for (let i = 0; i < item.qty; i++) {
-                    const nEl = document.getElementById(`name-${bIdx}-${i}`);
-                    if(!nEl) continue;
-                    const dName = nEl.value; const dLic = document.getElementById(`license-${bIdx}-${i}`).value;
+                    const nameEl = document.getElementById(`name-${bIdx}-${i}`);
+                    if(!nameEl) continue;
+                    const dName = nameEl.value; const dLic = document.getElementById(`license-${bIdx}-${i}`).value;
                     const dPhone = document.getElementById(`phone-${bIdx}-${i}`).value; const dSupport = document.getElementById(`support-${bIdx}-${i}`).checked;
                     const dLater = document.getElementById(`later-${bIdx}-${i}`).checked;
-                    const entryName = dLater ? "TBA (24h before)" : dName;
+                    const entryName = dLater ? "TBA" : dName;
                     emailBody += `\n > Driver: ${entryName} | Phone: ${dPhone} | Support: ${dSupport}`;
                     roster.push({
                         lead_email: email, invoice_to, billing_address, contact_phone, marketing_opt_in,
