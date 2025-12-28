@@ -3,30 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyCPC.online | Professional Driver Booking</title>
+    <title>Professional Driver CPC Booking Portal | myCPC.online</title>
+    <meta name="description" content="Official booking portal for myCPC.online. Request seats for National (3.5h) and International (7h) Driver CPC training. Invoice and payment link issued within 24 hours.">
+    <link rel="canonical" href="https://bookings.my-cpc.online">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://psvct.co.uk/wp-content/uploads/2025/11/ChatGPT-Image-Nov-23-2025-04_28_35-PM-1.png">
+    <link rel="apple-touch-icon" href="https://psvct.co.uk/wp-content/uploads/2025/11/ChatGPT-Image-Nov-23-2025-04_28_35-PM-1.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        
         .animate-in { animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
         
-        /* Color Coding for Calendar */
         .cat-mixed { background-color: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
         .cat-psv { background-color: #faf5ff; color: #6b21a8; border: 1px solid #e9d5ff; }
         .cat-specialist { border: 2px solid #eab308 !important; box-shadow: inset 0 0 0 1px #fef08a; }
         
         .decision-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-width: 2px; }
         .decision-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); border-color: #2563eb; }
-        .decision-selected { border-color: #2563eb; background-color: #eff6ff; ring: 2px; ring-color: #2563eb; }
         
-        /* 50% Transparent Sticky Bar with Glass Blur */
+        .decision-selected { 
+            border-color: #2563eb !important; 
+            background-color: #eff6ff; 
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); 
+        }
+        
         .sticky-checkout { 
             position: fixed; top: 0; left: 0; right: 0; z-index: 100; 
             transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             backdrop-filter: blur(12px);
-            background-color: rgba(15, 23, 42, 0.5); /* 50% Translucent Slate 900 */
+            background-color: rgba(15, 23, 42, 0.6);
         }
         .sticky-checkout.visible { transform: translateY(0); }
         
@@ -35,11 +48,11 @@
         .roster-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans pb-24 text-left">
+<body class="bg-slate-50 text-slate-900 pb-24 text-left">
 
-    <!-- FIXED STICKY CHECKOUT BAR (50% Transparent) -->
+    <!-- FIXED STICKY CHECKOUT BAR -->
     <div id="sticky-bar" class="sticky-checkout text-white shadow-2xl px-6 py-4 flex justify-between items-center border-b border-white/10">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 text-white">
             <div class="bg-blue-600 p-2 rounded-xl shadow-lg">
                 <i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i>
             </div>
@@ -57,48 +70,56 @@
         
         <!-- Header Support Bar -->
         <div class="bg-slate-900 text-white text-[10px] font-bold py-2.5 px-6 rounded-t-3xl flex flex-col md:flex-row justify-between items-center gap-2 uppercase tracking-widest text-center">
-            <div class="flex items-center gap-4 text-left font-bold">
+            <div class="flex items-center gap-4 text-left font-bold text-white">
                 <span class="flex items-center gap-1"><i data-lucide="phone" class="w-3 h-3 text-blue-400"></i> 0117 427 8967</span>
                 <a href="https://wa.me/447359941879" target="_blank" class="text-green-400 flex items-center gap-1 underline font-black">
                     <i data-lucide="message-circle" class="w-3 h-3 text-green-400"></i> WhatsApp Support
                 </a>
             </div>
-            <span class="opacity-70 leading-none tracking-tight">Invoice & Payment Link provided within 24 hours</span>
+            <div class="flex items-center gap-4 text-white">
+                <a href="https://www.my-cpc.online" class="text-blue-400 hover:text-blue-300 transition-colors uppercase tracking-widest font-black">
+                    Main Website <i data-lucide="external-link" class="w-3 h-3 inline ml-1"></i>
+                </a>
+            </div>
         </div>
 
         <header class="py-6 flex items-center justify-between border-b mb-8 bg-white rounded-b-3xl px-6 shadow-sm border-slate-100">
             <div class="flex items-center gap-3 text-left">
                 <div class="bg-blue-600 p-2 rounded-xl shadow-lg">
-                    <i data-lucide="bus" class="text-white w-6 h-6"></i>
+                    <i data-lucide="award" class="text-white w-6 h-6"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold tracking-tight mb-1 leading-none text-left font-black uppercase tracking-tighter">MyCPC<span class="text-blue-600">.online</span></h1>
-                    <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest leading-none text-left">Professional Driver Standards</p>
+                    <h1 class="text-xl font-bold tracking-tight mb-1 leading-none text-left font-black uppercase italic">MyCPC<span class="text-blue-600">.online</span></h1>
+                    <p class="text-[9px] text-slate-500 font-black uppercase tracking-widest leading-none text-left">
+                        JAUPT & DVSA Approved • ASOT Centre AC02237
+                    </p>
                 </div>
             </div>
-            <div class="bg-slate-100 p-3 rounded-2xl flex items-center gap-2 border border-slate-200">
-                <i data-lucide="shopping-basket" class="w-5 h-5 text-blue-600"></i>
-                <span id="basket-count" class="font-black text-blue-600 text-sm">0</span>
+            <div class="flex items-center gap-4">
+                <div class="bg-slate-100 p-3 rounded-2xl flex items-center gap-2 border border-slate-200">
+                    <i data-lucide="shopping-basket" class="w-5 h-5 text-blue-600"></i>
+                    <span id="basket-count" class="font-black text-blue-600 text-sm">0</span>
+                </div>
             </div>
         </header>
 
         <!-- STEP 1: Sector Choice -->
         <div id="step-1" class="animate-in space-y-6">
              <div class="text-center py-6">
-                <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter leading-none mb-2 text-center w-full">Driver CPC Portal</h2>
+                <h2 class="text-3xl font-black text-slate-800 uppercase tracking-tighter leading-none mb-2 text-center w-full italic">Driver CPC Portal</h2>
                 <p class="text-slate-500 font-medium text-sm text-center w-full uppercase tracking-widest font-black">Select your industry sector</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button onclick="setGlobalLicense('PCV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-purple-600 shadow-sm transition-all group text-center">
                     <i data-lucide="users" class="w-14 h-14 text-purple-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-black text-xl text-slate-800 uppercase">Passenger</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight">Bus, Coach & Private Hire.</p>
+                    <h3 class="font-black text-xl text-slate-800 uppercase italic">Passenger</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight text-center">Bus, Coach & Private Hire.</p>
                 </button>
                 <button onclick="setGlobalLicense('HGV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-blue-600 shadow-sm transition-all group text-center">
                     <i data-lucide="truck" class="w-14 h-14 text-blue-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-black text-xl text-slate-800 uppercase">Freight</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight">Lorry, LGV & Distribution.</p>
+                    <h3 class="font-black text-xl text-slate-800 uppercase italic">Freight</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight text-center">Lorry, LGV & Distribution.</p>
                 </button>
             </div>
         </div>
@@ -106,8 +127,8 @@
         <!-- STEP 2: Browser -->
         <div id="step-2" class="hidden animate-in space-y-6 text-left">
             <div class="flex items-center justify-between">
-                <button onclick="location.reload()" class="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase font-black">
-                    <i data-lucide="chevron-left" class="w-3 h-3"></i> Change Sector
+                <button onclick="location.reload()" class="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase">
+                    <i data-lucide="chevron-left" class="w-3 h-3 text-blue-600 text-blue-600"></i> Change Sector
                 </button>
                 <div class="flex bg-white p-1 rounded-xl shadow-sm border border-slate-100">
                     <button onclick="setView('calendar')" id="btn-calendar" class="px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg">
@@ -119,71 +140,79 @@
                 </div>
             </div>
 
-            <div id="view-container" class="space-y-3 text-left"></div>
+            <div id="view-container" class="space-y-3 text-left text-slate-900"></div>
 
             <!-- ROSTER & INVOICING SUMMARY -->
             <div id="basket-section" class="hidden mt-12 animate-in text-left">
                 <div class="bg-slate-900 rounded-[40px] p-8 text-white shadow-2xl border-t-8 border-blue-600">
-                    <h3 class="text-2xl font-black mb-1 flex items-center gap-3 text-left uppercase tracking-tighter">
+                    <h3 class="text-2xl font-black mb-1 flex items-center gap-3 text-left uppercase tracking-tighter italic">
                         <i data-lucide="clipboard-list" class="text-blue-400"></i>
                         Booking Roster
                     </h3>
-                    <p class="text-[10px] text-white/40 uppercase font-bold mb-8 tracking-widest ml-10">Driver details can be updated up to 24h before start.</p>
+                    <p class="text-[10px] text-white/40 uppercase font-bold mb-8 tracking-widest ml-10 text-left">Driver details can be updated up to 24h before start.</p>
                     
                     <div id="roster-list" class="space-y-6 mb-10 text-left roster-container"></div>
 
                     <!-- INVOICING FORM -->
-                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3 border-t border-white/10 pt-10 text-left uppercase tracking-tighter">
+                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3 border-t border-white/10 pt-10 text-left uppercase tracking-tighter italic">
                         <i data-lucide="file-text" class="text-blue-400"></i>
                         Invoicing Details
                     </h3>
-                    <div class="bg-blue-500/10 border border-blue-500/30 p-4 rounded-2xl mb-8 text-left leading-tight">
-                        <p class="text-[11px] text-blue-200 uppercase font-black tracking-widest">
-                            <i data-lucide="info" class="w-3 h-3 inline mr-1 text-blue-400"></i> Multi-module discounts and bundle prices will be manually applied to your final invoice.
-                        </p>
-                    </div>
-
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-left">
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Invoice To (Company or Name)</label>
+                            <label for="invoice_to" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Invoice To (Company or Name)</label>
                             <input id="invoice_to" required placeholder="Acme Logistics Ltd" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
                         </div>
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Lead Email for Invoice</label>
+                            <label for="booker_email" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Lead Email for Invoice</label>
                             <input id="booker_email" required type="email" placeholder="email@address.com" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
                         </div>
                     </div>
 
-                    <div class="space-y-1 mb-4 text-left">
-                        <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Billing Address & Postcode</label>
+                    <div class="space-y-1 mb-4 text-left text-slate-900">
+                        <label for="billing_address" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Billing Address & Postcode</label>
                         <textarea id="billing_address" required rows="2" placeholder="Full address for invoicing purposes" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all"></textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-left">
                         <div class="space-y-1 text-left">
-                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block">Contact Phone Number</label>
+                            <label for="contact_phone" class="text-[10px] font-bold text-white/30 uppercase ml-2 block">Contact Phone Number</label>
                             <input id="contact_phone" required placeholder="Main contact number" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
                         </div>
                         <div class="bg-white/5 p-4 rounded-2xl border border-white/10 flex items-center justify-between">
                             <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest leading-none">Total (Pre-Discount)</span>
-                            <span id="total-price" class="text-2xl font-black text-blue-400 leading-none">£0.00</span>
+                            <span id="total-price" class="text-2xl font-black text-blue-400 leading-none italic uppercase">£0.00</span>
                         </div>
                     </div>
 
-                    <!-- OTHER INFORMATION BOX -->
                     <div class="space-y-1 mb-6 text-left">
-                        <label class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Any other information / Special Requirements</label>
-                        <textarea id="other_info" rows="3" placeholder="Notes for discounts, support needs, or course specific requests..." class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all"></textarea>
+                        <label for="other_info" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Other information / Special Requirements</label>
+                        <textarea id="other_info" rows="3" placeholder="Notes for discounts or support needs..." class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all"></textarea>
                     </div>
 
+                    <!-- MARKETING PERMISSION -->
                     <label class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10 mb-8 cursor-pointer group transition-all hover:bg-white/10 text-left">
                         <input type="checkbox" id="marketing_opt_in" class="w-5 h-5 rounded border-white/20 bg-transparent text-blue-600 focus:ring-blue-500">
                         <span class="text-xs text-white/70 font-medium leading-tight group-hover:text-white text-left">
-                            I give permission for PSV Compliance and Training to use my information for future marketing and course updates.
+                            I give permission for PSV Compliance and Training to use my info for marketing and course updates. You can opt out at any time.
                         </span>
                     </label>
 
-                    <button onclick="submitBooking()" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-[30px] font-black text-xl transition-all active:scale-95 shadow-xl shadow-blue-500/20 uppercase tracking-tighter">
+                    <!-- Trust Reassurance Block -->
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl mb-6 text-left">
+                      <p class="text-[10px] text-blue-300 uppercase font-black tracking-widest mb-2 italic">
+                        What happens next
+                      </p>
+                      <ul class="text-[11px] text-white/80 font-medium space-y-1 leading-relaxed text-slate-100">
+                        <li>• We manually check multi-seat discounts and confirm availability.</li>
+                        <li>• Invoice + payment link emailed within 24 hours.</li>
+                        <li>• **Your seat is reserved for 2 days from the date of your invoice.**</li>
+                        <li>• Payments will appear as <strong>PSV Compliance and Training</strong>.</li>
+                      </ul>
+                    </div>
+
+                    <button onclick="submitBooking()" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-[30px] font-black text-xl transition-all active:scale-95 shadow-xl shadow-blue-500/20 uppercase tracking-tighter italic text-white">
                         Confirm & Request Invoice
                     </button>
                 </div>
@@ -191,49 +220,104 @@
         </div>
 
         <!-- SUCCESS SCREEN -->
-        <div id="success" class="hidden text-center py-20 animate-in bg-white rounded-[40px] shadow-xl p-12 mt-10 border border-slate-100 text-center">
-            <div class="bg-green-100 p-8 rounded-full inline-block mb-6 text-green-600 mx-auto">
-                <i data-lucide="check-circle" class="w-16 h-16 text-green-600"></i>
+        <div id="success" class="hidden animate-in mt-10 space-y-6">
+            <div class="bg-white rounded-[40px] shadow-xl p-12 border border-slate-100 text-center">
+                <div class="bg-green-100 p-8 rounded-full inline-block mb-6 text-green-600 mx-auto">
+                    <i data-lucide="check-circle" class="w-16 h-16 text-green-600"></i>
+                </div>
+                <h2 id="success-title" class="text-3xl font-black text-slate-800 mb-2 leading-none uppercase tracking-tighter italic">Request Received</h2>
+                
+                <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-4 inline-block mb-6">
+                    <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Your Booking Reference</p>
+                    <p id="booking-ref-display" class="text-3xl font-black text-blue-900 tracking-widest uppercase">---</p>
+                </div>
+                
+                <p id="success-txt" class="text-slate-600 mb-8 px-4 leading-relaxed font-bold text-sm"></p>
+                
+                <!-- BACS PAYMENT PROMOTION -->
+                <div id="bacs-block" class="bg-slate-900 rounded-3xl p-8 text-white text-left space-y-4 border-t-8 border-blue-600 shadow-xl">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-lg font-black uppercase italic tracking-tight">Pay via BACS (Bank Transfer)</h4>
+                        <i data-lucide="landmark" class="text-blue-400"></i>
+                    </div>
+                    
+                    <!-- Conditional Late Booking Warning -->
+                    <div id="bacs-urgent-warning" class="hidden bg-orange-500/20 border border-orange-500/40 p-4 rounded-xl mb-4">
+                        <div class="flex gap-2 items-center mb-1">
+                            <i data-lucide="alert-triangle" class="text-orange-400 w-4 h-4"></i>
+                            <span class="text-[10px] font-black uppercase text-orange-200">Late Booking Notice</span>
+                        </div>
+                        <p class="text-xs text-orange-100/80 leading-relaxed font-bold">
+                            Please **DO NOT** send payment yet. As this course starts within 4 working days, we must verify space availability first. We will contact you shortly.
+                        </p>
+                    </div>
+
+                    <div id="bacs-standard-instruction">
+                        <p class="text-xs text-slate-400 leading-relaxed">
+                            To secure your seat immediately, you can pay via bank transfer using your **Booking Reference** as the payment description.
+                        </p>
+                        <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                            <div>
+                                <p class="text-[9px] font-bold text-white/30 uppercase">Bank Name</p>
+                                <p class="font-bold text-sm text-blue-100">Monzo</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-bold text-white/30 uppercase">Account Name</p>
+                                <p class="font-bold text-sm text-blue-100">myCPConline</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-bold text-white/30 uppercase">Sort Code</p>
+                                <p class="font-black text-lg text-white">04-00-03</p>
+                            </div>
+                            <div>
+                                <p class="text-[9px] font-bold text-white/30 uppercase">Account Number</p>
+                                <p class="font-black text-lg text-white">94282683</p>
+                            </div>
+                        </div>
+                        <div class="bg-blue-600/20 border border-blue-500/30 p-3 rounded-xl mt-4">
+                            <p class="text-[10px] font-black text-blue-300 uppercase text-center italic">
+                                * Use Description: <span id="bacs-ref-hint" class="text-white">---</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="location.reload()" class="mt-12 bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all hover:bg-slate-800 mx-auto block text-white">Start New Request</button>
             </div>
-            <h2 id="success-title" class="text-3xl font-black text-slate-800 mb-2 font-black leading-none uppercase tracking-tighter text-center tracking-tighter">Request Received</h2>
-            <p id="success-txt" class="text-slate-600 mb-8 px-12 leading-relaxed font-bold text-sm text-center font-medium"></p>
-            <button onclick="location.reload()" class="bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all hover:bg-slate-800 mx-auto block tracking-widest">Start New Request</button>
         </div>
 
         <footer class="mt-auto pt-12 pb-6 text-center border-t">
             <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">
-                Legal Entity: <span class="text-slate-700 font-black font-black uppercase">PSV Compliance and Training</span>
+                Legal Entity: <span class="text-slate-700 font-black uppercase">PSV Compliance and Training</span>
             </p>
         </footer>
     </div>
 
     <!-- DECISION MODAL -->
-    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-left">
+    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 text-left" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl animate-in relative border border-white/20">
-            <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 text-left leading-none">Date</div>
-            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 leading-tight font-black text-left uppercase tracking-tighter">Course Options</h3>
-            <div id="pathway-options" class="space-y-3 mb-8 text-left"></div>
-            <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border">
+            <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 text-left leading-none italic">Date</div>
+            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 leading-tight text-left uppercase tracking-tighter italic">Course Options</h3>
+            <div id="pathway-options" class="space-y-3 mb-8 text-left text-slate-900"></div>
+            <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border border-slate-200">
                 <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-left">Quantity of Seats</div>
                 <div class="flex items-center gap-4">
-                    <button onclick="modQty(-1)" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black transition-colors hover:bg-slate-100">-</button>
-                    <input id="m-qty" type="number" value="1" readonly class="bg-transparent text-center font-black text-lg w-8 outline-none">
-                    <button onclick="modQty(1)" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black transition-colors hover:bg-slate-100">+</button>
+                    <button onclick="modQty(-1)" aria-label="Decrease quantity" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-black transition-colors hover:bg-slate-100">-</button>
+                    <input id="m-qty" type="number" value="1" readonly class="bg-transparent text-center font-black text-lg w-8 outline-none text-slate-900">
+                    <button onclick="modQty(1)" aria-label="Increase quantity" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-black transition-colors hover:bg-slate-100">+</button>
                 </div>
             </div>
-            <div class="flex gap-3">
-                <button onclick="closeModal()" class="flex-1 py-4 rounded-2xl text-xs font-black text-slate-400 uppercase transition-all hover:bg-slate-50 font-black tracking-widest">Cancel</button>
-                <button onclick="confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50 font-black tracking-widest" disabled>Choose Pathway</button>
+            <div class="flex gap-3 text-slate-900">
+                <button onclick="closeModal()" id="close-modal-btn" class="flex-1 py-4 rounded-2xl text-xs font-black text-slate-400 uppercase transition-all hover:bg-slate-50 font-black tracking-widest">Cancel</button>
+                <button onclick="confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50 font-black tracking-widest italic text-white" disabled>Choose Pathway</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 1. CONFIGURATION ---
         const SUPABASE_URL = 'https://jvbitnykgjasweugqgks.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_Bu0qel0FaGCSq-r4mE9Xsw_M5O_C-DY'; 
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
         const WEB3FORMS_KEY = "eea7a374-f421-4e9e-ba23-e3d0f67ba412";
 
         let liveCourses = [];
@@ -243,6 +327,8 @@
         let currentMonth = new Date(2026, 0, 1);
         let activeModalDateCourses = [];
         let selectedOption = null;
+        let lastFocusedElement;
+        let modalTrapHandler = null;
 
         async function init() {
             try {
@@ -253,82 +339,114 @@
             lucide.createIcons();
         }
 
+        window.applyDetailsToAll = (sourceBIdx, sourceSIdx) => {
+            const sourceName = document.getElementById(`name-${sourceBIdx}-${sourceSIdx}`).value;
+            const sourceLicense = document.getElementById(`license-${sourceBIdx}-${sourceSIdx}`).value;
+            const sourcePhone = document.getElementById(`phone-${sourceBIdx}-${sourceSIdx}`).value;
+            const sourceType = document.getElementById(`type-${sourceBIdx}-${sourceSIdx}`).value;
+            const sourceSupport = document.getElementById(`support-${sourceBIdx}-${sourceSIdx}`).checked;
+            const sourceLater = document.getElementById(`later-${sourceBIdx}-${sourceSIdx}`).checked;
+
+            basket.forEach((item, bIdx) => {
+                for (let i = 0; i < item.qty; i++) {
+                    const nameInp = document.getElementById(`name-${bIdx}-${i}`);
+                    const licInp = document.getElementById(`license-${bIdx}-${i}`);
+                    const phoneInp = document.getElementById(`phone-${bIdx}-${i}`);
+                    const typeSel = document.getElementById(`type-${bIdx}-${i}`);
+                    const supportInp = document.getElementById(`support-${bIdx}-${i}`);
+                    const laterInp = document.getElementById(`later-${bIdx}-${i}`);
+
+                    if (nameInp) {
+                        nameInp.value = sourceName;
+                        licInp.value = sourceLicense;
+                        phoneInp.value = sourcePhone;
+                        typeSel.value = sourceType;
+                        supportInp.checked = sourceSupport;
+                        laterInp.checked = sourceLater;
+                        
+                        if (sourceLater) {
+                            nameInp.disabled = true; nameInp.classList.add('opacity-40');
+                            licInp.disabled = true; licInp.classList.add('opacity-40');
+                            phoneInp.disabled = true; phoneInp.classList.add('opacity-40');
+                        } else {
+                            nameInp.disabled = false; nameInp.classList.remove('opacity-40');
+                            licInp.disabled = false; licInp.classList.remove('opacity-40');
+                            phoneInp.disabled = false; phoneInp.classList.remove('opacity-40');
+                        }
+                    }
+                }
+            });
+        };
+
         function isWithin4Days(dateLabel) {
             const months = { 'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5, 'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11 };
             let targetDate;
-            if (dateLabel.includes('-')) {
-                targetDate = new Date(dateLabel);
-            } else {
-                const parts = dateLabel.split(' ');
-                targetDate = new Date(2026, months[parts[2]], parseInt(parts[1]));
-            }
-            const now = new Date();
-            now.setHours(0,0,0,0);
+            if (dateLabel.includes('-')) { targetDate = new Date(dateLabel); } 
+            else { const parts = dateLabel.split(' '); targetDate = new Date(2026, months[parts[2]], parseInt(parts[1])); }
+            const now = new Date(); now.setHours(0,0,0,0);
             return (targetDate - now) / (1000 * 60 * 60 * 24) < 4;
         }
 
-        window.toggleDetails = (bIdx, sIdx) => {
-            const check = document.getElementById(`later-${bIdx}-${sIdx}`);
-            const nameInp = document.getElementById(`name-${bIdx}-${sIdx}`);
-            const licInp = document.getElementById(`license-${bIdx}-${sIdx}`);
-            const phoneInp = document.getElementById(`phone-${bIdx}-${sIdx}`);
-            if(!check || !nameInp) return;
-            if (check.checked) {
-                nameInp.value = "TBA (24h before)"; nameInp.disabled = true; nameInp.classList.add('opacity-40');
-                licInp.value = "TBA"; licInp.disabled = true; licInp.classList.add('opacity-40');
-                phoneInp.value = "TBA"; phoneInp.disabled = true; phoneInp.classList.add('opacity-40');
-            } else {
-                nameInp.value = ""; nameInp.disabled = false; nameInp.classList.remove('opacity-40');
-                licInp.value = ""; licInp.disabled = false; licInp.classList.remove('opacity-40');
-                phoneInp.value = ""; phoneInp.disabled = false; phoneInp.classList.remove('opacity-40');
-            }
-        };
-
         window.setGlobalLicense = (lic) => { globalLicense = lic; document.getElementById('step-1').classList.add('hidden'); document.getElementById('step-2').classList.remove('hidden'); render(); };
         window.setView = (view) => { currentView = view; render(); };
-        window.closeModal = () => document.getElementById('modal').classList.add('hidden');
+        
+        function openDecisionModal() {
+            const modal = document.getElementById('modal');
+            lastFocusedElement = document.activeElement;
+            modal.classList.remove('hidden');
+            const focusables = modal.querySelectorAll('button, input');
+            const first = focusables[0]; const last = focusables[focusables.length - 1];
+            
+            modalTrapHandler = (e) => {
+                if (e.key === 'Escape') closeDecisionModal();
+                if (e.key !== 'Tab') return;
+                if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); }
+                if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); }
+            };
+            document.addEventListener('keydown', modalTrapHandler);
+            first.focus();
+        }
+
+        function closeDecisionModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.add('hidden');
+            if (modalTrapHandler) document.removeEventListener('keydown', modalTrapHandler);
+            modalTrapHandler = null;
+            if (lastFocusedElement) lastFocusedElement.focus();
+        }
+
+        window.closeModal = closeDecisionModal;
         window.modQty = (dir) => { let val = parseInt(document.getElementById('m-qty').value) + dir; if (val < 1) val = 1; document.getElementById('m-qty').value = val; };
 
-        // UPDATED MODAL: Handles days with multiple modules
         window.openModal = (isoDate, shortDate) => {
             activeModalDateCourses = liveCourses.filter(c => c.date_label.includes(isoDate) || c.date_label.includes(shortDate));
             if (activeModalDateCourses.length === 0) return;
-
             selectedOption = null;
             document.getElementById('add-to-basket-btn').disabled = true;
             document.getElementById('modal-date').innerText = activeModalDateCourses[0].date_label;
-            document.getElementById('modal-title').innerText = activeModalDateCourses.length > 1 ? "Full Day Session" : activeModalDateCourses[0].module_name;
+            document.getElementById('modal-title').innerText = activeModalDateCourses.length > 1 ? "Combined Session" : activeModalDateCourses[0].module_name;
             document.getElementById('m-qty').value = 1;
-            
             const optionsBox = document.getElementById('pathway-options');
             optionsBox.innerHTML = '';
-
-            // Handle Combined Day (Saturdays or specific blocks)
             if (activeModalDateCourses.length > 1) {
-                activeModalDateCourses.forEach((c, idx) => {
-                    addDecision(optionsBox, `single_${c.id}`, `Part ${idx+1}: ${c.module_name}`, '3.5h Standalone Module', '£21.99');
-                });
-                addDecision(optionsBox, 'combined_day', 'Full Day (7h Block)', 'Includes both morning and afternoon modules.', '£38.99');
+                activeModalDateCourses.forEach(c => addDecision(optionsBox, `single_${c.id}`, c.module_name, '3.5h Module', '£21.99'));
+                addDecision(optionsBox, 'combined_day', 'Full Day (7h pairing)', 'Both Modules', '£38.99');
             } else {
                 const c = activeModalDateCourses[0];
-                if (c.is_7h === true || c.is_7h === 'Y' || c.block_id?.toString().includes('sat')) {
-                    addDecision(optionsBox, '7h_full', 'Full Day (7h)', 'International CPC Block', '£38.99');
+                if (c.is_7h === true || c.is_7h === 'Y') {
+                    addDecision(optionsBox, '7h_full', 'Full Day (7h)', 'International Block', '£38.99');
                 } else if (c.block_id) {
-                    const partner = liveCourses.find(p => p.block_id === c.block_id && p.id !== c.id);
-                    addDecision(optionsBox, 'national', 'Single Session (3.5h)', 'Standard National Module', '£21.99');
-                    addDecision(optionsBox, 'international', `Combined Block (7h)`, `Includes partner day ${partner?.date_label || ''}.`, '£38.99');
-                } else {
-                    addDecision(optionsBox, 'national', 'Specialist Session (3.5h)', 'Advanced Professional Standards.', '£21.99');
-                }
+                    addDecision(optionsBox, 'national', 'Single (3.5h)', '3.5h Module', '£21.99');
+                    addDecision(optionsBox, 'international', `Pairing (7h)`, `Includes partner day`, '£38.99');
+                } else { addDecision(optionsBox, 'national', 'Specialist (3.5h)', 'Advanced Standard', '£21.99'); }
             }
-            
-            document.getElementById('modal').classList.remove('hidden');
+            openDecisionModal();
             lucide.createIcons();
         };
 
         function addDecision(container, type, title, desc, price) {
             const btn = document.createElement('button');
-            btn.className = `w-full p-4 rounded-3xl border-2 text-left transition-all decision-card border-slate-100`;
+            btn.className = `w-full p-4 rounded-3xl border-2 text-left transition-all decision-card border-slate-100 text-slate-900`;
             btn.onclick = () => {
                 selectedOption = type;
                 document.querySelectorAll('.decision-card').forEach(el => el.classList.remove('decision-selected'));
@@ -336,20 +454,16 @@
                 document.getElementById('add-to-basket-btn').disabled = false;
                 document.getElementById('add-to-basket-btn').classList.replace('bg-slate-900', 'bg-blue-600');
             };
-            btn.innerHTML = `<div class="flex justify-between items-center text-left"><div><div class="font-black text-sm text-slate-800 leading-none mb-1 text-left font-black">${title}</div><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tight text-left">${desc}</div></div><div class="text-lg font-black text-blue-600 text-right font-black tracking-tight">£${price.replace('£','')}</div></div>`;
+            btn.innerHTML = `<div class="flex justify-between items-center text-left text-slate-900"><div><div class="font-black text-sm text-slate-800 mb-1 font-black uppercase italic">${title}</div><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">${desc}</div></div><div class="text-lg font-black text-blue-600">£${price.replace('£','')}</div></div>`;
             container.appendChild(btn);
         }
 
         window.confirmAddToBasket = () => {
             const qty = parseInt(document.getElementById('m-qty').value);
-            
             if (selectedOption === 'combined_day') {
-                activeModalDateCourses.forEach(c => {
-                    basket.push({ courseId: c.id, pathway: 'international', qty, data: c });
-                });
+                activeModalDateCourses.forEach(c => basket.push({ courseId: c.id, pathway: 'international', qty, data: c }));
             } else if (selectedOption.startsWith('single_')) {
-                const cid = selectedOption.replace('single_', '');
-                const c = activeModalDateCourses.find(x => x.id === cid);
+                const c = activeModalDateCourses.find(x => x.id === selectedOption.replace('single_', ''));
                 basket.push({ courseId: c.id, pathway: 'national', qty, data: c });
             } else if (selectedOption === 'international') {
                 const c = activeModalDateCourses[0];
@@ -359,35 +473,27 @@
                 const c = activeModalDateCourses[0];
                 basket.push({ courseId: c.id, pathway: selectedOption === '7h_full' ? 'international' : 'national', qty, data: c });
             }
-
             closeModal(); updateBasket(); render();
         };
 
         function updateBasket() {
             const totalSeats = basket.reduce((s, b) => s + b.qty, 0);
-            const stickyBar = document.getElementById('sticky-bar');
             if(document.getElementById('basket-count')) document.getElementById('basket-count').innerText = totalSeats;
             if(document.getElementById('basket-section')) document.getElementById('basket-section').classList.toggle('hidden', basket.length === 0);
-            
+            const stickyBar = document.getElementById('sticky-bar');
             if(stickyBar) {
                 if (totalSeats > 0) {
                     stickyBar.classList.add('visible');
-                    const stickyCountEl = document.getElementById('sticky-count');
-                    if(stickyCountEl) stickyCountEl.innerText = `${totalSeats} Seats Selected`;
+                    document.getElementById('sticky-count').innerText = `${totalSeats} Seats Selected`;
                 } else { stickyBar.classList.remove('visible'); }
             }
-
-            const hasUrgent = basket.some(item => isWithin4Days(item.data.date_label));
-            if(document.getElementById('last-minute-alert')) document.getElementById('last-minute-alert').classList.toggle('hidden', !hasUrgent);
-            
-            let total = 0;
             const groups = [];
             basket.forEach(item => {
                 const gid = item.pathway === 'international' ? (item.data.block_id || item.courseId) : item.courseId;
                 let g = groups.find(x => x.id === gid && x.pathway === item.pathway);
                 if (!g) { g = { id: gid, pathway: item.pathway, qty: item.qty }; groups.push(g); }
             });
-            total = groups.reduce((sum, g) => sum + (g.qty * (g.pathway === 'international' ? 38.99 : 21.99)), 0);
+            const total = groups.reduce((sum, g) => sum + (g.qty * (g.pathway === 'international' ? 38.99 : 21.99)), 0);
             if(document.getElementById('total-price')) document.getElementById('total-price').innerText = `£${total.toFixed(2)}`;
             if(document.getElementById('sticky-price')) document.getElementById('sticky-price').innerText = `£${total.toFixed(2)}`;
             renderRoster();
@@ -399,23 +505,24 @@
             list.innerHTML = '';
             basket.forEach((item, bIdx) => {
                 const section = document.createElement('div');
-                section.className = "bg-white/5 p-6 rounded-3xl border border-white/10 mb-4 animate-in text-left";
+                section.className = "bg-white/5 p-6 rounded-3xl border border-white/10 mb-4 animate-in text-left text-white";
                 let inputs = '';
                 for (let i = 0; i < item.qty; i++) {
-                    inputs += `<div class="border-b border-white/5 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"><div class="grid grid-cols-1 md:grid-cols-3 gap-2 items-center mb-2 text-left"><input id="name-${bIdx}-${i}" placeholder="Driver Name" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400 transition-all"><input id="license-${bIdx}-${i}" placeholder="License No." class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-400 transition-all"><input id="phone-${bIdx}-${i}" placeholder="Driver Phone" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400 transition-all"></div><div class="flex flex-wrap gap-4 items-center"><select id="type-${bIdx}-${i}" class="bg-slate-800 border border-white/20 p-2 rounded-lg text-[10px] font-bold text-white outline-none"><option value="HGV" ${globalLicense === 'HGV' ? 'selected' : ''}>HGV</option><option value="PCV" ${globalLicense === 'PCV' ? 'selected' : ''}>PCV</option></select><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="later-${bIdx}-${i}" onchange="toggleDetails(${bIdx}, ${i})" class="w-4 h-4 rounded border-white/20 bg-transparent"><span class="text-[10px] text-white/50 uppercase font-bold tracking-widest">Details Later</span></label><label class="flex items-center gap-2 cursor-pointer ml-auto"><input type="checkbox" id="support-${bIdx}-${i}" class="w-4 h-4 rounded border-white/20 bg-transparent text-blue-500"><span class="text-[10px] text-blue-400 uppercase font-black tracking-widest">Support Needed?</span></label></div></div>`;
+                    inputs += `<div class="border-b border-white/5 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"><div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2 text-left"><input id="name-${bIdx}-${i}" placeholder="Driver Name" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"><input id="license-${bIdx}-${i}" placeholder="License No." class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-400"><input id="phone-${bIdx}-${i}" placeholder="Driver Phone" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"></div><div class="flex flex-wrap gap-4 items-center"><select id="type-${bIdx}-${i}" class="bg-slate-800 border border-white/20 p-2 rounded-lg text-[10px] font-bold text-white"><option value="HGV" ${globalLicense === 'HGV' ? 'selected' : ''}>HGV</option><option value="PCV" ${globalLicense === 'PCV' ? 'selected' : ''}>PCV</option></select><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="later-${bIdx}-${i}" onchange="toggleDetails(${bIdx}, ${i})" class="w-4 h-4 rounded border-white/20 bg-transparent"><span class="text-[10px] text-white/50 uppercase font-bold tracking-widest">Details Later</span></label><button onclick="applyDetailsToAll(${bIdx}, ${i})" class="ml-auto text-[10px] font-black text-blue-400 hover:text-blue-300 uppercase tracking-widest flex items-center gap-1 border border-blue-400/30 px-3 py-1.5 rounded-lg transition-all"><i data-lucide="copy" class="w-3 h-3"></i> Apply to all</button></div></div>`;
                 }
-                section.innerHTML = `<div class="flex justify-between items-start mb-4 text-left"><div class="text-left text-white font-bold"><div class="text-[9px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1 font-black">${item.data.date_label}</div><h4 class="font-bold text-sm text-white text-left leading-tight uppercase tracking-tighter">${item.data.module_name}</h4><div class="text-[8px] font-black text-white/30 uppercase mt-1 text-left leading-none tracking-widest font-black">${item.pathway} | ${item.qty} Driver(s)</div></div><button onclick="removeFromBasket(${bIdx})" class="text-white/20 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="space-y-2 text-left" id="fields-${bIdx}">${inputs}</div>`;
+                section.innerHTML = `<div class="flex justify-between items-start mb-4 text-left"><div class="text-left text-white font-bold"><div class="text-[9px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1 font-black">${item.data.date_label}</div><h4 class="font-bold text-sm text-white text-left leading-tight uppercase tracking-tighter">${item.data.module_name}</h4><div class="text-[8px] font-black text-white/30 uppercase mt-1 text-left leading-none tracking-widest font-black uppercase">${item.pathway} | ${item.qty} Driver(s)</div></div><button onclick="removeFromBasket(${bIdx})" class="text-white/20 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button></div><div class="space-y-2 text-left" id="fields-${bIdx}">${inputs}</div>`;
                 list.appendChild(section);
             });
             lucide.createIcons();
         }
 
+        function removeFromBasket(idx) { basket.splice(idx, 1); updateBasket(); render(); }
+
         function render() {
             const container = document.getElementById('view-container');
             if(!container) return;
             container.innerHTML = '';
-            const btnCal = document.getElementById('btn-calendar');
-            const btnList = document.getElementById('btn-list');
+            const btnCal = document.getElementById('btn-calendar'); const btnList = document.getElementById('btn-list');
             if(btnCal && btnList) {
                 btnCal.className = currentView === 'calendar' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all';
                 btnList.className = currentView === 'list' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all';
@@ -424,7 +531,7 @@
                 const filtered = globalLicense === 'HGV' ? liveCourses.filter(c => !c.category.includes('PSV Only')) : liveCourses;
                 filtered.forEach(c => {
                     const count = basket.filter(b => b.courseId === c.id).reduce((s, b) => s + b.qty, 0);
-                    container.innerHTML += `<div onclick="openModal('${c.date_label}','')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between text-left ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}"><div class="flex items-center gap-4 text-left"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${count > 0 ? 'bg-blue-600 border-blue-600' : 'border-slate-200'}">${count > 0 ? '<i data-lucide="shopping-cart" class="text-white w-3 h-3"></i>' : ''}</div><div class="text-left"><div class="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1 text-left font-black">${c.date_label}</div><div class="font-bold text-slate-800 text-sm leading-tight text-left font-black uppercase tracking-tighter">${c.module_name}</div></div></div><div class="flex items-center gap-2 text-right">${(c.is_specialist === true || c.is_specialist === 'Y') ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase tracking-tight text-right font-black font-black uppercase tracking-tighter">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-right font-black uppercase tracking-tighter">${count} seats</div>` : ''}</div></div>`;
+                    container.innerHTML += `<div onclick="openModal('${c.date_label}','')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between text-left ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'} text-slate-900"><div class="flex items-center gap-4 text-slate-900"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${count > 0 ? 'bg-blue-600 border-blue-600' : 'border-slate-200'}">${count > 0 ? '<i data-lucide="shopping-cart" class="text-white w-3 h-3"></i>' : ''}</div><div><div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1 font-black text-slate-400">${c.date_label}</div><div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800">${c.module_name}</div></div></div><div class="flex items-center gap-2 text-slate-900">${(c.is_specialist === true || c.is_specialist === 'Y') ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg italic uppercase tracking-tighter text-white">${count} seats</div>` : ''}</div></div>`;
                 });
             } else { renderCalendar(container); }
             lucide.createIcons();
@@ -434,25 +541,20 @@
             const year = currentMonth.getFullYear(); const month = currentMonth.getMonth();
             const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
             const monthName = currentMonth.toLocaleString('default', { month: 'long' });
-            let html = `<div class="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden animate-in text-left"><div class="flex items-center justify-between p-5 bg-slate-50 border-b text-left"><button onclick="changeMonth(-1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><div class="text-xs font-black uppercase tracking-widest text-slate-600 text-center font-black">${monthName} ${year}</div><button onclick="changeMonth(1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div><div class="p-4"><div class="calendar-grid text-[9px] font-black text-slate-400 uppercase text-center mb-4 text-left font-black"><div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div></div><div class="calendar-grid text-left">`;
+            let html = `<div class="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden animate-in text-slate-900"><div class="flex items-center justify-between p-5 bg-slate-50 border-b"><button onclick="changeMonth(-1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><div class="text-xs font-black uppercase tracking-widest italic text-slate-900">${monthName} ${year}</div><button onclick="changeMonth(1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div><div class="p-4"><div class="calendar-grid text-[9px] font-black text-slate-400 uppercase text-center mb-4"><div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div></div><div class="calendar-grid">`;
             for (let i = 0; i < (firstDay === 0 ? 0 : firstDay); i++) html += '<div></div>';
             for (let d = 1; d <= daysInMonth; d++) {
-                const dayDate = new Date(year, month, d);
-                const isoDate = dayDate.toISOString().split('T')[0]; 
-                const shortDate = `${d.toString().padStart(2, '0')} ${monthName.substring(0,3)}`; 
-                
+                const dayDate = new Date(year, month, d); const isoDate = dayDate.toISOString().split('T')[0]; 
+                const shortDate = `${d.toString().padStart(2, '0')} ${monthName.substring(0,3)}`; 
                 const courses = liveCourses.filter(c => c.date_label.includes(isoDate) || c.date_label.includes(shortDate));
-                const inBasket = courses.some(c => basket.some(b => b.courseId === c.id));
-                const hasCourse = courses.length > 0;
-                
-                let cellClass = inBasket ? 'bg-blue-600 text-white shadow-lg scale-105 z-10' : 'text-slate-200';
-                let label = d;
+                const inBasket = courses.some(c => basket.some(b => b.courseId === c.id)); const hasCourse = courses.length > 0;
+                let cellClass = inBasket ? 'bg-blue-600 text-white shadow-lg scale-105 z-10 font-black' : 'text-slate-200 opacity-40';
+                let cursorStyle = hasCourse ? 'cursor-pointer hover:scale-[1.02]' : 'cursor-default';
                 if (hasCourse && !inBasket) {
-                    const c = courses[0];
-                    cellClass = (c.category.includes('PSV')) ? 'cat-psv shadow-sm' : 'cat-mixed shadow-sm';
+                    const c = courses[0]; cellClass = (c.category.includes('PSV')) ? 'cat-psv shadow-sm opacity-100' : 'cat-mixed shadow-sm opacity-100';
                     if (courses.some(x => x.is_specialist === true || x.is_specialist === 'Y')) cellClass += ' cat-specialist';
                 }
-                html += `<div onclick="${hasCourse ? `openModal('${isoDate}','${shortDate}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all cursor-pointer relative font-bold text-xs text-center border-transparent border-2 ${cellClass} font-black"><span>${label}</span>${hasCourse && courses.length > 1 && !inBasket ? '<div class="text-[6px] opacity-60 uppercase mt-0.5 leading-none">2 Mod</div>' : ''}${(courses.some(x => x.is_specialist === true || x.is_specialist === 'Y')) && !inBasket ? '<div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-0.5 mx-auto shadow-sm"></div>' : ''}</div>`;
+                html += `<div onclick="${hasCourse ? `openModal('${isoDate}','${shortDate}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all relative font-bold text-xs text-center border-transparent border-2 ${cellClass} ${cursorStyle} font-black text-slate-900"><span>${d}</span>${hasCourse && courses.length > 1 && !inBasket ? '<div class="text-[6px] opacity-60 uppercase mt-0.5 leading-none">2 Mod</div>' : ''}${(courses.some(x => x.is_specialist === true || x.is_specialist === 'Y')) && !inBasket ? '<div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-0.5 mx-auto shadow-sm"></div>' : ''}</div>`;
             }
             container.innerHTML = html + '</div></div></div>';
         }
@@ -465,47 +567,55 @@
             const invoice_to = document.getElementById('invoice_to').value;
             const billing_address = document.getElementById('billing_address').value;
             const contact_phone = document.getElementById('contact_phone').value;
-            const other_info = document.getElementById('other_info')?.value || '';
-            const marketing_opt_in = document.getElementById('marketing_opt_in').checked;
 
             if(!email || !invoice_to || !billing_address || !contact_phone) { alert("Please complete all invoicing fields."); return; }
+            
+            const bookingRef = "CPC-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+            
             btn.disabled = true; btn.innerText = "Processing Request...";
-
-            const roster = [];
-            let isUrgent = false;
-            let emailBody = `--- LEAD CONTACT ---\nName: ${invoice_to}\nEmail: ${email}\nPhone: ${contact_phone}\nAddress: ${billing_address}\nMarketing: ${marketing_opt_in}\nNotes: ${other_info}\n\n--- DRIVER ROSTER ---\n`;
+            const roster = []; let isUrgent = false;
+            let emailBody = `--- LEAD CONTACT ---\nRef: ${bookingRef}\nName: ${invoice_to}\nEmail: ${email}\nPhone: ${contact_phone}\n\n--- DRIVER ROSTER ---\n`;
 
             basket.forEach((item, bIdx) => {
                 if (isWithin4Days(item.data.date_label)) isUrgent = true;
                 emailBody += `\nCOURSE: ${item.data.date_label} - ${item.data.module_name}`;
                 for (let i = 0; i < item.qty; i++) {
-                    const nameEl = document.getElementById(`name-${bIdx}-${i}`);
-                    if(!nameEl) continue;
-                    const dName = nameEl.value; const dLic = document.getElementById(`license-${bIdx}-${i}`).value;
-                    const dPhone = document.getElementById(`phone-${bIdx}-${i}`).value; const dSupport = document.getElementById(`support-${bIdx}-${i}`).checked;
+                    const nameVal = document.getElementById(`name-${bIdx}-${i}`).value;
                     const dLater = document.getElementById(`later-${bIdx}-${i}`).checked;
-                    const entryName = dLater ? "TBA" : dName;
-                    emailBody += `\n > Driver: ${entryName} | Phone: ${dPhone} | Support: ${dSupport}`;
                     roster.push({
-                        lead_email: email, invoice_to, billing_address, contact_phone, marketing_opt_in,
-                        other_info: other_info, driver_name: entryName, driver_license: dLater ? 'TBA' : dLic, 
-                        driver_phone: dPhone, support_required: dSupport, course_id: item.courseId, 
-                        course_date: item.data.date_label, payment_method: 'invoice', status: 'pending'
+                        booking_ref: bookingRef, lead_email: email, invoice_to, billing_address, contact_phone, 
+                        driver_name: dLater ? "TBA" : nameVal, course_id: item.courseId, 
+                        course_date: item.data.date_label, status: isUrgent ? 'pending_urgent' : 'pending'
                     });
                 }
             });
 
             const { error } = await _supabase.from('bookings').insert(roster);
-            const formData = new FormData(); formData.append("access_key", WEB3FORMS_KEY);
-            formData.append("subject", `New Booking: ${invoice_to} (${isUrgent ? 'URGENT' : 'Standard'})`);
+            const formData = new FormData(); 
+            formData.append("access_key", WEB3FORMS_KEY);
+            formData.append("subject", `Booking [${bookingRef}]: ${invoice_to} (${isUrgent ? 'URGENT' : 'Standard'})`);
             formData.append("message", emailBody);
             await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
 
             if (!error) {
-                document.getElementById('step-2').classList.add('hidden'); document.getElementById('success').classList.remove('hidden');
+                document.getElementById('step-2').classList.add('hidden');
+                document.getElementById('success').classList.remove('hidden');
+                document.getElementById('booking-ref-display').innerText = bookingRef;
+                document.getElementById('bacs-ref-hint').innerText = bookingRef;
+                
+                // Toggle Urgent Warning in BACS block
+                if (isUrgent) {
+                    document.getElementById('bacs-urgent-warning').classList.remove('hidden');
+                    document.getElementById('bacs-standard-instruction').classList.add('opacity-40');
+                } else {
+                    document.getElementById('bacs-urgent-warning').classList.add('hidden');
+                    document.getElementById('bacs-standard-instruction').classList.remove('opacity-40');
+                }
+
                 document.getElementById('success-txt').innerText = isUrgent 
-                    ? "Thank you. Your request is being prioritised. We will manually confirm availability and send your discounted invoice within 12 hours."
-                    : "Thank you. We will manually apply all multi-module discounts and send your invoice and payment link to " + email + " within 24 hours.";
+                    ? "Thank you. As your course is within 4 days, please DO NOT send payment yet. We will verify space availability and contact you within 12 hours."
+                    : "Thank you. We will manually apply multi-seat discounts and send your invoice and payment link to " + email + " within 24 hours. Your seat is reserved for 2 days from the date of your invoice.";
+                lucide.createIcons();
             } else { alert("Error: " + error.message); btn.disabled = false; }
         };
 
