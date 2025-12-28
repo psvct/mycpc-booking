@@ -53,13 +53,13 @@
 
     <!-- FIXED STICKY CHECKOUT BAR -->
     <div id="sticky-bar" class="sticky-checkout text-white shadow-2xl px-6 py-4 flex justify-between items-center border-b border-white/10">
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-4 text-white">
             <div class="bg-blue-600 p-2 rounded-xl shadow-lg">
                 <i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i>
             </div>
             <div>
                 <div id="sticky-count" class="text-[10px] font-black uppercase tracking-widest text-blue-300 leading-none mb-1 text-left">0 Seats Selected</div>
-                <div id="sticky-price" class="text-xl font-black leading-none text-left">£0.00</div>
+                <div id="sticky-price" class="text-xl font-black leading-none text-left font-black">£0.00</div>
             </div>
         </div>
         <button onclick="document.getElementById('basket-section').scrollIntoView({behavior:'smooth'})" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-tighter shadow-lg active:scale-95 transition-all">
@@ -79,7 +79,7 @@
             </div>
             <div class="flex items-center gap-4">
                 <a href="https://www.my-cpc.online" class="text-blue-400 hover:text-blue-300 transition-colors uppercase tracking-widest font-black">
-                    Back to Website <i data-lucide="external-link" class="w-3 h-3 inline ml-1"></i>
+                    Back to Website <i data-lucide="external-link" class="w-3 h-3 inline ml-1 text-blue-400"></i>
                 </a>
             </div>
         </div>
@@ -96,9 +96,11 @@
                     </p>
                 </div>
             </div>
-            <div class="bg-slate-100 p-3 rounded-2xl flex items-center gap-2 border border-slate-200">
-                <i data-lucide="shopping-basket" class="w-5 h-5 text-blue-600"></i>
-                <span id="basket-count" class="font-black text-blue-600 text-sm">0</span>
+            <div class="flex items-center gap-4">
+                <div class="bg-slate-100 p-3 rounded-2xl flex items-center gap-2 border border-slate-200">
+                    <i data-lucide="shopping-basket" class="w-5 h-5 text-blue-600"></i>
+                    <span id="basket-count" class="font-black text-blue-600 text-sm">0</span>
+                </div>
             </div>
         </header>
 
@@ -113,7 +115,7 @@
                 <button onclick="setGlobalLicense('PCV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-purple-600 shadow-sm transition-all group text-center">
                     <i data-lucide="users" class="w-14 h-14 text-purple-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
                     <h3 class="font-black text-xl text-slate-800 uppercase italic">Passenger</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight">Bus, Coach & Private Hire.</p>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-tight leading-tight text-center">Bus, Coach & Private Hire.</p>
                 </button>
                 <button onclick="setGlobalLicense('HGV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-blue-600 shadow-sm transition-all group text-center">
                     <i data-lucide="truck" class="w-14 h-14 text-blue-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
@@ -127,7 +129,7 @@
         <div id="step-2" class="hidden animate-in space-y-6 text-left">
             <div class="flex items-center justify-between">
                 <button onclick="location.reload()" class="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase">
-                    <i data-lucide="chevron-left" class="w-3 h-3"></i> Change Sector
+                    <i data-lucide="chevron-left" class="w-3 h-3 text-blue-600"></i> Change Sector
                 </button>
                 <div class="flex bg-white p-1 rounded-xl shadow-sm border border-slate-100">
                     <button onclick="setView('calendar')" id="btn-calendar" class="px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg">
@@ -145,14 +147,13 @@
             <div id="basket-section" class="hidden mt-12 animate-in text-left">
                 <div class="bg-slate-900 rounded-[40px] p-8 text-white shadow-2xl border-t-8 border-blue-600">
                     <h3 class="text-2xl font-black mb-1 flex items-center gap-3 text-left uppercase tracking-tighter italic">
-                        <i data-lucide="clipboard-list" class="text-blue-400 text-blue-400"></i>
+                        <i data-lucide="clipboard-list" class="text-blue-400"></i>
                         Booking Roster
                     </h3>
                     <p class="text-[10px] text-white/40 uppercase font-bold mb-8 tracking-widest ml-10 text-left">Driver details can be updated up to 24h before start.</p>
                     
                     <div id="roster-list" class="space-y-6 mb-10 text-left roster-container text-white"></div>
 
-                    <!-- INVOICING FORM -->
                     <h3 class="text-2xl font-black mb-6 flex items-center gap-3 border-t border-white/10 pt-10 text-left uppercase tracking-tighter italic text-white">
                         <i data-lucide="file-text" class="text-blue-400"></i>
                         Invoicing Details
@@ -164,20 +165,20 @@
                             <input id="invoice_to" required placeholder="Acme Logistics Ltd" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
                         </div>
                         <div class="space-y-1">
-                            <label for="booker_email" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Lead Email for Invoice</label>
+                            <label for="booker_email" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left text-white/30">Lead Email for Invoice</label>
                             <input id="booker_email" required type="email" placeholder="email@address.com" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
                         </div>
                     </div>
 
                     <div class="space-y-1 mb-4 text-left">
-                        <label for="billing_address" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Billing Address & Postcode</label>
+                        <label for="billing_address" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left text-white/30">Billing Address & Postcode</label>
                         <textarea id="billing_address" required rows="2" placeholder="Full address for invoicing purposes" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all text-white"></textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-left">
                         <div class="space-y-1 text-left">
-                            <label for="contact_phone" class="text-[10px] font-bold text-white/30 uppercase ml-2 block">Contact Phone Number</label>
-                            <input id="contact_phone" required placeholder="Main contact number" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all">
+                            <label for="contact_phone" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-white/30">Contact Phone Number</label>
+                            <input id="contact_phone" required placeholder="Main contact number" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all text-white">
                         </div>
                         <div class="bg-white/5 p-4 rounded-2xl border border-white/10 flex items-center justify-between">
                             <span class="text-[10px] font-bold text-white/40 uppercase tracking-widest leading-none">Total (Pre-Discount)</span>
@@ -186,7 +187,7 @@
                     </div>
 
                     <div class="space-y-1 mb-6 text-left">
-                        <label for="other_info" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left">Other information / Special Requirements</label>
+                        <label for="other_info" class="text-[10px] font-bold text-white/30 uppercase ml-2 block text-left text-white/30 text-white">Other information / Special Requirements</label>
                         <textarea id="other_info" rows="3" placeholder="Notes for discounts or support needs..." class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none font-bold text-sm text-white focus:border-blue-500 transition-all text-white"></textarea>
                     </div>
 
@@ -197,11 +198,8 @@
                         </span>
                     </label>
 
-                    <!-- Trust Block -->
-                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl mb-6 text-left">
-                      <p class="text-[10px] text-blue-300 uppercase font-black tracking-widest mb-2 italic">
-                        What happens next
-                      </p>
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl mb-6 text-left text-white">
+                      <p class="text-[10px] text-blue-300 uppercase font-black tracking-widest mb-2 italic">What happens next</p>
                       <ul class="text-[11px] text-white/80 font-medium space-y-1 leading-relaxed text-slate-100">
                         <li>• We manually check multi-seat discounts and confirm availability.</li>
                         <li>• Invoice + payment link emailed within 24 hours.</li>
@@ -219,24 +217,24 @@
 
         <!-- SUCCESS SCREEN -->
         <div id="success" class="hidden animate-in mt-10 space-y-6">
-            <div class="bg-white rounded-[40px] shadow-xl p-12 border border-slate-100 text-center">
+            <div class="bg-white rounded-[40px] shadow-xl p-12 border border-slate-100 text-center text-slate-900">
                 <div class="bg-green-100 p-8 rounded-full inline-block mb-6 text-green-600 mx-auto">
-                    <i data-lucide="check-circle" class="w-16 h-16 text-green-600"></i>
+                    <i data-lucide="check-circle" class="w-16 h-16"></i>
                 </div>
-                <h2 id="success-title" class="text-3xl font-black text-slate-800 mb-2 leading-none uppercase tracking-tighter italic text-slate-800 text-center">Request Received</h2>
+                <h2 id="success-title" class="text-3xl font-black text-slate-800 mb-2 leading-none uppercase tracking-tighter italic">Request Received</h2>
                 
                 <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-4 inline-block mb-6">
                     <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Your Booking Reference</p>
-                    <p id="booking-ref-display" class="text-3xl font-black text-blue-900 tracking-widest uppercase text-blue-900 font-black">---</p>
+                    <p id="booking-ref-display" class="text-3xl font-black text-blue-900 tracking-widest uppercase font-black">---</p>
                 </div>
                 
-                <p id="success-txt" class="text-slate-600 mb-8 px-4 leading-relaxed font-bold text-sm text-center text-slate-600"></p>
+                <p id="success-txt" class="text-slate-600 mb-8 px-4 leading-relaxed font-bold text-sm text-center"></p>
                 
                 <!-- BACS PAYMENT PROMOTION -->
                 <div id="bacs-block" class="bg-slate-900 rounded-3xl p-8 text-white text-left space-y-4 border-t-8 border-blue-600 shadow-xl">
                     <div class="flex items-center justify-between">
                         <h4 class="text-lg font-black uppercase italic tracking-tight">Immediate BACS Payment</h4>
-                        <i data-lucide="landmark" class="text-blue-400 text-blue-400"></i>
+                        <i data-lucide="landmark" class="text-blue-400"></i>
                     </div>
                     
                     <div id="bacs-urgent-warning" class="hidden bg-orange-500/20 border border-orange-500/40 p-4 rounded-xl mb-4 text-orange-100 font-bold">
@@ -251,76 +249,60 @@
 
                     <div id="bacs-standard-instruction">
                         <p class="text-xs text-slate-400 leading-relaxed text-left text-slate-400">
-                            To lock in your seat immediately, you can pay via bank transfer using your **Booking Reference** as the payment description.
+                            To secure your seat immediately, you can pay via bank transfer using your **Booking Reference** as the payment description.
                         </p>
                         <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10 text-white">
                             <div>
-                                <p class="text-[9px] font-bold text-white/30 uppercase">Bank Name</p>
-                                <p class="font-bold text-sm text-blue-100">Monzo</p>
+                                <p class="text-[9px] font-bold text-white/30 uppercase text-white/30">Bank Name</p>
+                                <p class="font-bold text-sm text-blue-100 text-blue-100">Monzo</p>
                             </div>
                             <div>
                                 <p class="text-[9px] font-bold text-white/30 uppercase text-white/30">Account Name</p>
-                                <p class="font-bold text-sm text-blue-100">myCPConline</p>
+                                <p class="font-bold text-sm text-blue-100 text-blue-100">myCPConline</p>
                             </div>
                             <div>
-                                <p class="text-[9px] font-bold text-white/30 uppercase text-white/30 text-white/30">Sort Code</p>
-                                <p class="font-black text-lg text-white">04-00-03</p>
+                                <p class="text-[9px] font-bold text-white/30 uppercase text-white/30">Sort Code</p>
+                                <p class="font-black text-lg text-white text-white">04-00-03</p>
                             </div>
                             <div>
                                 <p class="text-[9px] font-bold text-white/30 uppercase text-white/30">Account Number</p>
-                                <p class="font-black text-lg text-white text-white text-white">94282683</p>
+                                <p class="font-black text-lg text-white text-white">94282683</p>
                             </div>
                         </div>
-                        <div class="bg-blue-600/20 border border-blue-500/30 p-3 rounded-xl mt-4">
-                            <p class="text-[10px] font-black text-blue-300 uppercase text-center italic text-blue-300">
-                                * Use Description: <span id="bacs-ref-hint" class="text-white font-black text-white">---</span>
+                        <div class="bg-blue-600/20 border border-blue-500/30 p-3 rounded-xl mt-4 text-blue-300">
+                            <p class="text-[10px] font-black uppercase text-center italic text-blue-300">
+                                * Use Description: <span id="bacs-ref-hint" class="text-white font-black">---</span>
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <button onclick="location.reload()" class="mt-12 bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all hover:bg-slate-800 mx-auto block text-white font-black tracking-widest">Start New Request</button>
+                <button onclick="location.reload()" class="mt-12 bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all hover:bg-slate-800 mx-auto block font-black">Start New Request</button>
             </div>
         </div>
 
-        <!-- FAQ Section restored -->
+        <!-- FAQ Section -->
         <section id="faq-section" class="mt-20 py-24 px-4 bg-slate-50 text-slate-900 text-center">
             <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-16 text-slate-900">
-                    <h2 class="text-3xl md:text-5xl font-extrabold mb-4 uppercase tracking-tight italic text-slate-900">Common Questions</h2>
-                    <p class="text-slate-500 font-medium italic">Clear answers for professional drivers and operators.</p>
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-5xl font-extrabold mb-4 uppercase tracking-tight italic">Common Questions</h2>
+                    <p class="text-slate-500 font-medium italic text-slate-500">Clear answers for professional drivers and operators.</p>
                 </div>
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-left">
-                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600 text-blue-600">Industry Terms</h4>
-                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left text-slate-900">PSV vs. PCV?</h5>
-                        <p class="text-sm text-slate-500 leading-relaxed text-left text-slate-500 text-slate-500"><strong>PSV</strong> refers to the vehicle. <strong>PCV</strong> is your driving licence category.</p>
+                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600">Industry Terms</h4>
+                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left">PSV vs. PCV?</h5>
+                        <p class="text-sm text-slate-500 leading-relaxed text-left"><strong>PSV</strong> refers to the vehicle. <strong>PCV</strong> is your driving licence category.</p>
                     </div>
                     <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-left">
-                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600 text-blue-600">Our Identity</h4>
-                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left text-slate-900 text-slate-900">What is myCPC.online?</h5>
-                        <p class="text-sm text-slate-500 leading-relaxed text-left text-slate-500 text-slate-500">The training arm of <strong>PSV Compliance and Training</strong>. Accredited training via active professionals.</p>
+                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600">Our Identity</h4>
+                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left">What is myCPC.online?</h5>
+                        <p class="text-sm text-slate-500 leading-relaxed text-left">The specialist training arm of <strong>PSV Compliance and Training</strong>. Accredited SEND transport specialists.</p>
                     </div>
                     <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-left">
-                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600 text-blue-600">CPC Rules</h4>
-                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left text-slate-900 text-slate-900">National vs. International?</h5>
-                        <p class="text-sm text-slate-500 leading-relaxed text-left text-slate-500 text-slate-500 text-slate-500">National CPC is for UK-only driving (3.5h). International CPC is for EU/EEA (7h pairings).</p>
-                    </div>
-                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-left">
-                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600 text-blue-600 text-blue-600">Technology</h4>
-                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left text-slate-900 text-slate-900">How do I join?</h5>
-                        <p class="text-sm text-slate-500 leading-relaxed text-left text-slate-500 text-slate-500">We use <strong>Google Meet</strong>. A link is emailed; simply click to join. Camera/mic is required.</p>
-                    </div>
-                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-left">
-                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600 text-blue-600">Licensing</h4>
-                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left text-slate-900 text-slate-900 text-slate-900 text-slate-900 text-slate-900">How do I get my licence?</h5>
-                        <p class="text-sm text-slate-500 leading-relaxed text-left text-slate-500 text-slate-500">Pass a medical, apply for provisional categories, and pass theory/practical tests. We can guide you.</p>
-                    </div>
-                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm text-left">
-                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600 text-blue-600">Quality</h4>
-                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left text-slate-900 text-slate-900">Is online effective?</h5>
-                        <p class="text-sm text-slate-500 leading-relaxed text-left text-slate-500 text-slate-500">Absolutely. Interactive, scenario-based learning without travel costs or paperwork delays.</p>
+                        <h4 class="font-black text-blue-600 mb-4 uppercase text-xs tracking-widest text-left text-blue-600">CPC Rules</h4>
+                        <h5 class="font-extrabold text-lg mb-3 leading-tight text-left">National vs. International?</h5>
+                        <p class="text-sm text-slate-500 leading-relaxed text-left text-slate-500 text-left">National CPC is for UK driving (3.5h). International CPC is for EU/EEA (7h pairings).</p>
                     </div>
                 </div>
             </div>
@@ -334,22 +316,22 @@
     </div>
 
     <!-- DECISION MODAL -->
-    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 text-left text-slate-900" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 text-left" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl animate-in relative border border-white/20 text-slate-900 text-slate-900">
             <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 text-left leading-none italic text-blue-600">Date</div>
             <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 leading-tight text-left uppercase tracking-tighter italic text-slate-800">Course Options</h3>
             <div id="pathway-options" class="space-y-3 mb-8 text-left text-slate-900"></div>
-            <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border border-slate-200 text-slate-900">
-                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-left text-slate-400">Quantity of Seats</div>
+            <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border border-slate-200">
+                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-left">Quantity of Seats</div>
                 <div class="flex items-center gap-4 text-slate-900">
                     <button onclick="modQty(-1)" aria-label="Decrease quantity" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-black transition-colors hover:bg-slate-100 text-slate-900">-</button>
-                    <input id="m-qty" type="number" value="1" readonly class="bg-transparent text-center font-black text-lg w-8 outline-none text-slate-900 text-slate-900">
+                    <input id="m-qty" type="number" value="1" readonly class="bg-transparent text-center font-black text-lg w-8 outline-none text-slate-900 text-slate-900 text-slate-900">
                     <button onclick="modQty(1)" aria-label="Increase quantity" class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-black transition-colors hover:bg-slate-100 text-slate-900">+</button>
                 </div>
             </div>
-            <div class="flex gap-3 text-slate-900 text-slate-900">
+            <div class="flex gap-3 text-slate-900">
                 <button onclick="closeModal()" id="close-modal-btn" class="flex-1 py-4 rounded-2xl text-xs font-black text-slate-400 uppercase transition-all hover:bg-slate-50 font-black tracking-widest text-slate-400 text-slate-400">Cancel</button>
-                <button onclick="confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50 font-black tracking-widest italic text-white text-white" disabled>Choose Pathway</button>
+                <button onclick="confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50 font-black tracking-widest italic text-white" disabled>Choose Pathway</button>
             </div>
         </div>
     </div>
@@ -364,7 +346,7 @@
         let globalLicense = 'HGV';
         let currentView = 'calendar'; 
         let basket = []; 
-        let currentMonth = new Date(2026, 0, 1);
+        let currentMonth = new Date(); 
         let activeModalDateCourses = [];
         let selectedOption = null;
         let lastFocusedElement;
@@ -372,7 +354,7 @@
 
         async function init() {
             try {
-                const { data } = await _supabase.from('courses').select('*').eq('active', true).order('date_label', { ascending: true });
+                const { data } = await _supabase.from('courses').select('*').eq('active', true).order('course_start', { ascending: true });
                 if (data) liveCourses = data;
             } catch (e) {}
             render();
@@ -387,7 +369,7 @@
             const laterField = document.getElementById(`later-${sourceBIdx}-${sourceSIdx}`);
             const supportField = document.getElementById(`support-${sourceBIdx}-${sourceSIdx}`);
 
-            if (!nameField) return;
+            if (!nameField || !licField || !phoneField || !typeField || !laterField || !supportField) return;
 
             const sourceName = nameField.value;
             const sourceLicense = licField.value;
@@ -427,13 +409,12 @@
             });
         };
 
-        function isWithin4Days(dateLabel) {
-            const months = { 'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5, 'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11 };
-            let targetDate;
-            if (dateLabel.includes('-')) { targetDate = new Date(dateLabel); } 
-            else { const parts = dateLabel.split(' '); targetDate = new Date(2026, months[parts[2]], parseInt(parts[1])); }
-            const now = new Date(); now.setHours(0,0,0,0);
-            return (targetDate - now) / (1000 * 60 * 60 * 24) < 4;
+        function isWithin4Days(courseStartISO) {
+            if (!courseStartISO) return false;
+            const targetDate = new Date(courseStartISO);
+            const now = new Date();
+            const diffHours = (targetDate - now) / (1000 * 60 * 60);
+            return diffHours > 0 && diffHours < 96; // 4 days = 96 hours
         }
 
         window.setGlobalLicense = (lic) => { globalLicense = lic; document.getElementById('step-1').classList.add('hidden'); document.getElementById('step-2').classList.remove('hidden'); render(); };
@@ -467,22 +448,29 @@
         window.closeModal = closeDecisionModal;
         window.modQty = (dir) => { let val = parseInt(document.getElementById('m-qty').value) + dir; if (val < 1) val = 1; document.getElementById('m-qty').value = val; };
 
-        window.openModal = (isoDate, shortDate) => {
-            activeModalDateCourses = liveCourses.filter(c => c.date_label.includes(isoDate) || c.date_label.includes(shortDate));
-            if (activeModalDateCourses.length === 0) return;
+        window.openModal = (id) => {
+            const c = liveCourses.find(item => item.id === id);
+            if (!c) return;
+            
+            activeModalDateCourses = liveCourses.filter(item => {
+                const itemDate = new Date(item.course_start).toDateString();
+                const targetDate = new Date(c.course_start).toDateString();
+                return itemDate === targetDate;
+            });
+
             selectedOption = null;
             document.getElementById('add-to-basket-btn').disabled = true;
-            document.getElementById('modal-date').innerText = activeModalDateCourses[0].date_label;
-            document.getElementById('modal-title').innerText = activeModalDateCourses.length > 1 ? "Combined Session" : activeModalDateCourses[0].module_name;
+            document.getElementById('modal-date').innerText = c.date_label;
+            document.getElementById('modal-title').innerText = activeModalDateCourses.length > 1 ? "Combined Session" : c.module_name;
             document.getElementById('m-qty').value = 1;
             const optionsBox = document.getElementById('pathway-options');
             optionsBox.innerHTML = '';
+            
             if (activeModalDateCourses.length > 1) {
-                activeModalDateCourses.forEach(c => addDecision(optionsBox, `single_${c.id}`, c.module_name, '3.5h Module', '£21.99'));
+                activeModalDateCourses.forEach(course => addDecision(optionsBox, `single_${course.id}`, course.module_name, '3.5h Module', '£21.99'));
                 addDecision(optionsBox, 'combined_day', 'Full Day (7h pairing)', 'Both Modules', '£38.99');
             } else {
-                const c = activeModalDateCourses[0];
-                if (c.is_7h === true || c.is_7h === 'Y') {
+                if (c.is_7h) {
                     addDecision(optionsBox, '7h_full', 'Full Day (7h)', 'International Block', '£38.99');
                 } else if (c.block_id) {
                     addDecision(optionsBox, 'national', 'Single (3.5h)', '3.5h Module', '£21.99');
@@ -503,7 +491,7 @@
                 document.getElementById('add-to-basket-btn').disabled = false;
                 document.getElementById('add-to-basket-btn').classList.replace('bg-slate-900', 'bg-blue-600');
             };
-            btn.innerHTML = `<div class="flex justify-between items-center text-left text-slate-900"><div><div class="font-black text-sm text-slate-800 mb-1 font-black uppercase italic text-slate-800">${title}</div><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tight text-slate-400">${desc}</div></div><div class="text-lg font-black text-blue-600 text-blue-600">£${price.replace('£','')}</div></div>`;
+            btn.innerHTML = `<div class="flex justify-between items-center text-left text-slate-900"><div><div class="font-black text-sm mb-1 uppercase italic">${title}</div><div class="text-[9px] font-bold text-slate-400 uppercase tracking-tight">${desc}</div></div><div class="text-lg font-black text-blue-600">£${price.replace('£','')}</div></div>`;
             container.appendChild(btn);
         }
 
@@ -557,30 +545,23 @@
                 section.className = "bg-white/5 p-6 rounded-3xl border border-white/10 mb-4 animate-in text-left text-white";
                 let inputs = '';
                 for (let i = 0; i < item.qty; i++) {
-                    inputs += `<div class="border-b border-white/5 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0 text-white"><div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2 text-left"><input id="name-${bIdx}-${i}" placeholder="Driver Name" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400 text-white"><input id="license-${bIdx}-${i}" placeholder="License No." class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-400 text-white"><input id="phone-${bIdx}-${i}" placeholder="Driver Phone" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400 text-white"></div><div class="flex flex-wrap gap-4 items-center text-white"><select id="type-${bIdx}-${i}" class="bg-slate-800 border border-white/20 p-2 rounded-lg text-[10px] font-bold text-white"><option value="HGV" ${globalLicense === 'HGV' ? 'selected' : ''}>HGV</option><option value="PCV" ${globalLicense === 'PCV' ? 'selected' : ''}>PCV</option></select><label class="flex items-center gap-2 cursor-pointer text-white"><input type="checkbox" id="later-${bIdx}-${i}" onchange="toggleDetails(${bIdx}, ${i})" class="w-4 h-4 rounded border-white/20 bg-transparent text-white"><span class="text-[10px] text-white/50 uppercase font-bold text-white/50 tracking-widest">Details Later</span></label><label class="flex items-center gap-2 cursor-pointer text-white"><input type="checkbox" id="support-${bIdx}-${i}" class="w-4 h-4 rounded border-white/20 bg-transparent text-blue-500"><span class="text-[10px] text-blue-400 uppercase font-black text-blue-400 tracking-widest italic">Extra Support?</span></label><button onclick="applyDetailsToAll(${bIdx}, ${i})" class="ml-auto text-[10px] font-black text-blue-400 hover:text-blue-300 uppercase tracking-widest flex items-center gap-1 border border-blue-400/30 px-3 py-1.5 rounded-lg transition-all text-blue-400"><i data-lucide="copy" class="w-3 h-3 text-blue-400"></i> Apply to all</button></div></div>`;
+                    inputs += `<div class="border-b border-white/5 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"><div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2 text-left"><input id="name-${bIdx}-${i}" placeholder="Driver Name" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"><input id="license-${bIdx}-${i}" placeholder="License No." class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-400"><input id="phone-${bIdx}-${i}" placeholder="Driver Phone" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"></div><div class="flex flex-wrap gap-4 items-center"><select id="type-${bIdx}-${i}" class="bg-slate-800 border border-white/20 p-2 rounded-lg text-[10px] font-bold text-white"><option value="HGV" ${globalLicense === 'HGV' ? 'selected' : ''}>HGV</option><option value="PCV" ${globalLicense === 'PCV' ? 'selected' : ''}>PCV</option></select><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="later-${bIdx}-${i}" onchange="toggleDetails(${bIdx}, ${i})" class="w-4 h-4 rounded border-white/20 bg-transparent"><span class="text-[10px] text-white/50 uppercase font-bold tracking-widest">Details Later</span></label><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="support-${bIdx}-${i}" class="w-4 h-4 rounded border-white/20 bg-transparent text-blue-500"><span class="text-[10px] text-blue-400 uppercase font-black tracking-widest italic">Extra Support?</span></label><button onclick="applyDetailsToAll(${bIdx}, ${i})" class="ml-auto text-[10px] font-black text-blue-400 hover:text-blue-300 uppercase tracking-widest flex items-center gap-1 border border-blue-400/30 px-3 py-1.5 rounded-lg transition-all text-blue-400"><i data-lucide="copy" class="w-3 h-3 text-blue-400"></i> Apply to all</button></div></div>`;
                 }
-                section.innerHTML = `<div class="flex justify-between items-start mb-4 text-left"><div class="text-left text-white font-bold"><div class="text-[9px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1 font-black text-blue-400">${item.data.date_label}</div><h4 class="font-bold text-sm text-white text-left leading-tight uppercase tracking-tighter text-white">${item.data.module_name}</h4><div class="text-[8px] font-black text-white/30 uppercase mt-1 text-left leading-none tracking-widest font-black uppercase text-white/30 uppercase">${item.pathway} | ${item.qty} Driver(s)</div></div><button onclick="removeFromBasket(${bIdx})" class="text-white/20 hover:text-red-400 transition-colors text-white/20"><i data-lucide="trash-2" class="w-4 h-4 text-white/20"></i></button></div><div class="space-y-2 text-left text-white" id="fields-${bIdx}">${inputs}</div>`;
+                section.innerHTML = `<div class="flex justify-between items-start mb-4 text-left"><div class="text-left text-white font-bold"><div class="text-[9px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1 font-black">${item.data.date_label}</div><h4 class="font-bold text-sm text-white text-left leading-tight uppercase tracking-tighter">${item.data.module_name}</h4><div class="text-[8px] font-black text-white/30 uppercase mt-1 text-left leading-none tracking-widest font-black uppercase text-white/30 uppercase">${item.pathway} | ${item.qty} Driver(s)</div></div><button onclick="removeFromBasket(${bIdx})" class="text-white/20 hover:text-red-400 transition-colors text-white/20"><i data-lucide="trash-2" class="w-4 h-4 text-white/20"></i></button></div><div class="space-y-2 text-left text-white" id="fields-${bIdx}">${inputs}</div>`;
                 list.appendChild(section);
             });
             lucide.createIcons();
         }
 
-        function removeFromBasket(idx) { basket.splice(idx, 1); updateBasket(); render(); }
-
         function render() {
             const container = document.getElementById('view-container');
             if(!container) return;
             container.innerHTML = '';
-            const btnCal = document.getElementById('btn-calendar'); const btnList = document.getElementById('btn-list');
-            if(btnCal && btnList) {
-                btnCal.className = currentView === 'calendar' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg text-white' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all text-slate-400';
-                btnList.className = currentView === 'list' ? 'px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white flex items-center gap-2 transition-all shadow-lg text-white' : 'px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 flex items-center gap-2 transition-all text-slate-400';
-            }
             if (currentView === 'list') {
                 const filtered = globalLicense === 'HGV' ? liveCourses.filter(c => !c.category.includes('PSV Only')) : liveCourses;
                 filtered.forEach(c => {
                     const count = basket.filter(b => b.courseId === c.id).reduce((s, b) => s + b.qty, 0);
-                    container.innerHTML += `<div onclick="openModal('${c.date_label}','')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between text-left ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'} text-slate-900"><div class="flex items-center gap-4 text-slate-900"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${count > 0 ? 'bg-blue-600 border-blue-600' : 'border-slate-200'}">${count > 0 ? '<i data-lucide="shopping-cart" class="text-white w-3 h-3"></i>' : ''}</div><div><div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1 font-black text-slate-400">${c.date_label}</div><div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800">${c.module_name}</div></div></div><div class="flex items-center gap-2 text-slate-900">${(c.is_specialist === true || c.is_specialist === 'Y') ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic text-purple-700">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg italic uppercase tracking-tighter text-white">${count} seats</div>` : ''}</div></div>`;
+                    container.innerHTML += `<div onclick="openModal('${c.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between text-left ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'} text-slate-900"><div class="flex items-center gap-4 text-slate-900"><div class="w-6 h-6 rounded-full border-2 flex items-center justify-center ${count > 0 ? 'bg-blue-600 border-blue-600' : 'border-slate-200'}">${count > 0 ? '<i data-lucide="shopping-cart" class="text-white w-3 h-3"></i>' : ''}</div><div><div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1 font-black text-slate-400">${c.date_label}</div><div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800">${c.module_name}</div></div></div><div class="flex items-center gap-2 text-slate-900">${(c.is_specialist) ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic text-purple-700">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg italic uppercase tracking-tighter text-white">${count} seats</div>` : ''}</div></div>`;
                 });
             } else { renderCalendar(container); }
             lucide.createIcons();
@@ -590,20 +571,19 @@
             const year = currentMonth.getFullYear(); const month = currentMonth.getMonth();
             const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
             const monthName = currentMonth.toLocaleString('default', { month: 'long' });
-            let html = `<div class="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden animate-in text-slate-900"><div class="flex items-center justify-between p-5 bg-slate-50 border-b"><button onclick="changeMonth(-1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><div class="text-xs font-black uppercase tracking-widest italic text-slate-900">${monthName} ${year}</div><button onclick="changeMonth(1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div><div class="p-4 text-slate-900"><div class="calendar-grid text-[9px] font-black text-slate-400 uppercase text-center mb-4 text-left"><div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div></div><div class="calendar-grid">`;
+            let html = `<div class="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden animate-in text-slate-900"><div class="flex items-center justify-between p-5 bg-slate-50 border-b"><button onclick="changeMonth(-1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-left" class="w-4 h-4"></i></button><div class="text-xs font-black uppercase tracking-widest italic text-slate-900">${monthName} ${year}</div><button onclick="changeMonth(1)" class="p-2 hover:bg-slate-200 rounded-xl transition-colors"><i data-lucide="chevron-right" class="w-4 h-4"></i></button></div><div class="p-4"><div class="calendar-grid text-[9px] font-black text-slate-400 uppercase text-center mb-4"><div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div></div><div class="calendar-grid">`;
             for (let i = 0; i < (firstDay === 0 ? 0 : firstDay); i++) html += '<div></div>';
             for (let d = 1; d <= daysInMonth; d++) {
-                const dayDate = new Date(year, month, d); const isoDate = dayDate.toISOString().split('T')[0]; 
-                const shortDate = `${d.toString().padStart(2, '0')} ${monthName.substring(0,3)}`; 
-                const courses = liveCourses.filter(c => c.date_label.includes(isoDate) || c.date_label.includes(shortDate));
+                const dayDate = new Date(year, month, d);
+                const courses = liveCourses.filter(c => new Date(c.course_start).toDateString() === dayDate.toDateString());
                 const inBasket = courses.some(c => basket.some(b => b.courseId === c.id)); const hasCourse = courses.length > 0;
-                let cellClass = inBasket ? 'bg-blue-600 text-white shadow-lg scale-105 z-10 font-black text-white' : 'text-slate-200 opacity-40';
+                let cellClass = inBasket ? 'bg-blue-600 text-white shadow-lg scale-105 z-10 font-black' : 'text-slate-200 opacity-40';
                 let cursorStyle = hasCourse ? 'cursor-pointer hover:scale-[1.02]' : 'cursor-default';
                 if (hasCourse && !inBasket) {
                     const c = courses[0]; cellClass = (c.category.includes('PSV')) ? 'cat-psv shadow-sm opacity-100' : 'cat-mixed shadow-sm opacity-100';
-                    if (courses.some(x => x.is_specialist === true || x.is_specialist === 'Y')) cellClass += ' cat-specialist';
+                    if (courses.some(x => x.is_specialist)) cellClass += ' cat-specialist';
                 }
-                html += `<div onclick="${hasCourse ? `openModal('${isoDate}','${shortDate}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all relative font-bold text-xs text-center border-transparent border-2 ${cellClass} ${cursorStyle} font-black text-slate-900"><span>${d}</span>${hasCourse && courses.length > 1 && !inBasket ? '<div class="text-[6px] opacity-60 uppercase mt-0.5 leading-none">2 Mod</div>' : ''}${(courses.some(x => x.is_specialist === true || x.is_specialist === 'Y')) && !inBasket ? '<div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-0.5 mx-auto shadow-sm"></div>' : ''}</div>`;
+                html += `<div onclick="${hasCourse ? `openModal('${courses[0].id}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all relative font-bold text-xs text-center border-transparent border-2 ${cellClass} ${cursorStyle} font-black text-slate-900"><span>${d}</span>${hasCourse && courses.length > 1 && !inBasket ? '<div class="text-[6px] opacity-60 uppercase mt-0.5 leading-none">2 Mod</div>' : ''}${(courses.some(x => x.is_specialist)) && !inBasket ? '<div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-0.5 mx-auto shadow-sm"></div>' : ''}</div>`;
             }
             container.innerHTML = html + '</div></div></div>';
         }
@@ -614,28 +594,26 @@
             const btn = document.getElementById('submit-btn');
             const email = document.getElementById('booker_email').value;
             const invoice_to = document.getElementById('invoice_to').value;
-            const billing_address = document.getElementById('billing_address').value;
-            const contact_phone = document.getElementById('contact_phone').value;
-            if(!email || !invoice_to || !billing_address || !contact_phone) { alert("Please complete all invoicing fields."); return; }
+            if(!email || !invoice_to || basket.length === 0) { alert("Please complete invoicing fields and ensure basket is not empty."); return; }
             
             const bookingRef = "CPC-" + Math.random().toString(36).substring(2, 8).toUpperCase();
             btn.disabled = true; btn.innerText = "Processing Request...";
             const roster = []; let isUrgent = false;
-            let emailBody = `--- LEAD CONTACT ---\nRef: ${bookingRef}\nName: ${invoice_to}\nEmail: ${email}\nPhone: ${contact_phone}\n\n--- DRIVER ROSTER ---\n`;
+            let emailBody = `--- LEAD CONTACT ---\nRef: ${bookingRef}\nName: ${invoice_to}\nEmail: ${email}\n\n--- DRIVER ROSTER ---\n`;
+            
             basket.forEach((item, bIdx) => {
-                if (isWithin4Days(item.data.date_label)) isUrgent = true;
+                if (isWithin4Days(item.data.course_start)) isUrgent = true;
                 emailBody += `\nCOURSE: ${item.data.date_label} - ${item.data.module_name}`;
                 for (let i = 0; i < item.qty; i++) {
                     const dName = document.getElementById(`name-${bIdx}-${i}`).value;
                     const dLic = document.getElementById(`license-${bIdx}-${i}`).value;
-                    const dPhone = document.getElementById(`phone-${bIdx}-${i}`).value;
-                    const dSupport = document.getElementById(`support-${bIdx}-${i}`).checked;
                     const dLater = document.getElementById(`later-${bIdx}-${i}`).checked;
+                    const dSupport = document.getElementById(`support-${bIdx}-${i}`).checked;
                     roster.push({
-                        booking_ref: bookingRef, lead_email: email, invoice_to, billing_address, contact_phone, 
+                        booking_ref: bookingRef, lead_email: email, invoice_to, 
                         driver_name: dLater ? "TBA" : dName, driver_license: dLater ? "TBA" : dLic,
-                        driver_phone: dLater ? "TBA" : dPhone, support_required: dSupport,
-                        course_id: item.courseId, course_date: item.data.date_label, status: 'pending'
+                        support_required: dSupport, course_id: item.courseId, 
+                        course_date: item.data.date_label, status: 'pending'
                     });
                 }
             });
@@ -655,8 +633,8 @@
                     document.getElementById('bacs-standard-instruction').classList.add('opacity-40');
                 }
                 document.getElementById('success-txt').innerText = isUrgent 
-                    ? "Thank you. As your course starts within 4 working days, please DO NOT send payment yet. We will verify space availability and contact you within 12 hours."
-                    : "Thank you. We will manually apply discounts and send your invoice and payment link to " + email + " within 24 hours. Your seat is reserved for 2 days from the date of your invoice.";
+                    ? "Thank you. As your course starts within 4 days, please DO NOT send payment yet. We will verify availability and contact you within 12 hours."
+                    : "Thank you. We will manually apply multi-seat discounts and send your invoice and payment link to " + email + " within 24 hours. Your seat is reserved for 2 days from the invoice date.";
                 lucide.createIcons();
             } else { alert("Error: " + error.message); btn.disabled = false; }
         };
