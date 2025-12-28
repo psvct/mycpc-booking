@@ -39,66 +39,66 @@
 </head>
 <body class="bg-slate-50 text-slate-900 pb-24 text-left">
 
-    <!-- Sticky Checkout -->
+    <!-- Sticky Basket -->
     <div id="sticky-bar" class="sticky-checkout text-white shadow-2xl px-6 py-4 flex justify-between items-center border-b border-white/10">
         <div class="flex items-center gap-4">
             <div class="bg-blue-600 p-2 rounded-xl shadow-lg"><i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i></div>
             <div>
-                <div id="sticky-count" class="text-[10px] font-black uppercase text-blue-300 mb-1 leading-none">0 Seats Selected</div>
-                <div id="sticky-price" class="text-xl font-black leading-none">£0.00</div>
+                <div id="sticky-count" class="text-[10px] font-black uppercase text-blue-300 mb-1 leading-none text-blue-300">0 Seats Selected</div>
+                <div id="sticky-price" class="text-xl font-black leading-none text-white">£0.00</div>
             </div>
         </div>
-        <button onclick="document.getElementById('basket-section').scrollIntoView({behavior:'smooth'})" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase shadow-lg transition-all active:scale-95">Review Request</button>
+        <button onclick="document.getElementById('basket-section').scrollIntoView({behavior:'smooth'})" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-black text-xs uppercase shadow-lg transition-all active:scale-95 text-white">Review Request</button>
     </div>
 
-    <div class="max-w-3xl mx-auto p-4 flex flex-col min-h-screen">
-        <div class="bg-slate-900 text-white text-[10px] font-bold py-2.5 px-6 rounded-t-3xl flex justify-between items-center uppercase tracking-widest">
+    <div class="max-w-3xl mx-auto p-4 flex flex-col min-h-screen text-slate-900">
+        <div class="bg-slate-900 text-white text-[10px] font-bold py-2.5 px-6 rounded-t-3xl flex justify-between items-center uppercase tracking-widest text-white">
             <div class="flex gap-4">
-                <span class="text-blue-400 font-bold"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i> 0117 427 8967</span>
-                <a href="https://wa.me/447359941879" target="_blank" class="text-green-400 font-black underline"><i data-lucide="message-circle" class="w-3 h-3 inline mr-1"></i> WhatsApp</a>
+                <span class="text-blue-400 font-bold text-blue-400"><i data-lucide="phone" class="w-3 h-3 inline mr-1"></i> 0117 427 8967</span>
+                <a href="https://wa.me/447359941879" target="_blank" class="text-green-400 font-black underline text-green-400"><i data-lucide="message-circle" class="w-3 h-3 inline mr-1 text-green-400"></i> WhatsApp</a>
             </div>
-            <a href="https://www.my-cpc.online" class="text-blue-400 hover:text-blue-300 font-black">Back to Website <i data-lucide="external-link" class="w-3 h-3 inline"></i></a>
+            <a href="https://www.my-cpc.online" class="text-blue-400 hover:text-blue-300 font-black text-blue-400">Main Site <i data-lucide="external-link" class="w-3 h-3 inline"></i></a>
         </div>
 
-        <header class="py-6 flex items-center justify-between border-b mb-8 bg-white rounded-b-3xl px-6 shadow-sm border-slate-100">
-            <div class="flex items-center gap-3">
+        <header class="py-6 flex items-center justify-between border-b mb-8 bg-white rounded-b-3xl px-6 shadow-sm border-slate-100 text-slate-900">
+            <div class="flex items-center gap-3 text-left">
                 <div class="bg-blue-600 p-2 rounded-xl shadow-lg text-white"><i data-lucide="award" class="w-6 h-6"></i></div>
                 <div>
-                    <h1 class="text-xl font-black uppercase italic text-slate-800 tracking-tight leading-none mb-1">MyCPC<span class="text-blue-600">.online</span></h1>
-                    <p class="text-[9px] text-slate-500 font-black uppercase italic tracking-tight">JAUPT Approved Centre AC02237</p>
+                    <h1 class="text-xl font-black uppercase italic text-slate-800 tracking-tight leading-none mb-1 text-slate-800">MyCPC<span class="text-blue-600">.online</span></h1>
+                    <p class="text-[9px] text-slate-500 font-black uppercase italic tracking-tight text-slate-500">JAUPT Approved Centre AC02237</p>
                 </div>
             </div>
             <div class="bg-slate-100 p-3 rounded-2xl flex items-center gap-2 border border-slate-200">
                 <i data-lucide="shopping-basket" class="w-5 h-5 text-blue-600"></i>
-                <span id="basket-count" class="font-black text-blue-600">0</span>
+                <span id="basket-count" class="font-black text-blue-600 text-blue-600">0</span>
             </div>
         </header>
 
         <div id="step-1" class="animate-in space-y-6">
              <div class="text-center py-6">
-                <h2 class="text-3xl font-black text-slate-800 uppercase italic">Booking Portal</h2>
-                <p class="text-slate-500 font-medium text-sm uppercase tracking-widest">Select industry sector to begin</p>
+                <h2 class="text-3xl font-black text-slate-800 uppercase italic text-slate-800">Booking Portal</h2>
+                <p class="text-slate-500 font-medium text-sm uppercase tracking-widest text-slate-500">Select industry sector to begin</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button onclick="setGlobalLicense('PCV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-purple-600 shadow-sm transition-all group text-center">
                     <i data-lucide="users" class="w-14 h-14 text-purple-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-black text-xl uppercase italic">Passenger</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase">Bus, Coach & Private Hire</p>
+                    <h3 class="font-black text-xl uppercase italic text-slate-800">Passenger</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase text-slate-400">Bus, Coach & Private Hire</p>
                 </button>
                 <button onclick="setGlobalLicense('HGV')" class="bg-white p-10 rounded-[40px] border-2 border-transparent hover:border-blue-600 shadow-sm transition-all group text-center">
                     <i data-lucide="truck" class="w-14 h-14 text-blue-600 mx-auto mb-4 group-hover:scale-110 transition-transform"></i>
-                    <h3 class="font-black text-xl uppercase italic">Freight</h3>
-                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase">Lorry, LGV & Distribution</p>
+                    <h3 class="font-black text-xl uppercase italic text-slate-800">Freight</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase text-slate-400">Lorry, LGV & Distribution</p>
                 </button>
             </div>
         </div>
 
         <div id="step-2" class="hidden animate-in space-y-6 text-left">
             <div class="flex items-center justify-between">
-                <button onclick="clearAllData()" class="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase"><i data-lucide="chevron-left" class="w-3 h-3"></i> Change Sector</button>
-                <div class="flex bg-white p-1 rounded-xl shadow-sm border border-slate-100">
-                    <button onclick="setView('calendar')" id="btn-calendar" class="px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white shadow-lg">CALENDAR</button>
-                    <button onclick="setView('list')" id="btn-list" class="px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 ml-1">LIST</button>
+                <button onclick="clearAllData()" class="text-[10px] font-black text-blue-600 flex items-center gap-1 uppercase font-black text-blue-600"><i data-lucide="chevron-left" class="w-3 h-3"></i> Change Sector</button>
+                <div class="flex bg-white p-1 rounded-xl shadow-sm border border-slate-100 text-white">
+                    <button onclick="setView('calendar')" id="btn-calendar" class="px-4 py-2 rounded-lg text-[10px] font-black bg-blue-600 text-white shadow-lg text-white">CALENDAR</button>
+                    <button onclick="setView('list')" id="btn-list" class="px-4 py-2 rounded-lg text-[10px] font-black text-slate-400 ml-1 text-slate-400">LIST</button>
                 </div>
             </div>
 
@@ -107,62 +107,65 @@
             <!-- Roster Section -->
             <div id="basket-section" class="hidden mt-12 animate-in text-left">
                 <div class="bg-slate-900 rounded-[40px] p-8 text-white shadow-2xl border-t-8 border-blue-600">
-                    <h3 class="text-2xl font-black mb-1 flex items-center gap-3 italic"><i data-lucide="clipboard-list" class="text-blue-400"></i> Driver Roster</h3>
-                    <p class="text-[10px] text-white/40 uppercase font-bold mb-8 ml-10">Provide driver details or tick 'Details Later'.</p>
+                    <h3 class="text-2xl font-black mb-1 flex items-center gap-3 italic text-white"><i data-lucide="clipboard-list" class="text-blue-400"></i> Driver Roster</h3>
+                    <p class="text-[10px] text-white/40 uppercase font-bold mb-8 ml-10 text-white/40">Provide driver details below or tick 'Details Later'.</p>
                     <div id="roster-list" class="space-y-6 mb-10 roster-container text-white"></div>
 
-                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3 border-t border-white/10 pt-10 italic"><i data-lucide="file-text" class="text-blue-400"></i> Invoicing Details</h3>
+                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3 border-t border-white/10 pt-10 italic text-white"><i data-lucide="file-text" class="text-blue-400"></i> Invoicing Details</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2">Invoice To (Company/Name)</label>
-                            <input id="invoice_to" required class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500">
+                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 text-white/30">Invoice To (Company/Name)</label>
+                            <input id="invoice_to" required class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500 text-white">
                         </div>
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2">Lead Email</label>
-                            <input id="booker_email" type="email" required class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500">
+                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 text-white/30 text-white/30">Lead Email</label>
+                            <input id="booker_email" type="email" required class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500 text-white">
                         </div>
                     </div>
                     <div class="space-y-1 mb-4">
-                        <label class="text-[10px] font-bold text-white/30 uppercase ml-2">Billing Address & Postcode</label>
-                        <textarea id="billing_address" rows="2" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500"></textarea>
+                        <label class="text-[10px] font-bold text-white/30 uppercase ml-2 text-white/30 text-white/30 text-white/30">Billing Address & Postcode</label>
+                        <textarea id="billing_address" rows="2" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500 text-white"></textarea>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                         <div class="space-y-1">
-                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2">Contact Phone</label>
-                            <input id="contact_phone" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500">
+                            <label class="text-[10px] font-bold text-white/30 uppercase ml-2 text-white/30">Contact Phone</label>
+                            <input id="contact_phone" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500 text-white">
                         </div>
-                        <div class="bg-white/5 p-4 rounded-2xl border border-white/10 flex items-center justify-between">
-                            <span class="text-[10px] font-bold text-white/40 uppercase">Total (Pre-Discount)</span>
-                            <span id="total-price" class="text-2xl font-black text-blue-400 italic">£0.00</span>
+                        <div class="bg-white/5 p-4 rounded-2xl flex items-center justify-between border border-white/10">
+                            <span class="text-[10px] font-bold text-white/40 uppercase text-white/40 text-white/40">Total (Est.)</span>
+                            <span id="total-price" class="text-2xl font-black text-blue-400 italic text-blue-400">£0.00</span>
                         </div>
                     </div>
 
                     <input type="text" id="hp_field" class="hp-field" tabindex="-1" autocomplete="off">
 
-                    <div class="space-y-3 mb-8 text-white">
-                        <label class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10 cursor-pointer">
+                    <div class="space-y-3 mb-8">
+                        <label class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10 cursor-pointer text-white">
                             <input type="checkbox" id="claiming_discount" class="w-5 h-5 rounded border-white/20 bg-transparent text-blue-600 focus:ring-blue-500">
-                            <span class="text-xs text-blue-300 font-bold">I am claiming a multi-seat or fleet discount (Manual Review).</span>
+                            <span class="text-xs text-blue-300 font-bold text-blue-300">I am claiming a multi-seat or fleet discount (Manual review).</span>
                         </label>
                         <label class="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10 cursor-pointer">
                             <input type="checkbox" id="marketing_opt_in" class="w-5 h-5 rounded border-white/20 bg-transparent text-blue-600 focus:ring-blue-500">
-                            <span class="text-xs text-white/70">I give permission for future marketing updates. (Opt out any time).</span>
+                            <span class="text-xs text-white/70 text-white/70">I give permission for marketing updates. (Opt out any time).</span>
                         </label>
                     </div>
 
-                    <div id="validation-error" class="hidden bg-red-500/20 border border-red-500/50 p-5 rounded-2xl mb-6 flex gap-4 animate-in">
-                        <i data-lucide="alert-circle" class="text-red-400 w-6 h-6 shrink-0"></i>
-                        <div><p class="text-[10px] font-black uppercase text-red-400 tracking-widest mb-1">Double Check Required</p><p id="error-text" class="text-xs text-red-100 font-bold"></p></div>
+                    <div id="validation-error" class="hidden bg-red-500/20 border border-red-500/50 p-5 rounded-2xl mb-6 flex gap-4 animate-in text-white text-white">
+                        <i data-lucide="alert-circle" class="text-red-400 w-6 h-6 shrink-0 text-red-400 text-red-400"></i>
+                        <div><p class="text-[10px] font-black uppercase text-red-400 tracking-widest mb-1 text-red-400">Check Highlights</p><p id="error-text" class="text-xs text-red-100 font-bold leading-tight text-red-100"></p></div>
                     </div>
 
-                    <button onclick="submitBooking()" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-[30px] font-black text-xl shadow-xl uppercase italic text-white transition-all active:scale-95 font-black">Confirm & Request Invoice</button>
+                    <button onclick="submitBooking()" id="submit-btn" class="w-full bg-blue-600 hover:bg-blue-500 py-6 rounded-[30px] font-black text-xl shadow-xl uppercase italic text-white transition-all active:scale-95 font-black text-white">Confirm & Request Invoice</button>
                 </div>
                 
-                <div class="mt-6 bg-purple-900 p-8 rounded-[40px] text-white flex gap-6 items-start">
-                    <i data-lucide="shield-check" class="w-12 h-12 text-purple-300 shrink-0"></i>
+                <!-- UNIVERSAL SAFETY MANDATE -->
+                <div id="safety-mandate-block" class="mt-6 bg-purple-900 p-8 rounded-[40px] text-white flex gap-6 items-start text-left text-white">
+                    <i data-lucide="shield-check" class="w-12 h-12 text-purple-300 shrink-0 text-purple-300"></i>
                     <div>
-                        <h4 class="font-black text-sm uppercase mb-2 italic leading-none">Safety Mandate</h4>
-                        <p class="text-xs opacity-90 font-medium">Children must be dropped off on the correct side of the road and seen to be entering their home safely before departure.</p>
+                        <h4 class="font-black text-sm uppercase mb-2 italic tracking-widest leading-none text-white">Our Safety Mandate</h4>
+                        <p class="text-xs opacity-90 font-medium text-white/90">
+                            A professional driver’s responsibility extends beyond the vehicle. We commit to a superior duty of care—protecting vulnerable road users, securing freight with absolute integrity, and ensuring every passenger is seen safely home.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -170,47 +173,47 @@
 
         <div id="success" class="hidden animate-in mt-10 space-y-6">
             <div class="bg-white rounded-[40px] shadow-xl p-12 text-center text-slate-900 border border-slate-100">
-                <div class="bg-green-100 p-8 rounded-full inline-block mb-6 text-green-600 mx-auto"><i data-lucide="check-circle" class="w-16 h-16"></i></div>
-                <h2 class="text-3xl font-black text-slate-800 mb-2 uppercase italic tracking-tighter">Request Received</h2>
-                <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-4 inline-block mb-6 text-blue-900 font-black">
-                    <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Your Booking Reference</p>
-                    <p id="booking-ref-display" class="text-2xl font-black tracking-widest uppercase">---</p>
+                <div class="bg-green-100 p-8 rounded-full inline-block mb-6 text-green-600 mx-auto text-green-600"><i data-lucide="check-circle" class="w-16 h-16 text-green-600 text-green-600"></i></div>
+                <h2 class="text-3xl font-black text-slate-800 mb-2 uppercase italic text-slate-800">Request Received</h2>
+                <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-4 inline-block mb-6 text-blue-900">
+                    <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1 text-blue-400 text-blue-400">Your Booking Reference</p>
+                    <p id="booking-ref-display" class="text-2xl font-black text-blue-900 tracking-widest uppercase text-blue-900 font-black text-blue-900">---</p>
                 </div>
-                <p id="success-txt" class="text-slate-600 mb-8 px-4 font-bold text-sm"></p>
+                <p id="success-txt" class="text-slate-600 mb-8 px-4 font-bold text-sm text-slate-600"></p>
                 
-                <div id="bacs-block" class="hidden bg-slate-900 rounded-3xl p-8 text-white text-left space-y-4 border-t-8 border-blue-600 shadow-xl">
-                    <div class="flex items-center justify-between">
-                        <h4 class="text-lg font-black uppercase italic tracking-tight">Immediate BACS Payment</h4>
-                        <i data-lucide="landmark" class="text-blue-400"></i>
+                <div id="bacs-block" class="hidden bg-slate-900 rounded-3xl p-8 text-white text-left space-y-4 border-t-8 border-blue-600 shadow-xl text-white">
+                    <div class="flex items-center justify-between text-white">
+                        <h4 class="text-lg font-black uppercase italic tracking-tight text-white">Immediate BACS Payment</h4>
+                        <i data-lucide="landmark" class="text-blue-400 text-blue-400 text-blue-400 text-white text-white"></i>
                     </div>
                     <div id="bacs-urgent-warning" class="hidden bg-orange-500/20 border border-orange-500/40 p-4 rounded-xl mb-4 text-orange-100 font-bold">
-                        <p class="text-xs opacity-90 text-orange-100"><i data-lucide="alert-triangle" class="w-3 h-3 inline mr-1 text-orange-400"></i> Late booking: Please do not pay yet. Wait for manual verification.</p>
+                        <p class="text-xs opacity-90 text-orange-100"><i data-lucide="alert-triangle" class="w-3 h-3 inline mr-1 text-orange-400 text-orange-400"></i> Late booking: Please wait for manual verification before sending payment.</p>
                     </div>
                     <div id="bacs-standard-instruction">
-                        <p class="text-xs text-slate-400 mb-4">You may pay now via bank transfer. Use your **Booking Reference** as the payment description.</p>
+                        <p class="text-xs text-slate-400 mb-4 text-slate-400">You may pay now via bank transfer. Use your **Booking Reference** as the payment description.</p>
                         <div class="grid grid-cols-2 gap-4 border-t border-white/10 pt-4 text-white">
-                            <div><p class="text-[9px] font-bold text-white/30 uppercase text-white/30">Bank</p><p class="font-bold text-sm text-blue-100">Monzo</p></div>
-                            <div><p class="text-[9px] font-bold text-white/30 uppercase text-white/30">Account</p><p class="font-bold text-sm text-blue-100 truncate">myCPConline</p></div>
-                            <div><p class="text-[9px] font-bold text-white/30 uppercase text-white/30">Sort Code</p><p class="font-black text-lg text-white">04-00-03</p></div>
-                            <div><p class="text-[9px] font-bold text-white/30 uppercase text-white/30 text-white/30">Acc No.</p><p class="font-black text-lg text-white">94282683</p></div>
+                            <div><p class="text-[9px] font-bold text-white/30 uppercase text-white/30 text-white/30 text-white/30">Bank</p><p class="font-bold text-sm text-blue-100 text-blue-100 text-blue-100">Monzo</p></div>
+                            <div><p class="text-[9px] font-bold text-white/30 uppercase text-white/30 text-white/30 text-white/30 text-white/30">Account</p><p class="font-bold text-sm text-blue-100 truncate text-blue-100 text-blue-100">myCPConline</p></div>
+                            <div><p class="text-[9px] font-bold text-white/30 uppercase text-white/30 text-white/30 text-white/30 text-white/30">Sort Code</p><p class="font-black text-lg text-white text-white text-white">04-00-03</p></div>
+                            <div><p class="text-[9px] font-bold text-white/30 uppercase text-white/30 text-white/30 text-white/30 text-white/30">Acc No.</p><p class="font-black text-lg text-white text-white text-white">94282683</p></div>
                         </div>
-                        <div class="bg-blue-600/20 border border-blue-500/30 p-3 rounded-xl mt-4 text-blue-300 text-center italic text-[10px] font-black uppercase">* Reference: <span id="bacs-ref-hint" class="text-white font-black text-white">---</span></div>
+                        <div class="bg-blue-600/20 border border-blue-500/30 p-3 rounded-xl mt-4 text-blue-300 text-center italic text-[10px] font-black uppercase text-blue-300">* Reference: <span id="bacs-ref-hint" class="text-white text-white text-white font-black text-white">---</span></div>
                     </div>
                 </div>
-                <button onclick="clearAllData(); location.reload();" class="mt-12 bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs font-black">Start New Request</button>
+                <button onclick="clearAllData(); location.reload();" class="mt-12 bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs font-black text-white">Start New Request</button>
             </div>
         </div>
 
         <footer class="mt-auto pt-12 pb-6 text-center border-t text-slate-400">
-            <p class="text-[9px] font-black uppercase tracking-widest">Legal Entity: <span class="text-slate-700 font-black">PSV Compliance and Training</span></p>
+            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400">Legal Entity: <span class="text-slate-700 font-black text-slate-700">PSV Compliance and Training</span></p>
         </footer>
     </div>
 
     <!-- MODAL -->
-    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 text-left">
         <div class="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl relative border border-white/20 text-slate-900">
             <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 leading-none italic text-blue-600">Date</div>
-            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tighter">Course Options</h3>
+            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 uppercase text-slate-800 tracking-tighter">Course Options</h3>
             <div id="pathway-options" class="space-y-3 mb-8"></div>
             <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border border-slate-200">
                 <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-slate-400">Quantity</div>
@@ -220,9 +223,9 @@
                     <button onclick="modQty(1)" aria-label="Increase quantity" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black">+</button>
                 </div>
             </div>
-            <div class="flex gap-3">
-                <button onclick="closeModal()" id="close-modal-btn" class="flex-1 py-4 rounded-2xl text-xs font-black text-slate-400 uppercase">Cancel</button>
-                <button onclick="confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50 italic text-white font-black" disabled>Choose Pathway</button>
+            <div class="flex gap-3 text-slate-900">
+                <button onclick="closeModal()" id="close-modal-btn" class="flex-1 py-4 rounded-2xl text-xs font-black text-slate-400 uppercase text-slate-400">Cancel</button>
+                <button onclick="confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50 italic text-white" disabled>Choose Pathway</button>
             </div>
         </div>
     </div>
@@ -236,6 +239,7 @@
         let liveCourses = []; let globalLicense = 'HGV'; let currentView = 'calendar'; let basket = []; 
         let currentMonth = new Date(); let activeModalDateCourses = []; let selectedOption = null;
         let validationWarningsShown = false;
+        let isProcessing = false;
 
         async function init() {
             try {
@@ -288,9 +292,9 @@
             const c = liveCourses.find(x => x.id === id); if (!c) return;
             activeModalDateCourses = liveCourses.filter(x => new Date(x.course_start).toDateString() === new Date(c.course_start).toDateString());
             selectedOption = null; document.getElementById('add-to-basket-btn').disabled = true;
-            document.getElementById('modal-date').innerText = c.date_label; document.getElementById('modal-title').innerText = activeModalDateCourses.length > 1 ? "Combined Day" : c.module_name;
+            document.getElementById('modal-date').innerText = c.date_label; document.getElementById('modal-title').innerText = activeModalDateCourses.length > 1 ? "Combined Session" : c.module_name;
             document.getElementById('m-qty').value = 1; const box = document.getElementById('pathway-options'); box.innerHTML = '';
-            if (activeModalDateCourses.length > 1) { activeModalDateCourses.forEach(x => addOpt(box, `single_${x.id}`, x.module_name, '3.5h Module', '£21.99', x.max_seats)); addOpt(box, 'combined_day', 'Full Day (7h pairing)', 'Both Modules', '£38.99', c.max_seats); }
+            if (activeModalDateCourses.length > 1) { activeModalDateCourses.forEach(course => addOpt(box, `single_${course.id}`, course.module_name, '3.5h Module', '£21.99', course.max_seats)); addOpt(box, 'combined_day', 'Full Day (7h pairing)', 'Both Modules', '£38.99', c.max_seats); }
             else { if (c.is_7h) addOpt(box, '7h_full', 'Full Day (7h)', 'Int. Block', '£38.99', c.max_seats); else if (c.block_id) { addOpt(box, 'national', 'Single (3.5h)', '3.5h Module', '£21.99', c.max_seats); addOpt(box, 'international', `Pairing (7h)`, `Includes partner`, '£38.99', c.max_seats); } else addOpt(box, 'national', 'Specialist (3.5h)', 'Adv. Standards', '£21.99', c.max_seats); }
             document.getElementById('modal').classList.remove('hidden'); lucide.createIcons();
         };
@@ -326,9 +330,9 @@
                 const s = document.createElement('div'); s.className = "bg-white/5 p-6 rounded-3xl border border-white/10 mb-4 animate-in text-left text-white";
                 let ins = '';
                 for (let i = 0; i < item.qty; i++) {
-                    ins += `<div class="border-b border-white/5 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"><div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2"><input id="name-${bIdx}-${i}" placeholder="Driver Name" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"><input id="email-${bIdx}-${i}" type="email" placeholder="Driver Email" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"><input id="license-${bIdx}-${i}" placeholder="License No." class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-400"><input id="phone-${bIdx}-${i}" placeholder="Driver Phone" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"></div><div class="flex flex-wrap gap-4 items-center text-white"><select id="type-${bIdx}-${i}" class="bg-slate-800 border border-white/20 p-2 rounded-lg text-[10px] font-bold text-white"><option value="HGV" ${globalLicense === 'HGV' ? 'selected' : ''}>HGV</option><option value="PCV" ${globalLicense === 'PCV' ? 'selected' : ''}>PCV</option></select><label class="flex items-center gap-2 cursor-pointer text-white"><input type="checkbox" id="later-${bIdx}-${i}" onchange="toggleDetails(${bIdx}, ${i})" class="w-4 h-4 rounded border-white/20 bg-transparent text-white"><span class="text-[10px] font-bold">Details Later</span></label><label class="flex items-center gap-2 cursor-pointer text-white"><input type="checkbox" id="support-${bIdx}-${i}" class="w-4 h-4 rounded border-white/20 bg-transparent text-blue-500"><span class="text-[10px] font-black italic">Support?</span></label><button onclick="applyDetailsToAll(${bIdx}, ${i})" class="ml-auto text-[10px] font-black text-blue-400 hover:text-blue-300 transition-all uppercase tracking-widest flex items-center gap-1 border border-blue-400/30 px-3 py-1.5 rounded-lg"><i data-lucide="copy" class="w-3 h-3"></i> Apply to all</button></div></div>`;
+                    ins += `<div class="border-b border-white/5 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0 text-white"><div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2"><input id="name-${bIdx}-${i}" placeholder="Driver Name" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"><input id="email-${bIdx}-${i}" type="email" placeholder="Driver Email" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"><input id="license-${bIdx}-${i}" placeholder="License No." class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white uppercase outline-none focus:border-blue-400"><input id="phone-${bIdx}-${i}" placeholder="Driver Phone" class="bg-white/10 border border-white/20 p-3 rounded-xl text-xs font-bold text-white outline-none focus:border-blue-400"></div><div class="flex flex-wrap gap-4 items-center text-white"><select id="type-${bIdx}-${i}" class="bg-slate-800 border border-white/20 p-2 rounded-lg text-[10px] font-bold text-white"><option value="HGV" ${globalLicense === 'HGV' ? 'selected' : ''}>HGV</option><option value="PCV" ${globalLicense === 'PCV' ? 'selected' : ''}>PCV</option></select><label class="flex items-center gap-2 cursor-pointer text-white"><input type="checkbox" id="later-${bIdx}-${i}" onchange="toggleDetails(${bIdx}, ${i})" class="w-4 h-4 rounded border-white/20 bg-transparent text-white"><span class="text-[10px] font-bold">Details Later</span></label><label class="flex items-center gap-2 cursor-pointer text-white"><input type="checkbox" id="support-${bIdx}-${i}" class="w-4 h-4 rounded border-white/20 bg-transparent text-blue-500"><span class="text-[10px] font-black italic text-blue-400">Support?</span></label><button onclick="applyDetailsToAll(${bIdx}, ${i})" class="ml-auto text-[10px] font-black text-blue-400 hover:text-blue-300 transition-all uppercase tracking-widest flex items-center gap-1 border border-blue-400/30 px-3 py-1.5 rounded-lg text-blue-400"><i data-lucide="copy" class="w-3 h-3 text-blue-400"></i> Apply to all</button></div></div>`;
                 }
-                s.innerHTML = `<div class="flex justify-between items-start mb-4"><div><div class="text-[9px] font-black text-blue-400 uppercase leading-none mb-1 text-blue-400">${item.data.date_label}</div><h4 class="font-bold text-sm text-white leading-tight uppercase italic text-white">${item.data.module_name}</h4></div><button onclick="removeFromBasket(${bIdx})" class="text-white/20 hover:text-red-400 transition-colors text-white/20"><i data-lucide="trash-2" class="w-4 h-4 text-white/20"></i></button></div><div class="space-y-2 text-white" id="fields-${bIdx}">${ins}</div>`;
+                s.innerHTML = `<div class="flex justify-between items-start mb-4 text-white"><div><div class="text-[9px] font-black text-blue-400 uppercase leading-none mb-1 text-blue-400 text-blue-400 text-blue-400">${item.data.date_label}</div><h4 class="font-bold text-sm text-white leading-tight uppercase italic text-white">${item.data.module_name}</h4></div><button onclick="removeFromBasket(${bIdx})" class="text-white/20 hover:text-red-400 transition-colors text-white/20 text-white/20 text-white/20 text-white/20"><i data-lucide="trash-2" class="w-4 h-4 text-white/20 text-white/20"></i></button></div><div class="space-y-2 text-white text-white" id="fields-${bIdx}">${ins}</div>`;
                 l.appendChild(s);
             });
             lucide.createIcons();
@@ -339,7 +343,7 @@
             if (currentView === 'list') {
                 liveCourses.filter(x => globalLicense === 'PCV' || !x.category.includes('PSV Only')).forEach(x => {
                     const count = basket.filter(b => b.courseId === x.id).reduce((a, b) => a + b.qty, 0);
-                    cont.innerHTML += `<div onclick="openModal('${x.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between text-slate-900 ${count > 0 ? 'border-blue-600 bg-blue-50' : 'border-slate-100 shadow-sm'}"><div><div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1">${x.date_label}</div><div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800">${x.module_name}</div></div><div class="flex items-center gap-2 text-slate-900">${(x.is_specialist) ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic text-purple-700">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-white">${count} seats</div>` : ''}</div></div>`;
+                    cont.innerHTML += `<div onclick="openModal('${x.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between text-slate-900 ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}"><div><div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1">${x.date_label}</div><div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800 text-slate-800">${x.module_name}</div></div><div class="flex items-center gap-2 text-slate-900 text-slate-900">${(x.is_specialist) ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic text-purple-700">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-white">${count} seats</div>` : ''}</div></div>`;
                 });
             } else renderCalendar(cont);
             lucide.createIcons();
@@ -347,11 +351,11 @@
 
         function renderCalendar(cont) {
             const y = currentMonth.getFullYear(), m = currentMonth.getMonth(), first = new Date(y, m, 1).getDay(), dInM = new Date(y, m + 1, 0).getDate(), name = currentMonth.toLocaleString('default', { month: 'long' });
-            let html = `<div class="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden text-slate-900"><div class="flex items-center justify-between p-5 bg-slate-50 border-b text-slate-900"><button onclick="changeMonth(-1)" class="p-2"><i data-lucide="chevron-left" class="w-4 h-4 text-slate-900"></i></button><div class="text-xs font-black uppercase tracking-widest italic text-slate-900">${name} ${y}</div><button onclick="changeMonth(1)" class="p-2"><i data-lucide="chevron-right" class="w-4 h-4 text-slate-900"></i></button></div><div class="p-4 text-slate-900"><div class="calendar-grid text-[9px] font-black text-slate-400 uppercase text-center mb-4 text-left text-slate-400"><div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div></div><div class="calendar-grid text-slate-900">`;
+            let html = `<div class="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden text-slate-900"><div class="flex items-center justify-between p-5 bg-slate-50 border-b text-slate-900"><button onclick="changeMonth(-1)" class="p-2"><i data-lucide="chevron-left" class="w-4 h-4 text-slate-900"></i></button><div class="text-xs font-black uppercase tracking-widest italic text-slate-900">${name} ${y}</div><button onclick="changeMonth(1)" class="p-2"><i data-lucide="chevron-right" class="w-4 h-4 text-slate-900"></i></button></div><div class="p-4 text-slate-900"><div class="calendar-grid text-[9px] font-black text-slate-400 uppercase text-center mb-4 text-left text-slate-400 text-slate-400"><div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div></div><div class="calendar-grid text-slate-900">`;
             for (let i = 0; i < (first === 0 ? 0 : first); i++) html += '<div></div>';
             for (let d = 1; d <= dInM; d++) {
                 const dayDate = new Date(y, m, d), courses = liveCourses.filter(x => new Date(x.course_start).toDateString() === dayDate.toDateString()), inB = courses.some(x => basket.some(b => b.courseId === x.id)), hasC = courses.length > 0;
-                let cls = inB ? 'bg-blue-600 text-white shadow-lg scale-105 z-10 font-black' : 'text-slate-200 opacity-40';
+                let cls = inB ? 'bg-blue-600 text-white shadow-lg scale-105 z-10 font-black text-white' : 'text-slate-200 opacity-40';
                 if (hasC && !inB) { const c = courses[0]; cls = (c.category.includes('PSV')) ? 'cat-psv opacity-100 shadow-sm' : 'cat-mixed opacity-100 shadow-sm'; if (courses.some(x => x.is_specialist)) cls += ' cat-specialist'; }
                 html += `<div onclick="${hasC ? `openModal('${courses[0].id}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all relative font-bold text-xs text-center border-transparent border-2 ${cls} ${hasC ? 'cursor-pointer hover:scale-105' : 'cursor-default'} font-black text-slate-900"><span>${d}</span>${hasC && courses.length > 1 && !inB ? '<div class="text-[6px] opacity-60 uppercase mt-0.5 leading-none text-slate-900">2 Mod</div>' : ''}${(courses.some(x => x.is_specialist)) && !inB ? '<div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-0.5 shadow-sm text-slate-900"></div>' : ''}</div>`;
             }
@@ -367,18 +371,17 @@
             return diffHours > 0 && diffHours < 96; 
         }
 
-        // UK Standard Driver License Regex (16 alphanumeric)
         function isValidUKLicense(l) { return /^[A-Z0-9]{16}$/i.test(l.replace(/\s/g, '')); }
 
         window.submitBooking = async () => {
+            if (isProcessing) return;
             const btn = document.getElementById('submit-btn'), errBox = document.getElementById('validation-error'), errText = document.getElementById('error-text');
-            const em = document.getElementById('booker_email').value, inv = document.getElementById('invoice_to').value, adr = document.getElementById('billing_address').value, ph = document.getElementById('contact_phone').value;
-            const claimingD = document.getElementById('claiming_discount').checked;
+            const em = document.getElementById('booker_email').value, inv = document.getElementById('invoice_to').value, adr = document.getElementById('billing_address').value, ph = document.getElementById('contact_phone').value, claimingD = document.getElementById('claiming_discount').checked;
             
-            if (document.getElementById('hp_field').value) return; // bot block
+            if (document.getElementById('hp_field').value) return; 
 
-            function mark(id, isE) { const el = document.getElementById(id); if (el) el.classList.toggle('input-error', isE); }
-            function showErr(msg) { errBox.classList.remove('hidden'); errText.innerText = msg; btn.disabled = false; document.getElementById('basket-section').scrollIntoView({behavior:'smooth'}); }
+            function mark(id, err) { const el = document.getElementById(id); if (el) el.classList.toggle('input-error', err); }
+            function showErr(msg) { errBox.classList.remove('hidden'); errText.innerText = msg; btn.disabled = false; isProcessing = false; document.getElementById('basket-section').scrollIntoView({behavior:'smooth'}); }
 
             if (!basket.length) { showErr("Please select at least one course date."); return; }
 
@@ -395,66 +398,49 @@
                 if (isWithin4Days(item.data.course_start)) isUrgent = true;
                 for (let i = 0; i < item.qty; i++) {
                     const lt = document.getElementById(`later-${bIdx}-${i}`).checked;
-                    const n = document.getElementById(`name-${bIdx}-${i}`), e = document.getElementById(`email-${bIdx}-${i}`), l = document.getElementById(`license-${bIdx}-${i}`), phD = document.getElementById(`phone-${bIdx}-${i}`);
+                    const nEl = document.getElementById(`name-${bIdx}-${i}`), eEl = document.getElementById(`email-${bIdx}-${i}`), lEl = document.getElementById(`license-${bIdx}-${i}`), pEl = document.getElementById(`phone-${bIdx}-${i}`);
                     
                     if (!lt) {
-                        const badN = !n.value.trim();
-                        const badE = !emailRegex.test(e.value.trim());
-                        const badL = !isValidUKLicense(l.value.trim());
-                        const badP = phD.value.trim().length < 5;
-
-                        if (badN || badE || badL || badP) {
-                            invalidCount++;
-                            mark(n.id, badN); mark(e.id, badE); mark(l.id, badL); mark(phD.id, badP);
-                        }
+                        const badN = !nEl.value.trim();
+                        const badE = !emailRegex.test(eEl.value.trim()); 
+                        const badL = !isValidUKLicense(lEl.value.trim());
+                        const badP = pEl.value.trim().length < 5;
+                        if (badN || badE || badL || badP) { invalidCount++; mark(nEl.id, badN); mark(eEl.id, badE); mark(lEl.id, badL); mark(pEl.id, badP); }
                     }
-                    roster.push({ lead_email: em, invoice_to: inv, billing_address: adr, contact_phone: ph, global_license: globalLicense, claiming_discount: claimingD, driver_name: lt ? "TBA" : n.value, driver_email: lt ? "TBA" : e.value, driver_license: lt ? "TBA" : l.value.replace(/\s/g,'').toUpperCase(), driver_phone: lt ? "TBA" : phD.value, support_required: document.getElementById(`support-${bIdx}-${i}`).checked, pathway: item.pathway, course_id: item.courseId, course_date: item.data.date_label, status: 'pending' });
+                    roster.push({ lead_email: em, invoice_to: inv, billing_address: adr, contact_phone: ph, global_license: globalLicense, claiming_discount: claimingD, driver_name: lt ? "TBA" : nEl.value, driver_email: lt ? "TBA" : eEl.value, driver_license: lt ? "TBA" : lEl.value.replace(/\s/g,'').toUpperCase(), driver_phone: lt ? "TBA" : pEl.value, support_required: document.getElementById(`support-${bIdx}-${i}`).checked, pathway: item.pathway, course_id: item.courseId, status: 'pending' });
                 }
             });
 
             if (invalidCount > 0 && !validationWarningsShown) {
-                showErr("Details look incomplete or incorrect (highlighted). Fix them or click Confirm anyway.");
-                btn.innerText = "Submit Anyway (Check Highlights)"; validationWarningsShown = true;
-                return;
+                showErr("Some details look missing or incorrect (highlighted). Fix them or Confirm anyway.");
+                btn.innerText = "Submit Anyway (Check Highlights)"; validationWarningsShown = true; return;
             }
 
-            // REFINED REF FORMULA: prefix + ((YYMMDD * SQRT(Today-37)) - Today DD) + Random
+            isProcessing = true; btn.disabled = true; btn.innerText = "Processing Request...";
+
             const prefix = invalidCount > 0 ? "CPX-" : "CPC-";
             const tD = new Date(); const oD = new Date(); oD.setDate(tD.getDate() - 37);
-            const tVal = parseInt(tD.toISOString().slice(2,10).replace(/-/g,''));
-            const oVal = parseInt(oD.toISOString().slice(2,10).replace(/-/g,''));
-            const derived = Math.round((tVal * Math.sqrt(oVal)) - tD.getDate()).toString().slice(-9);
-            const randPart = Math.random().toString(36).substring(2, 6).toUpperCase();
-            const bookingRef = (prefix + derived + "-" + randPart).substring(0, 18);
+            const tVal = parseInt(tD.toISOString().slice(2,10).replace(/-/g,'')), oVal = parseInt(oD.toISOString().slice(2,10).replace(/-/g,''));
+            const mathPart = Math.round((tVal * Math.sqrt(oVal)) - tD.getDate()).toString().slice(-9);
+            const randSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
+            const bookingRef = (prefix + mathPart + "-" + randSuffix).substring(0, 18);
             
-            roster.forEach(r => { r.booking_ref = bookingRef; r.flag_reason = invalidCount > 0 ? "Soft validation bypassed" : ""; });
-
-            btn.disabled = true; btn.innerText = "Processing...";
+            roster.forEach(r => { r.booking_ref = bookingRef; r.flag_reason = invalidCount > 0 ? "Validation Bypassed" : ""; });
             const { error } = await _supabase.from('bookings').insert(roster);
             
             if (!error) {
                 const formData = new FormData(); formData.append("access_key", WEB3FORMS_KEY);
-                formData.append("subject", `${invalidCount > 0 ? '[FLAGGED] ' : ''}Booking [${bookingRef}]: ${inv}`);
-                formData.append("message", `REF: ${bookingRef}\nURGENT: ${isUrgent}\nDISCOUNT: ${claimingD}\nClient: ${inv}\nEmail: ${em}`);
+                formData.append("subject", `${invalidCount > 0 ? '[CHECK] ' : ''}Booking [${bookingRef}]: ${inv}`);
+                formData.append("message", `REF: ${bookingRef}\nURGENT: ${isUrgent}\nClient: ${inv}\nEmail: ${em}\nPhone: ${ph}`);
                 await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
-
                 document.getElementById('step-2').classList.add('hidden'); document.getElementById('success').classList.remove('hidden');
                 document.getElementById('booking-ref-display').innerText = bookingRef; document.getElementById('bacs-ref-hint').innerText = bookingRef;
-                
-                if (!claimingD && !isUrgent) {
-                    document.getElementById('bacs-block').classList.remove('hidden');
-                } else if (isUrgent) {
-                    document.getElementById('bacs-block').classList.remove('hidden');
-                    document.getElementById('bacs-urgent-warning').classList.remove('hidden');
-                    document.getElementById('bacs-standard-instruction').classList.add('hidden');
-                } else if (claimingD) {
-                    document.getElementById('bacs-block').classList.remove('hidden');
-                    document.getElementById('bacs-standard-instruction').innerHTML = "<p class='text-xs font-bold opacity-80'>As you are claiming a fleet discount, please wait for our manual review and official invoice before paying.</p>";
-                }
-                
-                document.getElementById('success-txt').innerText = isUrgent ? "Request prioritised. Wait for space verification before paying." : "Reviewing discounts. Invoice arriving within 24 hours.";
+                if (!claimingD && !isUrgent) document.getElementById('bacs-block').classList.remove('hidden');
+                else if (isUrgent) { document.getElementById('bacs-block').classList.remove('hidden'); document.getElementById('bacs-urgent-warning').classList.remove('hidden'); document.getElementById('bacs-standard-instruction').classList.add('hidden'); }
+                else if (claimingD) { document.getElementById('bacs-block').classList.remove('hidden'); document.getElementById('bacs-standard-instruction').innerHTML = "<p class='text-xs font-bold opacity-80'>Discount applied: Wait for manual review before paying.</p>"; }
+                document.getElementById('success-txt').innerText = isUrgent ? "Request prioritised. Wait for confirmation before paying." : "Reviewing multi-seat discounts. Invoice arriving within 24 hours.";
                 clearAllData(); lucide.createIcons();
-            } else { showErr("Submission failed. Database Error. Please WhatsApp us."); btn.disabled = false; }
+            } else { showErr("Submission failed. Database Error. WhatsApp us."); }
         };
 
         window.onload = init;
