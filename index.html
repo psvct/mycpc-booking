@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>myCPC.online | Real Training by Real Drivers</title>
-    <meta name="description" content="Approved Driver CPC training for HGV & PSV professionals. JAUPT Approved Centre AC02237. Same-day DVSA uploads.">
-    
-    <link rel="icon" type="image/png" href="https://psvct.co.uk/wp-content/uploads/2025/11/ChatGPT-Image-Nov-23-2025-04_28_35-PM-1.png">
-    
+    <title>Driver CPC Booking Portal | myCPC.online</title>
+
     <!-- GOOGLE ANALYTICS (GA4) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1MQZE671GK"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){window.dataLayer.push(arguments);}
+      function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-1MQZE671GK');
     </script>
@@ -29,567 +26,548 @@
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1937159790533296&ev=PageView&noscript=1"/></noscript>
 
-    <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', sans-serif; }
-        
-        .nav-link-active { color: #2563eb; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        /* Smooth transitions for mobile menu */
-        #mobile-menu { transition: transform 0.3s ease-in-out; }
-        .mobile-menu-open { transform: translateX(0); }
-        .mobile-menu-closed { transform: translateX(100%); }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .animate-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .decision-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-width: 2px; }
+        .decision-selected { border-color: #2563eb !important; background-color: #eff6ff; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        .sticky-checkout { position: fixed; top: 0; left: 0; right: 0; z-index: 100; transform: translateY(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(12px); background-color: rgba(15, 23, 42, 0.8); }
+        .sticky-checkout.visible { transform: translateY(0); }
+        .input-error { border-color: #ef4444 !important; background-color: rgba(239, 68, 68, 0.05) !important; }
+        .hp-field { display: none; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Cookie Banner Styling */
-        .cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; background: #0f172a; color: white; padding: 1.25rem; z-index: 100; display: none; border-top: 4px solid #2563eb; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 pb-24 text-left">
 
-    <!-- Cookie Consent Banner -->
-    <div id="cookie-banner" class="cookie-banner shadow-2xl">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+    <!-- Sticky Checkout Bar -->
+    <div id="sticky-bar" class="sticky-checkout text-white shadow-2xl px-6 py-4 flex justify-between items-center border-b border-white/10">
+        <div class="flex items-center gap-4">
+            <div class="bg-blue-600 p-2.5 rounded-xl shadow-lg"><i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i></div>
+            <div>
+                <div id="sticky-count" class="text-[10px] font-black uppercase text-blue-300 mb-1 leading-none tracking-widest">0 Seats Selected</div>
+                <div id="sticky-price" class="text-xl font-black italic">£0.00</div>
+            </div>
+        </div>
+        <button onclick="window.handleStickyAction()" id="sticky-action-btn" class="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3.5 rounded-2xl font-black text-xs uppercase shadow-lg transition-all active:scale-95">Review Order</button>
+    </div>
+
+    <div class="max-w-3xl mx-auto p-4 flex flex-col min-h-screen">
+        <!-- Brand Header -->
+        <header class="py-6 flex items-center justify-between border-b mb-8 bg-white rounded-b-[32px] px-8 shadow-sm border-slate-100">
             <div class="flex items-center gap-3">
-                <i data-lucide="shield-info" class="text-blue-500 w-5 h-5 shrink-0"></i>
-                <p class="text-xs font-bold italic uppercase tracking-tight">We use Google & Meta tracking to improve your booking experience. By continuing, you agree to our policies.</p>
-            </div>
-            <button onclick="acceptCookies()" class="bg-blue-600 px-8 py-2.5 rounded-xl text-xs font-black uppercase italic shadow-lg active:scale-95 transition-all whitespace-nowrap">Accept & Continue</button>
-        </div>
-    </div>
-
-    <!-- Top Contact Bar -->
-    <div class="bg-slate-900 text-white py-2 px-4 sticky top-0 z-[60] text-[10px] sm:text-xs font-bold border-b border-white/10">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4">
-            <div class="flex items-center gap-4 sm:gap-6">
-                <a href="tel:01174278967" class="flex items-center gap-1.5 hover:text-blue-400 transition-colors">
-                    <i data-lucide="phone" class="w-3 h-3 text-blue-500"></i> 0117 427 8967
-                </a>
-                <a href="https://wa.me/447359941879" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 hover:text-green-400 transition-colors">
-                    <i data-lucide="message-square" class="w-3 h-3 text-green-500"></i> WhatsApp: 07359 941879
-                </a>
-            </div>
-            <div class="flex items-center gap-4">
-                <a href="https://psvct.github.io/mycpc-booking/" class="flex items-center gap-1 text-blue-400 hover:text-blue-300 transition-colors">
-                    <i data-lucide="book-open" class="w-3 h-3"></i> Official Booking Portal <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="sticky top-[58px] sm:top-[32px] w-full bg-white/95 backdrop-blur-md shadow-sm z-50">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <div class="bg-blue-600 p-1.5 rounded-lg">
-                    <i data-lucide="award" class="text-white w-6 h-6"></i>
+                <div class="bg-blue-600 p-2 rounded-xl shadow-lg"><i data-lucide="award" class="text-white w-6 h-6"></i></div>
+                <div>
+                    <h1 class="text-xl font-black uppercase italic tracking-tight leading-none mb-1">MyCPC<span class="text-blue-600">.online</span></h1>
+                    <p class="text-[9px] text-slate-400 font-black uppercase italic tracking-widest">JAUPT Centre AC02237</p>
                 </div>
-                <span class="font-bold text-xl tracking-tight">myCPC<span class="text-blue-600">.online</span></span>
             </div>
-
-            <div class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
-                <a href="#why" class="hover:text-blue-600 transition-colors">Why Choose Us</a>
-                <a href="#courses" class="hover:text-blue-600 transition-colors">Courses</a>
-                <a href="#times" class="hover:text-blue-600 transition-colors">Course Times</a>
-                <a href="#community" class="hover:text-blue-600 transition-colors">Community</a>
-                <a href="https://psvct.github.io/mycpc-booking/" class="bg-blue-600 text-white px-5 py-2.5 rounded-full hover:bg-blue-700 transition-all shadow-md">
-                    Book a Course
-                </a>
+            <div class="bg-slate-100 px-4 py-2.5 rounded-2xl flex items-center gap-2 border border-slate-200 text-blue-600 shadow-inner">
+                <i data-lucide="shopping-basket" class="w-5 h-5"></i>
+                <span id="basket-count" class="font-black text-lg tabular-nums">0</span>
             </div>
+        </header>
 
-            <button class="md:hidden p-2" onclick="toggleMenu(true)">
-                <i data-lucide="menu"></i>
-            </button>
+        <!-- Step 1: Pathway Selection -->
+        <div id="step-pathway" class="animate-in space-y-6">
+            <div class="text-center py-8">
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-slate-800">Booking Portal</h2>
+                <p class="text-slate-400 font-bold text-xs uppercase tracking-[0.2em] mt-2">Which CPC course are you looking for?</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button onclick="window.selectInitialPathway('national')" class="bg-white p-12 rounded-[48px] border-2 border-transparent hover:border-blue-600 shadow-sm transition-all group text-center active:scale-95">
+                    <i data-lucide="zap" class="w-16 h-16 text-blue-600 mx-auto mb-6 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-black text-2xl uppercase italic text-slate-800">National CPC</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest">3.5 Hour Standalone Module</p>
+                    <div class="mt-4 text-blue-600 font-black text-lg italic">£21.99</div>
+                </button>
+                <button onclick="window.selectInitialPathway('international')" class="bg-white p-12 rounded-[48px] border-2 border-transparent hover:border-blue-600 shadow-sm transition-all group text-center active:scale-95">
+                    <i data-lucide="layers" class="w-16 h-16 text-blue-600 mx-auto mb-6 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-black text-2xl uppercase italic text-slate-800">International CPC</h3>
+                    <p class="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest">7 Hour Pairing (Full Day or Split Evening)</p>
+                    <div class="mt-4 text-blue-600 font-black text-lg italic">£38.99</div>
+                </button>
+            </div>
         </div>
-    </nav>
 
-    <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 bg-white z-[70] hidden flex flex-col pt-24 px-6 gap-6 text-lg font-bold">
-        <button class="absolute top-6 right-6 p-2" onclick="toggleMenu(false)">
-            <i data-lucide="x" class="w-8 h-8"></i>
-        </button>
-        <a href="#why" onclick="toggleMenu(false)">Why Choose Us</a>
-        <a href="#courses" onclick="toggleMenu(false)">Course List</a>
-        <a href="#times" onclick="toggleMenu(false)">Course Times</a>
-        <a href="#community" onclick="toggleMenu(false)">Community Commitment</a>
-        <a href="#faq" onclick="toggleMenu(false)">FAQs</a>
-        <hr class="border-slate-100">
-        <a href="https://psvct.github.io/mycpc-booking/" class="text-blue-600">Book Online Now</a>
-    </div>
+        <!-- Step 2: Course List -->
+        <div id="step-courses" class="hidden animate-in space-y-6">
+            <div class="flex items-center justify-between">
+                <button onclick="window.goToStep('pathway')" class="text-[10px] font-black flex items-center gap-1.5 uppercase text-blue-600 hover:text-blue-700 transition-colors tracking-widest"><i data-lucide="chevron-left" class="w-3.5 h-3.5"></i> Back</button>
+                <div id="pathway-badge" class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-[9px] font-black uppercase tracking-widest italic">Default: National</div>
+            </div>
+            <div id="view-container" class="space-y-3"></div>
+        </div>
 
-    <!-- Hero Section -->
-    <section id="home" class="pt-24 pb-16 px-4 bg-gradient-to-b from-blue-50 to-slate-50 overflow-hidden">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6 text-center md:text-left animate-in" style="animation: fadeIn 0.8s ease-out">
-                <div class="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
-                    <i data-lucide="shield-check" class="w-4 h-4"></i> JAUPT & DVSA Approved
+        <!-- Step 3: Invoicing & Final Review -->
+        <div id="step-invoicing" class="hidden animate-in space-y-8">
+            <!-- Review Section -->
+            <div class="bg-white rounded-[40px] p-8 shadow-sm border border-slate-100">
+                <h3 class="text-xl font-black mb-6 uppercase italic tracking-tighter flex items-center gap-2"><i data-lucide="shopping-cart" class="text-blue-600"></i> Review Selections</h3>
+                <div id="order-summary-container" class="space-y-3 mb-6">
+                    <!-- Summary Items go here -->
                 </div>
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight text-slate-900">
-                    Real Training. <br>
-                    <span class="text-blue-600 italic">Real Drivers.</span> <br>
-                    Real Value.
-                </h1>
-                <p class="text-lg text-slate-600 max-w-lg mx-auto md:mx-0 font-medium">
-                    High-impact Driver CPC for HGV & PSV professionals. Delivered live online by industry experts who understand the road.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
-                    <a href="https://psvct.github.io/mycpc-booking/" class="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-200 active:scale-95">
-                        Book Online Now <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                    </a>
-                    <div class="flex flex-col justify-center text-center sm:text-left">
-                        <span class="text-sm font-semibold text-slate-400 uppercase tracking-widest">400+ Drivers Trained</span>
-                        <div class="flex gap-1 text-yellow-400 justify-center sm:justify-start">★★★★★</div>
+                <div class="flex justify-between items-center pt-6 border-t border-slate-50">
+                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Current Request Est.</span>
+                    <span id="summary-total-price" class="text-2xl font-black text-slate-900 italic">£0.00</span>
+                </div>
+            </div>
+
+            <!-- Invoicing Form -->
+            <div class="bg-slate-900 rounded-[48px] p-10 text-white shadow-2xl border-t-8 border-blue-600">
+                <button onclick="window.goToStep('courses')" class="text-[10px] font-black text-blue-400 uppercase mb-8 flex items-center gap-2 hover:text-blue-300 transition-colors tracking-widest"><i data-lucide="chevron-left" class="w-4 h-4"></i> Back to Courses</button>
+                <h3 class="text-3xl font-black mb-8 flex items-center gap-4 italic uppercase tracking-tighter text-white"><i data-lucide="file-text" class="text-blue-400"></i> Invoicing Details</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-black text-white/30 uppercase ml-3 tracking-widest">Invoice To (Company/Name)</label>
+                        <input id="invoice_to" placeholder="e.g. Acme Logistics Ltd" class="w-full bg-white/10 border border-white/20 p-5 rounded-[24px] outline-none text-white focus:border-blue-500 transition-all font-bold">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-black text-white/30 uppercase ml-3 tracking-widest">Lead Contact Email</label>
+                        <input id="booker_email" type="email" placeholder="email@company.com" class="w-full bg-white/10 border border-white/20 p-5 rounded-[24px] outline-none text-white focus:border-blue-500 transition-all font-bold">
                     </div>
                 </div>
+                
+                <div class="space-y-1.5 mb-5">
+                    <label class="text-[10px] font-black text-white/30 uppercase ml-3 tracking-widest">Billing Address & Postcode</label>
+                    <textarea id="billing_address" rows="2" placeholder="Full address for invoice generation..." class="w-full bg-white/10 border border-white/20 p-5 rounded-[24px] outline-none text-white focus:border-blue-500 transition-all font-bold"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-black text-white/30 uppercase ml-3 tracking-widest">Contact Phone</label>
+                        <input id="contact_phone" placeholder="07xxx xxxxxx" class="w-full bg-white/10 border border-white/20 p-5 rounded-[24px] outline-none text-white focus:border-blue-500 transition-all font-bold">
+                    </div>
+                    <div class="bg-white/5 p-5 rounded-[24px] flex items-center justify-between border border-white/10 shadow-inner">
+                        <span class="text-[10px] font-black text-white/40 uppercase tracking-widest">Final Total</span>
+                        <span id="invoice-step-price" class="text-3xl font-black text-blue-400 italic">£0.00</span>
+                    </div>
+                </div>
+
+                <!-- Legal Acknowledgments -->
+                <div class="space-y-3 mb-10">
+                    <label class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 cursor-pointer hover:bg-white/10 transition-all group">
+                        <div class="relative flex items-center">
+                            <input type="checkbox" id="marketing_opt_in" class="w-5 h-5 rounded border-white/20 bg-transparent text-blue-600 focus:ring-blue-500 cursor-pointer">
+                        </div>
+                        <span class="text-xs font-bold text-slate-400 group-hover:text-white transition-colors">I wish to receive marketing updates and course reminders from the PSV Compliance and Training group.</span>
+                    </label>
+
+                    <label class="flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10 cursor-pointer hover:bg-white/10 transition-all group">
+                        <div class="relative flex items-center">
+                            <input type="checkbox" id="terms_agree" class="w-5 h-5 rounded border-white/20 bg-transparent text-blue-600 focus:ring-blue-500 cursor-pointer">
+                        </div>
+                        <span class="text-xs font-black uppercase italic text-blue-400 group-hover:text-blue-300 transition-colors">I agree to the Terms & Conditions of booking. *</span>
+                    </label>
+                </div>
+
+                <div id="validation-error" class="hidden bg-red-500/20 border border-red-500/50 p-6 rounded-[24px] mb-8 flex gap-4 animate-in">
+                    <i data-lucide="alert-circle" class="text-red-400 w-6 h-6 shrink-0"></i>
+                    <p id="error-text" class="text-xs text-red-100 font-bold leading-relaxed"></p>
+                </div>
+
+                <button id="submit-btn" onclick="window.submitBooking()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-[32px] font-black text-2xl shadow-2xl uppercase italic transition-all active:scale-[0.98] border-b-4 border-blue-800">Confirm Booking Request</button>
             </div>
             
-            <div class="relative hidden md:block">
-                <div class="bg-white p-8 rounded-[40px] shadow-2xl border border-slate-200 relative z-10">
-                    <div class="flex flex-col gap-4 mb-6">
-                        <div class="flex items-center justify-between p-5 rounded-2xl bg-blue-50 border border-blue-100 group hover:bg-blue-100 transition-colors">
-                            <div>
-                                <span class="block text-[10px] font-black text-blue-400 uppercase">National CPC</span>
-                                <span class="text-xl font-black text-blue-900 leading-none">3.5 Hour Modules</span>
-                            </div>
-                            <span class="text-3xl font-black text-blue-600 italic">£21.99</span>
-                        </div>
-                        <div class="flex items-center justify-between p-5 rounded-2xl bg-slate-900 text-white group hover:bg-slate-800 transition-colors">
-                            <div>
-                                <span class="block text-[10px] font-black text-slate-400 uppercase">International CPC</span>
-                                <span class="text-xl font-black leading-none italic">7 Hour Pairings</span>
-                            </div>
-                            <span class="text-3xl font-black text-blue-400 italic">£38.99</span>
-                        </div>
-                    </div>
-                    <ul class="space-y-4">
-                        <li class="flex items-center gap-3 text-slate-600 font-semibold">
-                            <i data-lucide="check-circle-2" class="text-green-500 w-5 h-5 shrink-0"></i> No hidden upload fees
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-600 font-semibold">
-                            <i data-lucide="check-circle-2" class="text-green-500 w-5 h-5 shrink-0"></i> Same-day DVSA upload
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-600 font-semibold">
-                            <i data-lucide="check-circle-2" class="text-green-500 w-5 h-5 shrink-0"></i> Flexible 3.5h or 7h splits
-                        </li>
-                        <li class="flex items-center gap-3 text-slate-600 font-semibold">
-                            <i data-lucide="check-circle-2" class="text-green-500 w-5 h-5 shrink-0"></i> UK-wide online classroom
-                        </li>
-                    </ul>
+            <!-- Rotating Safety Hints & Tips -->
+            <div id="safety-tips-container" class="bg-blue-900/10 border border-blue-900/20 p-10 rounded-[48px] flex flex-col sm:flex-row gap-8 items-start shadow-sm mt-8">
+                <div class="bg-blue-600 p-4 rounded-3xl shadow-lg shrink-0">
+                    <i data-lucide="lightbulb" class="w-10 h-10 text-white"></i>
                 </div>
-                <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Course Times Section -->
-    <section id="times" class="py-20 px-4 bg-blue-600 text-white">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
-                    <div class="bg-white/10 w-fit p-3 rounded-2xl">
-                        <i data-lucide="clock" class="w-8 h-8"></i>
-                    </div>
-                    <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight italic uppercase">Course <span class="text-blue-200">Schedule</span></h2>
-                    <p class="text-blue-50 text-lg leading-relaxed font-medium">
-                        Punctuality is vital for compliance. Drivers must be present for the full 3.5 or 7 hours of training. Enrollment opens 15–30 minutes prior to session start for ID verification.
-                    </p>
-                    <div class="bg-white/5 p-6 rounded-[32px] border border-white/10 backdrop-blur-sm">
-                        <h4 class="font-bold flex items-center gap-2 mb-4 uppercase tracking-widest text-sm"><i data-lucide="shield-check" class="text-blue-300"></i> Compliance Policy</h4>
-                        <p class="text-sm text-blue-100 font-medium">Our timings are JAUPT audited. Full attendance, active engagement, and working cameras are required to guarantee same-day DVSA upload.</p>
-                    </div>
-                </div>
-
-                <div class="grid gap-6">
-                    <!-- Full Day Logic -->
-                    <div class="bg-white text-slate-900 p-8 rounded-[40px] shadow-2xl relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 bg-blue-100 px-4 py-2 rounded-bl-2xl font-black text-[10px] uppercase text-blue-600">Full Day (7h)</div>
-                        <h3 class="text-2xl font-black mb-6 uppercase italic tracking-tighter">Daytime Pairings</h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-                                <span class="font-bold text-slate-400 uppercase text-xs">Module 1 (3.5h)</span>
-                                <span class="font-black text-xl text-blue-600">08:00 – 11:45</span>
-                            </div>
-                            <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-dashed border-slate-200">
-                                <span class="text-[10px] font-black text-slate-400 uppercase italic">Lunch Interval</span>
-                                <span class="text-[10px] font-black text-slate-400 tracking-widest">30 MIN BREAK</span>
-                            </div>
-                            <div class="flex justify-between items-center pt-1">
-                                <span class="font-bold text-slate-400 uppercase text-xs">Module 2 (3.5h)</span>
-                                <span class="font-black text-xl text-blue-600">12:15 – 16:00</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Evening Logic -->
-                    <div class="bg-slate-900 text-white p-8 rounded-[40px] shadow-2xl relative overflow-hidden group border border-white/5">
-                        <div class="absolute top-0 right-0 bg-blue-600 px-4 py-2 rounded-bl-2xl font-black text-[10px] uppercase text-white">Evening (3.5h)</div>
-                        <h3 class="text-2xl font-black mb-6 uppercase italic tracking-tighter">Split Evenings</h3>
-                        <p class="text-[10px] text-slate-500 mb-6 font-black uppercase tracking-widest">Available Mon/Tue & Wed/Thu</p>
-                        <div class="flex justify-between items-center border-t border-white/10 pt-6">
-                            <span class="font-bold text-slate-400 uppercase text-xs">Live Session</span>
-                            <div class="text-right">
-                                <span class="block font-black text-3xl text-blue-400 italic">18:30 – 22:15</span>
-                                <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Includes 15m Break</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Courses Section -->
-    <section id="courses" class="py-20 px-4 bg-white">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-12 space-y-4">
-                <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900">Our <span class="text-blue-600 italic">CPC Modules</span></h2>
-                <p class="text-slate-500 font-bold max-w-2xl mx-auto">International courses (7h) are comprised of two module pairings. Standalone National modules (3.5h) can be booked row-by-row.</p>
-                
-                <div class="flex justify-center gap-2 mt-10 bg-slate-100 p-1.5 rounded-full w-fit mx-auto border border-slate-200">
-                    <button id="view-int" onclick="toggleViewMode('int')" class="flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black transition-all bg-white shadow-md text-blue-600 uppercase italic">
-                        <i data-lucide="layers" class="w-4 h-4"></i> International (7h)
-                    </button>
-                    <button id="view-nat" onclick="toggleViewMode('nat')" class="flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black transition-all text-slate-500 uppercase italic">
-                        <i data-lucide="zap" class="w-4 h-4"></i> Standalone (3.5h)
-                    </button>
-                </div>
-            </div>
-
-            <!-- Course Grid -->
-            <div id="course-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Data injected via JS -->
-            </div>
-
-            <!-- Compliance Warning -->
-            <div class="mt-16 bg-blue-50 p-8 rounded-[40px] border border-blue-100 flex flex-col md:flex-row items-center gap-8 shadow-sm">
-                <div class="bg-white p-4 rounded-2xl shadow-sm text-blue-600 shrink-0">
-                    <i data-lucide="info" class="w-8 h-8"></i>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                    <h4 class="font-black text-blue-900 uppercase italic tracking-tighter text-xl mb-1">Module Grouping Logic</h4>
-                    <p class="text-slate-600 text-sm font-semibold leading-relaxed">
-                        International Courses 1-7 are JAUPT recognized groupings. 
-                        <span class="text-orange-700 font-black italic underline">Codes 6 and 7 are PSV Only (Bus/Coach)</span>. 
-                        Individual modules (e.g. Mod 1, Mod 18) can be booked standalone for £21.99 via our live portal.
+                <div>
+                    <h4 class="font-black text-lg uppercase mb-3 italic tracking-tighter text-blue-900 underline underline-offset-4 decoration-blue-200">Professional Hints & Tips</h4>
+                    <p id="current-safety-tip" class="text-sm font-bold text-slate-600 leading-relaxed italic animate-in">
+                        Loading professional tip...
                     </p>
                 </div>
-                <a href="https://psvct.github.io/mycpc-booking/" class="whitespace-nowrap bg-blue-600 text-white px-10 py-4 rounded-2xl font-black uppercase italic hover:bg-blue-700 transition-all shadow-xl shadow-blue-200 active:scale-95">
-                    Enter Portal
-                </a>
+            </div>
+            <input type="text" id="hp_field" class="hp-field" tabindex="-1">
+        </div>
+
+        <!-- Step 5: Success -->
+        <div id="step-success" class="hidden animate-in mt-10 text-center space-y-6 pb-12">
+            <div class="bg-white rounded-[60px] shadow-2xl p-16 border border-slate-100 relative overflow-hidden">
+                <div class="bg-green-100 p-10 rounded-full inline-block mb-10 text-green-600 shadow-inner"><i data-lucide="check-circle" class="w-20 h-20"></i></div>
+                <h2 class="text-4xl font-black text-slate-800 mb-4 uppercase italic tracking-tighter">Request Received</h2>
+                <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-[32px] p-8 inline-block mb-10 relative group">
+                    <p class="text-[10px] font-black text-blue-400 uppercase tracking-[0.3em] mb-3">Booking Reference</p>
+                    <p id="booking-ref-display" class="text-3xl font-black tracking-[0.2em] text-blue-900 uppercase">---</p>
+                </div>
+                <p id="success-txt" class="text-slate-500 mb-12 max-w-sm mx-auto font-bold text-base leading-relaxed italic"></p>
+                <button onclick="location.reload();" class="bg-slate-900 hover:bg-black text-white px-12 py-5 rounded-[24px] font-black uppercase text-xs tracking-widest transition-all shadow-xl active:scale-95">Start New Request</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Why Us -->
-    <section id="why" class="py-20 px-4 bg-slate-50">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16 space-y-4">
-                <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 uppercase italic">Why Choose <span class="text-blue-600">Us?</span></h2>
-                <p class="text-slate-500 font-black text-sm uppercase tracking-[0.2em]">Industry expertise from active drivers.</p>
+    <!-- Selection Modal -->
+    <div id="modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[110] flex items-center justify-center p-6">
+        <div class="bg-white rounded-[50px] w-full max-w-md p-12 shadow-2xl relative animate-in">
+            <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-2 italic tracking-widest">Date</div>
+            <h3 id="modal-title" class="text-3xl font-black text-slate-800 mb-10 uppercase italic tracking-tighter">Confirm Pathway</h3>
+            <div id="pathway-options" class="space-y-4 mb-10"></div>
+            <div class="flex items-center justify-between p-5 bg-slate-50 rounded-[28px] mb-10 border border-slate-200 shadow-inner">
+                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Seats</div>
+                <div class="flex items-center gap-6">
+                    <button onclick="window.modQty(-1)" class="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center font-black text-slate-900 hover:bg-slate-50 transition-colors">-</button>
+                    <input id="m-qty" type="number" value="1" readonly class="bg-transparent text-center font-black text-2xl w-12 outline-none text-slate-800 tabular-nums">
+                    <button onclick="window.modQty(1)" class="w-12 h-12 rounded-2xl bg-white border-2 border-slate-100 flex items-center justify-center font-black text-slate-900 hover:bg-slate-50 transition-colors">+</button>
+                </div>
             </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center text-blue-600 mb-8 group-hover:scale-110 transition-transform"><i data-lucide="users" class="w-7 h-7"></i></div>
-                    <h3 class="text-xl font-black mb-4 uppercase italic tracking-tighter">Active Trainers</h3>
-                    <p class="text-slate-500 font-semibold leading-relaxed">Neil and the team are current PSV/HGV drivers and Transport Managers. We understand the day-to-day challenges of the road.</p>
-                </div>
-                <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="bg-purple-50 w-14 h-14 rounded-2xl flex items-center justify-center text-purple-600 mb-8 group-hover:scale-110 transition-transform"><i data-lucide="shield-check" class="w-7 h-7"></i></div>
-                    <h3 class="text-xl font-black mb-4 uppercase italic tracking-tighter">Fully Compliant</h3>
-                    <p class="text-slate-500 font-semibold leading-relaxed">JAUPT & DVSA approved. Certificates uploaded same-day. No hidden fees or paperwork delays—we do the heavy lifting for you.</p>
-                </div>
-                <div class="bg-white p-10 rounded-[40px] border border-slate-100 shadow-sm hover:shadow-xl transition-all group">
-                    <div class="bg-green-50 w-14 h-14 rounded-2xl flex items-center justify-center text-green-600 mb-8 group-hover:scale-110 transition-transform"><i data-lucide="message-square" class="w-7 h-7"></i></div>
-                    <h3 class="text-xl font-black mb-4 uppercase italic tracking-tighter">Tech Support</h3>
-                    <p class="text-slate-500 font-semibold leading-relaxed">New to online learning? We offer 1-on-1 walkthroughs and local on-site support in Bristol/Keynsham if you need to use our tech.</p>
-                </div>
+            <div class="flex gap-4">
+                <button onclick="window.closeModal()" class="flex-1 py-5 rounded-[24px] text-xs font-black text-slate-400 uppercase tracking-widest hover:bg-slate-50 transition-colors">Cancel</button>
+                <button onclick="window.confirmAddToBasket()" id="add-to-basket-btn" class="flex-[2] bg-blue-600 text-white px-8 py-5 rounded-[24px] font-black uppercase italic shadow-xl active:scale-95 transition-all">Add to Request</button>
             </div>
         </div>
-    </section>
-
-    <!-- Community & Mission -->
-    <section id="community" class="py-24 px-4 bg-slate-900 text-white relative overflow-hidden">
-        <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px]"></div>
-        
-        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
-            <div class="space-y-8 animate-in" style="animation: fadeIn 1s ease-out">
-                <h2 class="text-3xl md:text-5xl font-black leading-tight uppercase italic tracking-tighter">Beyond Compliance: <br><span class="text-blue-400 underline underline-offset-8 decoration-blue-500/30">Community Focus</span></h2>
-                <p class="text-slate-400 text-xl leading-relaxed font-medium">We believe training should never have a negative impact. We stand with those who give back to our local community.</p>
-                
-                <div class="space-y-6">
-                    <div class="flex gap-6 p-6 rounded-[32px] bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-                        <div class="text-blue-400 shrink-0"><i data-lucide="heart" class="w-8 h-8"></i></div>
-                        <div>
-                            <h4 class="font-black text-xl mb-1 uppercase italic tracking-tight">Volunteers: Cost Price</h4>
-                            <p class="text-slate-400 text-sm font-semibold leading-relaxed">Volunteering with Scouts or community transport? We provide training at cost—no profit, just our thanks.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-6 p-6 rounded-[32px] bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-                        <div class="text-purple-400 shrink-0"><i data-lucide="stethoscope" class="w-8 h-8"></i></div>
-                        <div>
-                            <h4 class="font-black text-xl mb-1 uppercase italic tracking-tight">Health & Recovery</h4>
-                            <p class="text-slate-400 text-sm font-semibold leading-relaxed">Off the road due to long-term health? We offer cost-price training to help you return on your own terms.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-6 p-6 rounded-[32px] bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-                        <div class="text-green-400 shrink-0"><i data-lucide="map-pin" class="w-8 h-8"></i></div>
-                        <div>
-                            <h4 class="font-black text-xl mb-1 uppercase italic tracking-tight">Bristol / Keynsham Office</h4>
-                            <p class="text-slate-400 text-sm font-semibold leading-relaxed">Visit us to join your course. We provide the laptops, stable Wi-Fi, and coffee to get you through the day.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Interactive Tabs -->
-            <div class="bg-white text-slate-900 rounded-[40px] p-10 space-y-8 shadow-2xl relative">
-                <div class="flex gap-2 border-b border-slate-100 pb-4 overflow-x-auto scrollbar-hide">
-                    <button onclick="showTab('vision')" id="tab-vision-btn" class="px-6 py-2.5 text-xs font-black rounded-xl whitespace-nowrap transition-all bg-blue-600 text-white uppercase italic">Our Vision</button>
-                    <button onclick="showTab('trainer')" id="tab-trainer-btn" class="px-6 py-2.5 text-xs font-black rounded-xl whitespace-nowrap transition-all text-slate-400 hover:bg-slate-50 uppercase italic">Meet Neil</button>
-                    <button onclick="showTab('safety')" id="tab-safety-btn" class="px-6 py-2.5 text-xs font-black rounded-xl whitespace-nowrap transition-all text-slate-400 hover:bg-slate-50 uppercase italic">Safety Mandate</button>
-                </div>
-                
-                <div id="tab-vision" class="tab-content active min-h-[220px] animate-in">
-                    <p class="text-lg text-slate-600 leading-relaxed font-bold italic">"We’re not just another 'fill up and go' provider. Every course should deliver value you'll actually use on the road. We care about your compliance because your reputation is ours."</p>
-                </div>
-                
-                <div id="tab-trainer" class="tab-content min-h-[220px] animate-in">
-                    <p class="text-slate-600 font-semibold mb-4 leading-relaxed">Neil’s journey started on service buses before moving to HGV Class 2. Today, he’s a Certified Transport Manager and active driver.</p>
-                    <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
-                        <h4 class="font-black text-blue-900 uppercase text-[10px] mb-2 tracking-widest">Credentials</h4>
-                        <ul class="text-sm font-bold text-slate-700 space-y-1 italic">
-                            <li>• 11+ years in Bus & Coach</li>
-                            <li>• Certified Transport Manager</li>
-                            <li>• Active PSV & HGV License</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div id="tab-safety" class="tab-content min-h-[220px] animate-in">
-                    <p class="text-slate-600 font-semibold mb-4 leading-relaxed">Our Professional Safety Mandate extends beyond the classroom. It is a commitment to a superior duty of care.</p>
-                    <div class="bg-purple-50 p-5 rounded-2xl border border-purple-100">
-                        <h4 class="font-black text-purple-900 uppercase text-[10px] mb-2 tracking-widest">Child Safety Guarantee</h4>
-                        <p class="text-xs font-bold text-purple-800 leading-relaxed italic">
-                            "Children MUST be dropped off on the correct side of the road and MUST be seen to be entering their home safely before the vehicle departs."
-                        </p>
-                    </div>
-                </div>
-
-                <a href="https://psvct.github.io/mycpc-booking/" class="w-full inline-flex items-center justify-center gap-3 bg-slate-900 text-white py-5 rounded-2xl font-black uppercase italic hover:bg-black transition-all shadow-xl active:scale-95">
-                    View Course Calendar <i data-lucide="calendar" class="w-5 h-5"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="py-20 px-4">
-        <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-16 space-y-2">
-                <h2 class="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-slate-900">Expert Q&A</h2>
-                <p class="text-slate-400 font-bold uppercase text-[10px] tracking-widest">Everything you need to know</p>
-            </div>
-            <div class="space-y-4">
-                <details class="group bg-white border border-slate-200 rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all">
-                    <summary class="p-6 font-black cursor-pointer list-none flex justify-between items-center group-open:bg-blue-50 transition-colors uppercase italic text-sm">
-                        Can I drive while waiting for my new card? <i data-lucide="help-circle" class="text-blue-500 w-5 h-5"></i>
-                    </summary>
-                    <div class="p-6 text-slate-600 border-t border-slate-100 text-sm font-bold leading-relaxed">You must not drive professionally without a valid CPC card. However, if your card is delayed after completion, you can drive for up to 15 days if you carry proof of your completed hours and have applied for the card.</div>
-                </details>
-                <details class="group bg-white border border-slate-200 rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all">
-                    <summary class="p-6 font-black cursor-pointer list-none flex justify-between items-center group-open:bg-blue-50 transition-colors uppercase italic text-sm">
-                        What software do I need to join? <i data-lucide="help-circle" class="text-blue-500 w-5 h-5"></i>
-                    </summary>
-                    <div class="p-6 text-slate-600 border-t border-slate-100 text-sm font-bold leading-relaxed">We use Google Meet. It's accessible via any modern browser on phones, tablets, or laptops. No special installation is required—just click the link we email you.</div>
-                </details>
-                <details class="group bg-white border border-slate-200 rounded-[24px] overflow-hidden shadow-sm hover:shadow-md transition-all">
-                    <summary class="p-6 font-black cursor-pointer list-none flex justify-between items-center group-open:bg-blue-50 transition-colors uppercase italic text-sm">
-                        Are you an approved center? <i data-lucide="help-circle" class="text-blue-500 w-5 h-5"></i>
-                    </summary>
-                    <div class="p-6 text-slate-600 border-t border-slate-100 text-sm font-bold leading-relaxed">Yes. We are JAUPT Approved Centre AC02237. All our courses are fully accredited and count towards your 35-hour periodic training requirement.</div>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-50 border-t border-slate-200 py-20 px-4">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12 text-slate-500 font-bold">
-            <div class="md:col-span-2 space-y-6">
-                <div class="flex items-center gap-2">
-                    <div class="bg-blue-600 p-1.5 rounded-lg"><i data-lucide="award" class="text-white w-6 h-6"></i></div>
-                    <span class="font-black text-2xl text-slate-900 uppercase italic tracking-tighter text-nowrap">myCPC<span class="text-blue-600">.online</span></span>
-                </div>
-                <p class="text-sm max-w-sm font-semibold leading-relaxed">
-                    Real training delivered by active drivers. PSV and HGV Professional CPC provided across the UK via our live digital classroom.
-                </p>
-                <div class="flex gap-4">
-                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-sm"><i data-lucide="truck" class="text-blue-600"></i></div>
-                    <div class="p-3 bg-white rounded-xl border border-slate-200 shadow-sm"><i data-lucide="bus" class="text-blue-600"></i></div>
-                </div>
-            </div>
-            <div class="space-y-6">
-                <h5 class="font-black text-slate-900 uppercase text-xs tracking-widest">Connect</h5>
-                <div class="space-y-4 text-sm font-bold">
-                    <p class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-blue-500"></i> 0117 427 8967</p>
-                    <p class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-blue-500"></i> info@my-cpc.online</p>
-                    <p class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-blue-500"></i> Keynsham / Bristol</p>
-                </div>
-            </div>
-            <div class="space-y-6">
-                <h5 class="font-black text-slate-900 uppercase text-xs tracking-widest">Compliance</h5>
-                <div class="space-y-4 text-sm font-bold">
-                    <p>JAUPT AC02237</p>
-                    <p>DVSA Registered</p>
-                    <p class="text-blue-600 underline cursor-pointer">Privacy Policy</p>
-                </div>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-slate-200 text-center text-[10px] text-slate-400 font-black tracking-[0.3em] uppercase">
-            © 2025 PSV Compliance and Training - Real Training by Real Drivers
-        </div>
-    </footer>
-
-    <!-- Mobile CTA -->
-    <div class="md:hidden fixed bottom-6 left-6 right-6 z-50">
-        <a href="https://psvct.github.io/mycpc-booking/" class="flex items-center justify-center gap-3 bg-blue-600 text-white py-5 rounded-[24px] font-black uppercase italic shadow-2xl active:scale-95 transition-transform border-4 border-white">
-            <i data-lucide="book-open" class="w-6 h-6"></i> Book Dates
-        </a>
     </div>
 
     <script>
-        // Data Structure
-        const courses = [
-            { id: 1, title: "Hours & Penalties", modules: [{ no: 1, desc: "Hours and Tachos" }, { no: 10, desc: "Fines, Penalties and PI's" }], target: "HGV/PSV" },
-            { id: 2, title: "Fitness & Defense", modules: [{ no: 3, desc: "Driver Fit 2 Drive" }, { no: 6, desc: "Defensive Driving and VRU's" }], target: "HGV/PSV" },
-            { id: 3, title: "Road Rules & Emergency", modules: [{ no: 7, desc: "Highway Code" }, { no: 9, desc: "Road Emergencies" }], target: "HGV/PSV" },
-            { id: 4, title: "Infrastructure & Bias", modules: [{ no: 2, desc: "Bridge Strikes" }, { no: 12, desc: "Conflict, Unconscious Bias Resilience" }], target: "HGV/PSV" },
-            { id: 5, title: "Eco & Technology", modules: [{ no: 8, desc: "Speed Reduction and Eco Driving" }, { no: 11, desc: "Vehicle Technology and AFV's" }], target: "HGV/PSV" },
-            { id: 6, title: "PSV: School & Disability", modules: [{ no: 18, desc: "School Run and Safeguarding" }, { no: 20, desc: "Disability and PSVAR" }], target: "PSV Only", isPSV: true },
-            { id: 7, title: "PSV: Compliance & Care", modules: [{ no: 13, desc: "Walk Around Checks" }, { no: 17, desc: "Customer Care (PSV)" }], target: "PSV Only", isPSV: true }
+        const SUPABASE_URL = 'https://jvbitnykgjasweugqgks.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_Bu0qel0FaGCSq-r4mE9Xsw_M5O_C-DY'; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const WEB3FORMS_KEY = "eea7a374-f421-4e9e-ba23-e3d0f67ba412";
+
+        let liveCourses = [], basket = [], globalLicense = 'HGV', initialPathway = 'national', isProcessing = false, selectedOption = null, activeModalDateCourses = [];
+
+        const professionalTips = [
+            "Children MUST be dropped off on the correct side of the road and MUST be seen entering their home safely before departure.",
+            "Vulnerable Road Users (VRUs): Always prioritize the protection of cyclists and pedestrians. Give them the space they deserve.",
+            "Freight Integrity: Load security is a commitment to everyone's safety. Double-check your restraints before every journey.",
+            "Bridge Strikes are 100% preventable. Always know your vehicle height and plan your route specifically for HGV/PSV access.",
+            "Struggling with the tech? Neil and the team offer 1-on-1 support to help you get online with confidence for your training.",
+            "Driver Well-being: A tired driver is a dangerous driver. Ensure you take your full breaks as mandated by EU & Domestic rules."
         ];
 
-        let currentMode = 'int'; // 'int' or 'nat'
-
-        // --- SECURITY: ESCAPE HTML HELPER ---
-        function esc(s) {
-            return String(s ?? '')
-                .replaceAll('&', '&amp;')
-                .replaceAll('<', '&lt;')
-                .replaceAll('>', '&gt;')
-                .replaceAll('"', '&quot;')
-                .replaceAll("'", '&#39;');
+        function rotateTip() {
+            const el = document.getElementById('current-safety-tip');
+            if(!el) return;
+            const randomTip = professionalTips[Math.floor(Math.random() * professionalTips.length)];
+            el.innerText = `"${randomTip}"`;
         }
 
-        function toggleViewMode(mode) {
-            currentMode = mode;
-            const btnInt = document.getElementById('view-int');
-            const btnNat = document.getElementById('view-nat');
-            
-            if (mode === 'int') {
-                btnInt.className = "flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black transition-all bg-white shadow-md text-blue-600 uppercase italic";
-                btnNat.className = "flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black transition-all text-slate-500 uppercase italic";
-            } else {
-                btnNat.className = "flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black transition-all bg-white shadow-md text-blue-600 uppercase italic";
-                btnInt.className = "flex items-center gap-2 px-6 py-2.5 rounded-full text-xs font-black transition-all text-slate-500 uppercase italic";
+        function esc(s) { return String(s ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;'); }
+
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+        
+        function goToStep(id) {
+            ['pathway', 'sector', 'courses', 'invoicing', 'success'].forEach(s => {
+                const el = document.getElementById('step-'+s);
+                if(el) el.classList.add('hidden');
+            });
+            const target = document.getElementById('step-'+id);
+            if(target) {
+                target.classList.remove('hidden');
+                if(id === 'invoicing') rotateTip();
             }
-            renderCourses();
+            updateBasket();
+            window.scrollTo({top:0, behavior:'smooth'});
         }
 
-        function renderCourses() {
-            const container = document.getElementById('course-grid');
+        window.selectInitialPathway = (p) => {
+            initialPathway = p;
+            const badge = document.getElementById('pathway-badge');
+            const pathwayText = p === 'national' ? 'National (3.5h)' : 'International (7h)';
+            if(badge) badge.innerText = `Default: ${pathwayText}`;
+            goToStep('courses');
+            render();
+        };
+
+        window.setGlobalLicense = (l) => { 
+            globalLicense = l; 
+            goToStep('courses'); 
+            render(); 
+        };
+
+        function groupKeyForItem(item) {
+            if (!item) return "";
+            if (item.pathway !== 'international') return `national:${item.courseId}`;
+            return `international:${item.groupId || item.data?.block_id || item.courseId}`;
+        }
+
+        function getRosterGroups() {
+            const map = new Map();
+            basket.forEach(item => {
+                const key = groupKeyForItem(item);
+                if (!map.has(key)) map.set(key, { key, pathway: item.pathway, qty: 0, items: [] });
+                const g = map.get(key);
+                g.items.push(item);
+                if (item.pathway === 'international') g.qty = Math.max(g.qty, item.qty);
+                else g.qty += item.qty;
+            });
+            return Array.from(map.values());
+        }
+
+        window.removeGroup = (key) => {
+            basket = basket.filter(item => groupKeyForItem(item) !== key);
+            localStorage.setItem('cpc_basket', JSON.stringify(basket));
+            updateBasket(); render();
+        };
+
+        window.changeGroupQty = (key, delta) => {
+            const group = getRosterGroups().find(g => g.key === key);
+            if (!group) return;
+            const newQty = Math.max(1, Math.min(15, group.qty + delta));
+            
+            basket.forEach(item => {
+                if (groupKeyForItem(item) === key) {
+                    item.qty = newQty;
+                }
+            });
+            
+            localStorage.setItem('cpc_basket', JSON.stringify(basket));
+            updateBasket();
+        };
+
+        function updateBasket() {
+            const groups = getRosterGroups();
+            const totalSeats = groups.reduce((a, g) => a + g.qty, 0);
+            const totalCost = groups.reduce((a, g) => a + (g.qty * (g.pathway === 'international' ? 38.99 : 21.99)), 0);
+            
+            const bCount = document.getElementById('basket-count'); if(bCount) bCount.innerText = totalSeats;
+            const sBar = document.getElementById('sticky-bar'); if(sBar) sBar.classList.toggle('visible', !!totalSeats);
+            const sPrice = document.getElementById('sticky-price'); if(sPrice) sPrice.innerText = `£${totalCost.toFixed(2)}`;
+            const iPrice = document.getElementById('invoice-step-price'); if(iPrice) iPrice.innerText = `£${totalCost.toFixed(2)}`;
+            const sumPrice = document.getElementById('summary-total-price'); if(sumPrice) sumPrice.innerText = `£${totalCost.toFixed(2)}`;
+            const sCount = document.getElementById('sticky-count'); if(sCount) sCount.innerText = `${totalSeats} Seats Selected`;
+            
+            const btn = document.getElementById('sticky-action-btn');
+            const stepCourses = document.getElementById('step-courses');
+            if (btn && stepCourses) {
+                btn.innerText = (!stepCourses.classList.contains('hidden')) ? "Review Order" : "Confirm Booking";
+            }
+
+            renderOrderSummary(groups);
+        }
+
+        function renderOrderSummary(groups) {
+            const container = document.getElementById('order-summary-container');
             if (!container) return;
             container.innerHTML = '';
 
-            courses.forEach(course => {
-                const card = document.createElement('div');
-                card.className = `group relative p-8 rounded-[40px] border transition-all ${course.isPSV ? 'border-orange-100 bg-orange-50/20' : 'border-slate-100 bg-white hover:border-blue-200 hover:shadow-xl'}`;
-                
-                let modulesHtml = course.modules.map(mod => `
-                    <div class="p-4 rounded-2xl border flex flex-col gap-1 ${currentMode === 'nat' ? 'bg-blue-50 border-blue-200 scale-[1.03]' : 'bg-white border-slate-100 group-hover:border-slate-200'} transition-all">
-                        <div class="flex justify-between items-center">
-                            <span class="text-[10px] font-black ${course.isPSV ? 'text-orange-600' : 'text-blue-600'} uppercase">Mod ${mod.no}</span>
-                            ${currentMode === 'nat' ? '<span class="text-[9px] font-black text-slate-400 uppercase">Standalone Session</span>' : ''}
-                        </div>
-                        <span class="text-sm font-black text-slate-800 italic">${esc(mod.desc)}</span>
-                    </div>
-                `).join('');
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest ${course.isPSV ? 'bg-orange-600' : 'bg-blue-600'} text-white">
-                                CODE ${course.id}
-                            </span>
-                            ${currentMode === 'int' ? '<span class="text-slate-400 font-black text-[9px] uppercase tracking-widest">7H TOTAL</span>' : ''}
-                        </div>
-                        <div class="${course.isPSV ? 'text-orange-600' : 'text-blue-600'}">
-                             <i data-lucide="${course.isPSV ? 'bus' : 'truck'}" class="w-5 h-5"></i>
-                        </div>
-                    </div>
-                    <h3 class="font-black text-xl mb-8 text-slate-800 leading-tight uppercase italic tracking-tighter">${esc(course.title)}</h3>
-                    <div class="space-y-3">${modulesHtml}</div>
-                    ${currentMode === 'int' ? `
-                        <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pairing Price</span>
-                            <span class="text-2xl font-black text-slate-900 italic">£38.99</span>
-                        </div>
-                    ` : `
-                        <div class="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between">
-                            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Module Price</span>
-                            <span class="text-2xl font-black text-slate-900 italic">£21.99</span>
-                        </div>
-                    `}
-                `;
-                container.appendChild(card);
-            });
-            lucide.createIcons();
-        }
-
-        function showTab(id) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.getElementById('tab-' + id).classList.add('active');
-            
-            // UI Toggle
-            document.querySelectorAll('[id$="-btn"]').forEach(b => {
-                b.className = "px-6 py-2.5 text-xs font-black rounded-xl whitespace-nowrap transition-all text-slate-400 hover:bg-slate-50 uppercase italic";
-            });
-            const activeBtn = document.getElementById('tab-' + id + '-btn');
-            activeBtn.className = "px-6 py-2.5 text-xs font-black rounded-xl whitespace-nowrap transition-all bg-blue-600 text-white shadow-md uppercase italic";
-        }
-
-        function toggleMenu(open) {
-            const overlay = document.getElementById('mobile-menu-overlay');
-            if (open) overlay.classList.remove('hidden');
-            else overlay.classList.add('hidden');
-        }
-
-        function acceptCookies() {
-            localStorage.setItem('cpc_cookies_accepted', 'true');
-            document.getElementById('cookie-banner').style.display = 'none';
-        }
-
-        // Initialize on load
-        window.addEventListener('load', () => {
-            if (!localStorage.getItem('cpc_cookies_accepted')) {
-                document.getElementById('cookie-banner').style.display = 'block';
+            if (groups.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-xs font-bold uppercase italic">No courses selected</p>';
+                return;
             }
+
+            groups.forEach(g => {
+                const itemHtml = `
+                <div class="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100 animate-in">
+                    <div class="flex-1">
+                        <div class="text-[8px] font-black text-blue-600 uppercase italic tracking-widest mb-1">${esc(g.pathway)}</div>
+                        <div class="text-xs font-bold text-slate-800 leading-tight">
+                            ${g.items.map(it => `${esc(it.data.module_name)} (${esc(it.data.date_label)})`).join('<br>')}
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 ml-6">
+                        <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-xl border border-slate-200 shadow-sm">
+                            <button onclick="window.changeGroupQty('${g.key}', -1)" class="w-7 h-7 flex items-center justify-center font-black text-slate-400 hover:text-blue-600 transition-colors">-</button>
+                            <span class="text-xs font-black w-6 text-center tabular-nums">${g.qty}</span>
+                            <button onclick="window.changeGroupQty('${g.key}', 1)" class="w-7 h-7 flex items-center justify-center font-black text-slate-400 hover:text-blue-600 transition-colors">+</button>
+                        </div>
+                        <button onclick="window.removeGroup('${g.key}')" class="text-slate-300 hover:text-red-500 transition-colors active:scale-90">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>`;
+                container.innerHTML += itemHtml;
+            });
             lucide.createIcons();
-            renderCourses();
-        });
+        }
+
+        function render() {
+            const cont = document.getElementById('view-container'); if(!cont) return; cont.innerHTML = '';
+            liveCourses.forEach(x => {
+                const keyNat = `national:${x.id}`;
+                const keyInt = `international:${x.block_id || x.id}`;
+                const groups = getRosterGroups();
+                const inBasket = groups.find(g => g.key === keyNat || g.key === keyInt);
+                const isFull = x.seats_remaining !== null && x.seats_remaining <= 0;
+
+                cont.innerHTML += `
+                <div class="flex items-center gap-3 animate-in">
+                    <button onclick="${isFull ? '' : `window.openModal('${x.id}')`}" class="flex-1 p-6 bg-white border-2 rounded-[32px] flex justify-between items-center text-left transition-all ${inBasket ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 hover:border-blue-200'} ${isFull ? 'opacity-50 grayscale cursor-not-allowed' : ''}">
+                        <div>
+                            <div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1.5 tracking-widest">${esc(x.date_label)}</div>
+                            <div class="font-bold text-slate-800 text-sm uppercase italic tracking-tight">${esc(x.module_name)}</div>
+                            <div class="text-[8px] font-black uppercase mt-1.5 ${isFull ? 'text-red-500' : 'text-blue-500'} tracking-tighter">${isFull ? 'SESSION FULL' : `${x.seats_remaining} seats remaining`}</div>
+                        </div>
+                        ${inBasket ? `<div class="bg-blue-600 text-white text-[10px] font-black px-4 py-2 rounded-xl italic">${inBasket.qty} seats</div>` : `<i data-lucide="plus" class="w-5 h-5 text-slate-200"></i>`}
+                    </button>
+                    ${inBasket ? `<button onclick="window.removeGroup('${inBasket.key}')" class="p-5 bg-red-50 text-red-400 rounded-3xl hover:bg-red-100 active:scale-90 transition-all"><i data-lucide="trash-2" class="w-5 h-5"></i></button>` : ''}
+                </div>`;
+            });
+            lucide.createIcons();
+        }
+
+        window.openModal = (id) => {
+            const c = liveCourses.find(x => x.id === id); if(!c) return;
+            activeModalDateCourses = liveCourses.filter(x => new Date(x.course_start).toDateString() === new Date(c.course_start).toDateString());
+            
+            const mDate = document.getElementById('modal-date'); if(mDate) mDate.innerText = c.date_label;
+            const mQty = document.getElementById('m-qty'); if(mQty) mQty.value = 1;
+            const box = document.getElementById('pathway-options'); box.innerHTML = '';
+            
+            activeModalDateCourses.forEach(course => {
+                const b = document.createElement('button');
+                b.className = `w-full p-5 rounded-[24px] border-2 text-left decision-card border-slate-100 mt-2 hover:border-blue-200 transition-all ${initialPathway === 'national' && course.id === id ? 'decision-selected' : ''}`;
+                if(initialPathway === 'national' && course.id === id) selectedOption = `single_${course.id}`;
+                
+                b.onclick = () => { selectedOption = `single_${course.id}`; document.querySelectorAll('.decision-card').forEach(x => x.classList.remove('decision-selected')); b.classList.add('decision-selected'); };
+                b.innerHTML = `<div class="flex justify-between font-black uppercase italic tracking-tighter items-center"><div><div class="text-sm text-slate-800 font-bold">${esc(course.module_name)}</div><div class="text-[8px] text-slate-400 tracking-widest uppercase">3.5h Standalone Module</div></div><div class="text-blue-600 text-lg">£21.99</div></div>`;
+                box.appendChild(b);
+            });
+
+            if (activeModalDateCourses.length > 1 || c.block_id) {
+                const blockModules = activeModalDateCourses.length > 1 ? activeModalDateCourses : liveCourses.filter(x => x.block_id === c.block_id);
+                const names = blockModules.map(m => m.module_name).join(' & ');
+                
+                const b = document.createElement('button');
+                b.className = `w-full p-5 rounded-[24px] border-2 text-left decision-card border-slate-100 mt-2 hover:border-blue-200 transition-all ${initialPathway === 'international' ? 'decision-selected' : ''}`;
+                if(initialPathway === 'international') selectedOption = "combined";
+                
+                b.onclick = () => { selectedOption = "combined"; document.querySelectorAll('.decision-card').forEach(x => x.classList.remove('decision-selected')); b.classList.add('decision-selected'); };
+                b.innerHTML = `
+                <div class="flex justify-between font-black uppercase italic tracking-tighter items-center">
+                    <div class="flex-1 pr-4">
+                        <div class="text-sm text-slate-800 font-bold">International Pairing</div>
+                        <div class="text-[8px] text-slate-400 tracking-widest leading-relaxed mt-1">${esc(names)}</div>
+                        <div class="text-[7px] text-blue-500 font-bold uppercase mt-1">7h Training Total</div>
+                    </div>
+                    <div class="text-blue-600 text-lg font-black">£38.99</div>
+                </div>`;
+                box.appendChild(b);
+            }
+            
+            document.getElementById('modal').classList.remove('hidden');
+            lucide.createIcons();
+        };
+
+        window.confirmAddToBasket = () => {
+            const qInput = document.getElementById('m-qty');
+            const q = parseInt(qInput ? qInput.value : '1');
+            
+            if (selectedOption === 'combined') {
+                const anchor = activeModalDateCourses.length ? activeModalDateCourses[0] : null;
+                if(!anchor) return;
+                const blockModules = activeModalDateCourses.length > 1 ? activeModalDateCourses : liveCourses.filter(x => x.block_id === anchor.block_id);
+                const gKey = `international:${blockModules[0].block_id || blockModules[0].id}`;
+                basket = basket.filter(item => groupKeyForItem(item) !== gKey);
+                blockModules.forEach(c => basket.push({ courseId: c.id, pathway: 'international', qty: q, data: c, groupId: `comb_${blockModules[0].id}` }));
+            } else {
+                const id = selectedOption.replace('single_', '');
+                const c = liveCourses.find(x => x.id === id);
+                if(c) {
+                    const gKey = `national:${id}`;
+                    basket = basket.filter(item => groupKeyForItem(item) !== gKey);
+                    basket.push({ courseId: c.id, pathway: 'national', qty: q, data: c });
+                }
+            }
+            localStorage.setItem('cpc_basket', JSON.stringify(basket));
+            closeModal(); updateBasket(); render();
+        };
+
+        async function submitBooking() {
+            if (isProcessing) return;
+            const btn = document.getElementById('submit-btn'), errBox = document.getElementById('validation-error'), errText = document.getElementById('error-text');
+            if (document.getElementById('hp_field').value) return; 
+            
+            const em = document.getElementById('booker_email').value, inv = document.getElementById('invoice_to').value, adr = document.getElementById('billing_address').value, ph = document.getElementById('contact_phone').value;
+            const mktAgree = document.getElementById('marketing_opt_in').checked;
+            const termsAgree = document.getElementById('terms_agree').checked;
+
+            if (!inv.trim() || !em.trim() || !adr.trim()) { 
+                errBox.classList.remove('hidden'); 
+                errText.innerText = "Please complete all required invoicing fields."; 
+                return; 
+            }
+
+            if (!termsAgree) {
+                errBox.classList.remove('hidden');
+                errText.innerText = "You must agree to the Terms & Conditions to proceed.";
+                return;
+            }
+
+            const groups = getRosterGroups();
+            const totalSeats = groups.reduce((a, g) => a + g.qty, 0);
+            const totalCost = groups.reduce((a, g) => a + (g.qty * (g.pathway === 'international' ? 38.99 : 21.99)), 0);
+            if (totalSeats < 1) return;
+
+            isProcessing = true; btn.disabled = true; btn.innerText = "Processing...";
+            const bookingRef = `CPC-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+
+            try {
+                gtag('event', 'purchase', { transaction_id: bookingRef, value: totalCost, currency: 'GBP' });
+                fbq('track', 'Purchase', { value: totalCost, currency: 'GBP' });
+
+                const courseSummary = groups.map(g => {
+                    const modulesWithDates = g.items.map(it => `[${it.data.date_label}] ${it.data.module_name}`).join(' & ');
+                    return `- ${g.pathway.toUpperCase()}: ${modulesWithDates} (Qty: ${g.qty})`;
+                }).join('\n');
+
+                const formData = new FormData(); formData.append("access_key", WEB3FORMS_KEY);
+                formData.append("subject", `New Booking [${bookingRef}]: ${inv}`);
+                formData.append("message", `
+NEW BOOKING REQUEST
+REFERENCE: ${bookingRef}
+TOTAL SEATS: ${totalSeats}
+TOTAL EST: £${totalCost.toFixed(2)}
+
+CLIENT DETAILS
+Name: ${inv}
+Email: ${em}
+Phone: ${ph}
+Address: ${adr}
+
+COURSES (DATES & MODULES):
+${courseSummary}
+
+ACKNOWLEDGMENTS
+T&Cs Accepted: YES
+Marketing Opt-In: ${mktAgree ? 'YES' : 'NO'}`);
+                
+                await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
+
+                const roster = [];
+                groups.forEach(g => g.items.forEach(it => { 
+                    for(let i=0; i<g.qty; i++) {
+                        roster.push({ lead_email:em, invoice_to:inv, billing_address:adr, contact_phone:ph, global_license:globalLicense, pathway:g.pathway, course_id:it.courseId, booking_ref:bookingRef, driver_name:'TBA', driver_license:'TBA', status:'pending', marketing_opt_in: mktAgree }); 
+                    }
+                }));
+                await _supabase.from('bookings').insert(roster);
+
+                document.getElementById('booking-ref-display').innerText = bookingRef;
+                document.getElementById('success-txt').innerText = `Thank you. A request for £${totalCost.toFixed(2)} has been logged. Neil will review and email your invoice to ${em} within 24 hours.`;
+                
+                basket = []; localStorage.removeItem('cpc_basket'); updateBasket(); goToStep('success');
+            } catch (ex) { isProcessing = false; btn.disabled = false; }
+        }
+
+        window.modQty = (d) => { let v = parseInt(document.getElementById('m-qty').value) + d; if(v>0 && v<=15) document.getElementById('m-qty').value = v; };
+        window.handleStickyAction = () => { if(!document.getElementById('step-courses').classList.contains('hidden')) goToStep('invoicing'); else submitBooking(); };
+        window.goToStep = goToStep;
+        window.closeModal = closeModal;
+
+        async function init() {
+            const { data } = await _supabase.from('course_availability').select('*').order('course_start', { ascending: true });
+            if (data) { 
+                liveCourses = data; 
+                const saved = JSON.parse(localStorage.getItem('cpc_basket') || '[]'); 
+                basket = saved.map(i => { 
+                    const l = liveCourses.find(c => c.id === i.courseId); 
+                    return l ? { ...i, data: l } : null; 
+                }).filter(x => x); 
+            }
+            updateBasket();
+            lucide.createIcons();
+        }
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
