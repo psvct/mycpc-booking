@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Driver CPC Booking Portal | myCPC.online</title>
+    <title>Booking Portal | myCPC.online</title>
     <meta name="description" content="Official booking portal for myCPC.online. Request seats for Driver CPC training. Invoice and payment link issued within 24 hours.">
     <link rel="canonical" href="https://bookings.my-cpc.online">
     
@@ -93,10 +93,11 @@
             </div>
         </div>
 
-        <!-- Step 2: Course Selection (List View Only) -->
+        <!-- Step 2: Course Selection (List View) -->
         <div id="step-courses" class="hidden animate-in space-y-6 text-left">
             <div class="flex items-center justify-between text-blue-600">
                 <button onclick="window.goToStep('sector')" class="text-[10px] font-black flex items-center gap-1 uppercase text-blue-600"><i data-lucide="chevron-left" class="w-3 h-3 text-blue-600"></i> Change Sector</button>
+                <div id="basket-summary-mini" class="text-[9px] font-black text-slate-400 uppercase italic">Select modules to build your basket</div>
             </div>
             <div id="view-container" class="space-y-3"></div>
         </div>
@@ -237,7 +238,7 @@
                 .replaceAll("'", '&#39;');
         }
 
-        // --- CORE FUNCTIONS (HOISTED DECLARATIONS) ---
+        // --- CORE FUNCTIONS (FUNCTION DECLARATIONS FOR HOISTING) ---
 
         function closeModal() { 
             const m = document.getElementById('modal');
@@ -265,9 +266,19 @@
             return Array.from(map.values());
         }
 
+        function removeGroup(groupKey) {
+            basket = basket.filter(item => groupKeyForItem(item) !== groupKey);
+            localStorage.setItem('cpc_basket', JSON.stringify(basket));
+            updateBasket();
+            render();
+        }
+
         function getSeatCountForCourseRow(course) {
-            const itemMatch = basket.find(b => b.courseId === course.id);
-            return itemMatch ? itemMatch.qty : 0;
+            // Find if the specific course row is in basket (National or International)
+            const groups = getRosterGroups();
+            const targetKey = groupKeyForItem({ courseId: course.id, pathway: course.block_id ? 'international' : 'national', data: course });
+            const group = groups.find(g => g.key === targetKey);
+            return group ? group.qty : 0;
         }
 
         function updateBasket() {
@@ -283,14 +294,14 @@
             const spEl = document.getElementById('sticky-price'); if(spEl) spEl.innerText = `£${totalCost.toFixed(2)}`; 
             const scEl = document.getElementById('sticky-count'); if(scEl) scEl.innerText = `${totalSeats} Seats Selected`;
             
-            const currentStep = ['sector', 'courses', 'invoicing', 'success'].find(id => {
-                const el = document.getElementById('step-' + id);
-                return el && !el.classList.contains('hidden');
-            });
             const sBtn = document.getElementById('sticky-action-btn');
             if (sBtn) {
-                if (currentStep === 'courses') sBtn.innerText = 'Review & Checkout';
-                else if (currentStep === 'invoicing') sBtn.innerText = 'Confirm Order';
+                const stepCourses = document.getElementById('step-courses');
+                if (stepCourses && !stepCourses.classList.contains('hidden')) {
+                    sBtn.innerText = 'Review & Checkout';
+                } else {
+                    sBtn.innerText = 'Confirm Order';
+                }
             }
         }
 
@@ -303,7 +314,30 @@
                 const count = getSeatCountForCourseRow(x);
                 const sRem = x.seats_remaining;
                 const seatLabel = (sRem === null || sRem === undefined) ? "Check availability" : sRem <= 0 ? "FULL" : sRem + " seats remaining";
-                cont.innerHTML += `<button type="button" onclick="window.openModal('${x.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between w-full text-left text-slate-900 ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}"><div><div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1 text-slate-400">${esc(x.date_label)}</div><div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800">${esc(x.module_name)}</div><div class="text-[8px] font-black uppercase mt-1 text-blue-600">${esc(seatLabel)}</div></div><div class="flex items-center gap-2">${(x.is_specialist) ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic text-purple-700">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-white">${count} seats</div>` : ''}</div></button>`;
+                
+                // Add Remove button if item is in basket
+                const groupKey = groupKeyForItem({ courseId: x.id, pathway: x.block_id ? 'international' : 'national', data: x });
+                const isInBasket = basket.some(b => groupKeyForItem(b) === groupKey);
+
+                cont.innerHTML += `
+                <div class="flex items-center gap-3">
+                    <button type="button" onclick="window.openModal('${x.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between w-full text-left text-slate-900 ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}">
+                        <div>
+                            <div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1 text-slate-400">${esc(x.date_label)}</div>
+                            <div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800">${esc(x.module_name)}</div>
+                            <div class="text-[8px] font-black uppercase mt-1 text-blue-600">${esc(seatLabel)}</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${(x.is_specialist) ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic text-purple-700">Specialist</div>' : ''}
+                            ${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-white">${count} seats</div>` : ''}
+                        </div>
+                    </button>
+                    ${isInBasket ? `
+                        <button onclick="window.removeGroup('${groupKey}')" class="p-4 bg-red-50 text-red-500 rounded-3xl hover:bg-red-100 transition-colors shadow-sm">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        </button>
+                    ` : ''}
+                </div>`;
             });
             lucide.createIcons();
         }
@@ -437,19 +471,8 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function handleStickyAction() {
-            const stepCourses = document.getElementById('step-courses');
-            if (stepCourses && !stepCourses.classList.contains('hidden')) {
-                if (basket.length === 0) return;
-                goToStep('invoicing');
-            } else {
-                submitBooking();
-            }
-        }
-
         async function submitBooking() {
             if (isProcessing) return;
-            // Anti-spam throttle
             if (Date.now() - lastSubmitAt < 5000) return; 
             lastSubmitAt = Date.now();
 
@@ -494,27 +517,69 @@
                 }
             });
 
-            // --- DUAL MODE FAIL-SAFE SUBMISSION ---
-            try {
-                // 1. Send Email Notification First (Reliable Fallback)
-                const formData = new FormData(); formData.append("access_key", WEB3FORMS_KEY);
-                formData.append("subject", `Booking [${bookingRef}]: ${inv}`);
-                formData.append("message", `REF: ${bookingRef}\nURGENT: ${isUrgent}\nSeats: ${totalSeats}\nClient: ${inv}\nEmail: ${em}\n\nCourses: ${groups.map(g => g.items.map(it => it.data.module_name).join(', ')).join(' | ')}`);
-                
-                const emailResponse = await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
+            // --- BUILD ENHANCED EMAIL SUMMARY ---
+            const courseDetails = groups.map(g => {
+                const modules = g.items.map(it => `[${it.data.date_label}] ${it.data.module_name}`).join(' AND ');
+                return `- ${g.pathway.toUpperCase()}: ${modules} (Qty: ${g.qty})`;
+            }).join('\n');
 
-                // 2. Try to save to DB (if it fails, we ignore it tonight)
+            try {
+                // 1. Send Email Notification with ALL fields
+                const formData = new FormData(); formData.append("access_key", WEB3FORMS_KEY);
+                formData.append("subject", `New CPC Booking [${bookingRef}]: ${inv}`);
+                formData.append("message", `
+NEW BOOKING REQUEST
+-------------------
+REFERENCE: ${bookingRef}
+URGENT: ${isUrgent ? 'YES' : 'NO'}
+TOTAL SEATS: ${totalSeats}
+
+CLIENT DETAILS
+--------------
+Invoiced To: ${inv}
+Lead Email: ${em}
+Contact Phone: ${ph}
+Billing Address: ${adr}
+
+COURSE BREAKDOWN
+----------------
+${courseDetails}
+
+SAFETY MANDATE ACKNOWLEDGMENT
+-----------------------------
+Drivers acknowledge the professional duty of care: 
+"Children MUST be dropped off on the correct side of the road and MUST be seen to be entering their home safely before the vehicle departs."
+                `.trim());
+                
+                await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
+
+                // 2. Try to save to DB (Quietly)
                 await _supabase.from('bookings').insert(roster);
 
-                // 3. UI Success
+                // 3. UI Success & CLEAR BASKET
                 document.getElementById('booking-ref-display').innerText = bookingRef;
                 document.getElementById('success-txt').innerText = "Request received. We will contact you at " + em + " within 24 hours to confirm driver details and payment.";
+                
+                // CRITICAL: Clear local storage and state
+                basket = [];
+                localStorage.removeItem('cpc_basket');
+                updateBasket();
+                
                 goToStep('success');
-                isProcessing = false; basket = []; localStorage.removeItem('cpc_basket');
+                isProcessing = false;
 
             } catch (ex) { 
-                // Final Catch
                 showErr("Technical Error. Please refresh or contact support."); 
+            }
+        }
+
+        function handleStickyAction() {
+            const stepCourses = document.getElementById('step-courses');
+            if (stepCourses && !stepCourses.classList.contains('hidden')) {
+                if (basket.length === 0) return;
+                goToStep('invoicing');
+            } else {
+                submitBooking();
             }
         }
 
@@ -542,6 +607,7 @@
         window.copyRef = copyRef;
         window.openModal = openModal;
         window.confirmAddToBasket = confirmAddToBasket;
+        window.removeGroup = removeGroup;
 
         async function init() {
             try {
