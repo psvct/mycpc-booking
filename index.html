@@ -38,7 +38,6 @@
 
     <div id="copy-toast" class="copy-toast animate-in">Reference Copied! ✅</div>
 
-    <!-- Sticky Checkout Bar -->
     <div id="sticky-bar" class="sticky-checkout text-white shadow-2xl px-6 py-4 flex justify-between items-center border-b border-white/10">
         <div class="flex items-center gap-4 text-white">
             <div class="bg-blue-600 p-2 rounded-xl shadow-lg"><i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i></div>
@@ -73,7 +72,7 @@
             </div>
         </header>
 
-        <!-- Step 1: Sector Choice -->
+        <!-- Step 1: Sector -->
         <div id="step-sector" class="animate-in space-y-6">
              <div class="text-center py-6 text-slate-900">
                 <h2 class="text-3xl font-black uppercase italic text-slate-800">Booking Portal</h2>
@@ -101,7 +100,7 @@
             <div id="view-container" class="space-y-3"></div>
         </div>
 
-        <!-- Step 3: Invoicing Details & Submit -->
+        <!-- Step 3: Invoicing Details -->
         <div id="step-invoicing" class="hidden animate-in space-y-6 text-left">
             <div class="bg-slate-900 rounded-[40px] p-8 text-white shadow-2xl border-t-8 border-blue-600">
                 <button onclick="window.goToStep('courses')" class="text-[10px] font-black text-blue-400 uppercase mb-6 flex items-center gap-1"><i data-lucide="chevron-left" class="w-3 h-3 text-blue-400 text-blue-400"></i> Back to Courses</button>
@@ -121,9 +120,9 @@
                     <label class="text-[10px] font-bold text-white/30 uppercase ml-2 text-white/30">Billing Address & Postcode</label>
                     <textarea id="billing_address" rows="2" autocomplete="street-address" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500 text-white text-white"></textarea>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-white">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-white text-white">
                     <div class="space-y-1">
-                        <label class="text-[10px] font-bold text-white/30 uppercase ml-2 text-white/30 text-white/30">Contact Phone</label>
+                        <label class="text-[10px] font-bold text-white/30 uppercase ml-2 text-white/30">Contact Phone</label>
                         <input id="contact_phone" autocomplete="tel" class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none text-white focus:border-blue-500 text-white">
                     </div>
                     <div class="bg-white/5 p-4 rounded-2xl flex items-center justify-between border border-white/10 text-white">
@@ -144,7 +143,7 @@
                 </div>
 
                 <div id="validation-error" class="hidden bg-red-500/20 border border-red-500/50 p-5 rounded-2xl mb-6 flex gap-4 animate-in text-white">
-                    <i data-lucide="alert-circle" class="text-red-400 w-6 h-6 shrink-0 text-red-400 text-red-400"></i>
+                    <i data-lucide="alert-circle" class="text-red-400 w-6 h-6 shrink-0"></i>
                     <p id="error-text" class="text-xs text-red-100 font-bold leading-tight"></p>
                 </div>
 
@@ -155,7 +154,7 @@
                 <i data-lucide="shield-check" class="w-12 h-12 text-purple-300 shrink-0 text-purple-300"></i>
                 <div>
                     <h4 class="font-black text-sm uppercase mb-2 italic tracking-widest leading-none text-white text-white">Professional Safety Mandate</h4>
-                    <p class="text-xs opacity-90 font-medium text-white/90 text-white/90">
+                    <p class="text-xs opacity-90 font-medium text-white/90 text-white/90 text-white/90">
                         A professional driver’s responsibility extends beyond the vehicle. We commit to a superior duty of care—protecting vulnerable road users, securing freight with absolute integrity, and for those in passenger transit, ensuring every individual is seen safely home. Children must be dropped off on the correct side of the road and seen to be entering their home safely before departure.
                     </p>
                 </div>
@@ -165,47 +164,47 @@
             <input type="text" id="hp_field" class="hp-field" tabindex="-1" autocomplete="off">
         </div>
 
-        <!-- Step 5: Success Screen -->
-        <div id="step-success" class="hidden animate-in mt-10 space-y-6 text-slate-900 text-slate-900 text-slate-900">
+        <!-- Step: Success -->
+        <div id="step-success" class="hidden animate-in mt-10 space-y-6 text-slate-900">
             <div class="bg-white rounded-[40px] shadow-xl p-12 text-center border border-slate-100">
-                <div class="bg-green-100 p-8 rounded-full inline-block mb-6 text-green-600 mx-auto text-green-600 text-green-600 text-green-600"><i data-lucide="check-circle" class="w-16 h-16 text-green-600 text-green-600 text-green-600"></i></div>
-                <h2 class="text-3xl font-black text-slate-800 mb-2 uppercase italic tracking-tighter text-slate-800 text-slate-800 text-slate-800">Request Received</h2>
-                <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-6 inline-block mb-6 relative group text-blue-900 text-blue-900 text-blue-900">
-                    <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2 text-blue-400 text-blue-400 text-blue-400">Booking Reference</p>
-                    <div class="flex items-center justify-center gap-3 text-blue-900 text-blue-900 text-blue-900">
-                        <p id="booking-ref-display" class="text-2xl font-black tracking-widest uppercase text-blue-900 text-blue-900 text-blue-900">---</p>
-                        <button onclick="window.copyRef()" title="Copy Reference" class="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm active:scale-90 text-white text-white text-white">
-                            <i data-lucide="copy" class="w-4 h-4 text-white text-white text-white text-white"></i>
+                <div class="bg-green-100 p-8 rounded-full inline-block mb-6 text-green-600 mx-auto text-green-600"><i data-lucide="check-circle" class="w-16 h-16 text-green-600"></i></div>
+                <h2 class="text-3xl font-black text-slate-800 mb-2 uppercase italic tracking-tighter text-slate-800">Request Received</h2>
+                <div class="bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl p-6 inline-block mb-6 relative group text-blue-900">
+                    <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2 text-blue-400">Booking Reference</p>
+                    <div class="flex items-center justify-center gap-3 text-blue-900">
+                        <p id="booking-ref-display" class="text-2xl font-black tracking-widest uppercase text-blue-900">---</p>
+                        <button onclick="window.copyRef()" title="Copy Reference" class="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm active:scale-90 text-white">
+                            <i data-lucide="copy" class="w-4 h-4 text-white"></i>
                         </button>
                     </div>
                 </div>
-                <p id="success-txt" class="text-slate-600 mb-8 px-4 font-bold text-sm text-slate-600 text-slate-600 text-slate-600"></p>
-                <button onclick="location.reload();" class="mt-12 bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs font-black text-white text-white text-white">Start New Request</button>
+                <p id="success-txt" class="text-slate-600 mb-8 px-4 font-bold text-sm text-slate-600"></p>
+                <button onclick="location.reload();" class="mt-12 bg-slate-900 text-white px-10 py-4 rounded-2xl font-black uppercase text-xs font-black text-white">Start New Request</button>
             </div>
         </div>
 
-        <footer class="mt-auto pt-12 pb-6 text-center border-t text-slate-400 text-slate-400 text-slate-400">
-            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400 text-slate-400 text-slate-400">Legal Entity: <span class="text-slate-700 font-black text-slate-700 text-slate-700">PSV Compliance and Training</span></p>
+        <footer class="mt-auto pt-12 pb-6 text-center border-t text-slate-400">
+            <p class="text-[9px] font-black uppercase tracking-widest text-slate-400">Legal Entity: <span class="text-slate-700 font-black text-slate-700">PSV Compliance and Training</span></p>
         </footer>
     </div>
 
     <!-- Modal -->
-    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 text-left text-slate-900 text-slate-900 text-slate-900">
-        <div class="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl relative border border-white/20 text-slate-900 text-slate-900 text-slate-900 text-slate-900">
-            <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 leading-none italic text-blue-600 text-blue-600 text-blue-600">Date</div>
-            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tighter text-slate-800 text-slate-800 text-slate-800 text-slate-800">Course Options</h3>
-            <div id="pathway-options" class="space-y-3 mb-8 text-slate-900 text-slate-900 text-slate-900"></div>
-            <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border border-slate-200 text-slate-900 text-slate-900 text-slate-900">
-                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-slate-400 text-slate-400 text-slate-400">Quantity</div>
-                <div class="flex items-center gap-4 text-slate-900 text-slate-900 text-slate-900">
-                    <button onclick="window.modQty(-1)" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black text-slate-900 text-slate-900 text-slate-900">-</button>
-                    <input id="m-qty" type="number" value="1" readonly class="bg-transparent text-center font-black text-lg w-12 outline-none text-slate-900 text-slate-900 text-slate-900">
-                    <button onclick="window.modQty(1)" aria-label="Increase quantity" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black text-slate-900 text-slate-900 text-slate-900">+</button>
+    <div id="modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center p-4 text-left text-slate-900">
+        <div class="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl relative border border-white/20 text-slate-900">
+            <div id="modal-date" class="text-[10px] font-black text-blue-600 uppercase mb-1 leading-none italic text-blue-600">Date</div>
+            <h3 id="modal-title" class="text-xl font-black text-slate-800 mb-6 uppercase tracking-tighter text-slate-800">Course Options</h3>
+            <div id="pathway-options" class="space-y-3 mb-8 text-slate-900"></div>
+            <div class="flex items-center justify-between p-4 bg-slate-50 rounded-3xl mb-8 border border-slate-200 text-slate-900">
+                <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Quantity</div>
+                <div class="flex items-center gap-4 text-slate-900">
+                    <button onclick="window.modQty(-1)" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black text-slate-900">-</button>
+                    <input id="m-qty" type="number" value="1" readonly class="bg-transparent text-center font-black text-lg w-12 outline-none text-slate-900">
+                    <button onclick="window.modQty(1)" aria-label="Increase quantity" class="w-10 h-10 rounded-xl bg-white border flex items-center justify-center font-black text-slate-900">+</button>
                 </div>
             </div>
-            <div class="flex gap-3 text-slate-900 text-slate-900 text-slate-900">
-                <button onclick="window.closeModal()" id="close-modal-btn" class="flex-1 py-4 rounded-2xl text-xs font-black text-slate-400 uppercase text-slate-400 text-slate-400 text-slate-400">Cancel</button>
-                <button onclick="window.confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50 italic text-white text-white text-white text-white" disabled>Choose Pathway</button>
+            <div class="flex gap-3 text-slate-900">
+                <button onclick="window.closeModal()" id="close-modal-btn" class="flex-1 py-4 rounded-2xl text-xs font-black text-slate-400 uppercase">Cancel</button>
+                <button onclick="window.confirmAddToBasket()" id="add-to-basket-btn" class="flex-2 bg-slate-900 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase shadow-lg disabled:opacity-50 italic text-white" disabled>Choose Pathway</button>
             </div>
         </div>
     </div>
@@ -237,16 +236,11 @@
                 .replaceAll("'", '&#39;');
         }
 
-        // --- CORE FUNCTIONS (FUNCTION DECLARATIONS FOR HOISTING) ---
+        // --- CORE FUNCTIONS ---
 
         function closeModal() { 
             const m = document.getElementById('modal');
             if (m) m.classList.add('hidden'); 
-        }
-
-        function setView(view) { 
-            currentView = view; 
-            render(); 
         }
 
         function groupKeyForItem(item) {
@@ -500,7 +494,7 @@
             });
 
             try {
-                const { error } = await _supabase.from('bookings').insert(roster);
+                const { data, error } = await _supabase.from('bookings').insert(roster).select();
                 if (!error) {
                     const formData = new FormData(); formData.append("access_key", WEB3FORMS_KEY);
                     formData.append("subject", `Booking [${bookingRef}]: ${inv}`);
@@ -510,8 +504,13 @@
                     document.getElementById('success-txt').innerText = "Request received. We will contact you at " + em + " within 24 hours to confirm driver details and payment.";
                     goToStep('success');
                     isProcessing = false; basket = []; localStorage.removeItem('cpc_basket');
-                } else { showErr("Database Error. Please try again."); }
-            } catch (ex) { showErr("Submission Error."); }
+                } else { 
+                    // SHOW DETAILED ERROR MESSAGE FOR DEBUGGING
+                    showErr("Database Error: " + (error.message || "Unknown error")); 
+                }
+            } catch (ex) { 
+                showErr("Technical submission error. Please check your internet connection."); 
+            }
         }
 
         async function copyRef() {
@@ -528,7 +527,6 @@
 
         // --- MAP FUNCTIONS TO WINDOW ---
         window.closeModal = closeModal;
-        window.setView = setView;
         window.setGlobalLicense = setGlobalLicense;
         window.goToStep = goToStep;
         window.handleStickyAction = handleStickyAction;
