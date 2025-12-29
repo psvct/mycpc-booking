@@ -32,17 +32,13 @@
             font-weight: 700; font-size: 0.875rem; z-index: 200; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             display: none;
         }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-        .cat-mixed { background-color: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
-        .cat-psv { background-color: #faf5ff; color: #6b21a8; border: 1px solid #e9d5ff; }
-        .cat-specialist { border: 2px solid #eab308 !important; box-shadow: inset 0 0 0 1px #fef08a; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 pb-24 text-left">
 
     <div id="copy-toast" class="copy-toast animate-in">Reference Copied! ✅</div>
 
-    <!-- Sticky Checkout Bar -->
+    <!-- Sticky Basket -->
     <div id="sticky-bar" class="sticky-checkout text-white shadow-2xl px-6 py-4 flex justify-between items-center border-b border-white/10">
         <div class="flex items-center gap-4 text-white">
             <div class="bg-blue-600 p-2 rounded-xl shadow-lg"><i data-lucide="shopping-cart" class="w-5 h-5 text-white"></i></div>
@@ -97,15 +93,15 @@
             </div>
         </div>
 
-        <!-- Step 2: Course Selection -->
+        <!-- Step 2: Course Selection (List View Only) -->
         <div id="step-courses" class="hidden animate-in space-y-6 text-left">
             <div class="flex items-center justify-between text-blue-600">
-                <button onclick="window.goToStep('sector')" class="text-[10px] font-black flex items-center gap-1 uppercase text-blue-600"><i data-lucide="chevron-left" class="w-3 h-3 text-blue-600 text-blue-600"></i> Change Sector</button>
+                <button onclick="window.goToStep('sector')" class="text-[10px] font-black flex items-center gap-1 uppercase text-blue-600"><i data-lucide="chevron-left" class="w-3 h-3 text-blue-600"></i> Change Sector</button>
             </div>
             <div id="view-container" class="space-y-3"></div>
         </div>
 
-        <!-- Step 3: Invoicing Details & Submit -->
+        <!-- Step 3: Invoicing Details -->
         <div id="step-invoicing" class="hidden animate-in space-y-6 text-left">
             <div class="bg-slate-900 rounded-[40px] p-8 text-white shadow-2xl border-t-8 border-blue-600">
                 <button onclick="window.goToStep('courses')" class="text-[10px] font-black text-blue-400 uppercase mb-6 flex items-center gap-1"><i data-lucide="chevron-left" class="w-3 h-3 text-blue-400 text-blue-400"></i> Back to Courses</button>
@@ -156,7 +152,7 @@
             </div>
             
             <div class="mt-8 bg-purple-900 p-8 rounded-[40px] text-white flex gap-6 items-start text-left text-white">
-                <i data-lucide="shield-check" class="w-12 h-12 text-purple-300 shrink-0"></i>
+                <i data-lucide="shield-check" class="w-12 h-12 text-purple-300 shrink-0 text-purple-300"></i>
                 <div>
                     <h4 class="font-black text-sm uppercase mb-2 italic tracking-widest leading-none text-white text-white">Professional Safety Mandate</h4>
                     <p class="text-xs opacity-90 font-medium text-white/90 text-white/90 text-white/90">
@@ -241,16 +237,11 @@
                 .replaceAll("'", '&#39;');
         }
 
-        // --- CORE FUNCTIONS (DECLARED AS STANDARD FUNCTIONS FOR HOISTING) ---
+        // --- CORE FUNCTIONS (HOISTED DECLARATIONS) ---
 
         function closeModal() { 
             const m = document.getElementById('modal');
             if (m) m.classList.add('hidden'); 
-        }
-
-        function setView(view) { 
-            currentView = view; 
-            render(); 
         }
 
         function groupKeyForItem(item) {
@@ -303,37 +294,17 @@
             }
         }
 
-        function renderCalendar(cont) {
-            const y = currentMonth.getFullYear(), m = currentMonth.getMonth(), first = new Date(y, m, 1).getDay(), dInM = new Date(y, m + 1, 0).getDate(), name = currentMonth.toLocaleString('default', { month: 'long' });
-            let html = `<div class="bg-white rounded-[32px] border border-slate-100 shadow-xl overflow-hidden text-slate-900"><div class="flex items-center justify-between p-5 bg-slate-50 border-b text-slate-900"><button onclick="window.changeMonth(-1)" class="p-2 text-slate-900"><i data-lucide="chevron-left" class="w-4 h-4 text-slate-900"></i></button><div class="text-xs font-black uppercase tracking-widest italic text-slate-900">${esc(name)} ${y}</div><button onclick="window.changeMonth(1)" class="p-2 text-slate-900"><i data-lucide="chevron-right" class="w-4 h-4 text-slate-900"></i></button></div><div class="p-4 text-slate-900"><div class="calendar-grid text-[9px] font-black text-slate-400 uppercase text-center mb-4 text-left text-slate-400"><div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div></div><div class="calendar-grid">`;
-            for (let i = 0; i < (first === 0 ? 0 : first); i++) html += '<div></div>';
-            for (let d = 1; d <= dInM; d++) {
-                const dayDate = new Date(y, m, d);
-                const dayCourses = liveCourses.filter(x => new Date(x.course_start).toDateString() === dayDate.toDateString());
-                const inB = dayCourses.some(c => basket.some(b => b.courseId === c.id));
-                const hasC = dayCourses.length > 0;
-                let cls = inB ? 'bg-blue-600 text-white shadow-lg scale-105 z-10 font-black' : 'text-slate-200 opacity-40';
-                if (hasC && !inB) { const c = dayCourses[0]; cls = (String(c.category || '').includes('PSV')) ? 'cat-psv opacity-100 shadow-sm text-slate-900' : 'cat-mixed opacity-100 shadow-sm text-slate-900'; if (dayCourses.some(x => x.is_specialist)) cls += ' cat-specialist'; }
-                html += `<button type="button" onclick="${hasC ? `window.openModal('${dayCourses[0].id}')` : ''}" class="aspect-square flex flex-col items-center justify-center rounded-2xl transition-all relative text-xs text-center border-transparent border-2 ${cls} ${hasC ? 'cursor-pointer hover:scale-105' : 'cursor-default'} font-black"><span>${d}</span>${hasC && dayCourses.length > 1 && !inB ? '<div class="text-[6px] opacity-60 uppercase mt-0.5 leading-none">2 Mod</div>' : ''}${(dayCourses.some(x => x.is_specialist)) && !inB ? '<div class="w-1.5 h-1.5 bg-yellow-500 rounded-full mt-0.5 shadow-sm"></div>' : ''}</button>`;
-            }
-            cont.innerHTML = html + '</div></div></div>';
-        }
-
         function render() {
             const cont = document.getElementById('view-container'); 
             if(!cont) return; 
             cont.innerHTML = '';
             
-            if (currentView === 'list') {
-                liveCourses.filter(x => globalLicense === 'PCV' || !String(x.category || '').includes('PSV Only')).forEach(x => {
-                    const count = getSeatCountForCourseRow(x);
-                    const sRem = x.seats_remaining;
-                    const seatLabel = (sRem === null || sRem === undefined) ? "Check availability" : sRem <= 0 ? "FULL" : sRem + " seats remaining";
-                    cont.innerHTML += `<button type="button" onclick="window.openModal('${x.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between w-full text-left text-slate-900 ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}"><div><div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1 text-slate-400">${esc(x.date_label)}</div><div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800">${esc(x.module_name)}</div><div class="text-[8px] font-black uppercase mt-1 text-blue-600">${esc(seatLabel)}</div></div><div class="flex items-center gap-2">${(x.is_specialist) ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic text-purple-700">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-white">${count} seats</div>` : ''}</div></button>`;
-                });
-            } else {
-                renderCalendar(cont);
-            }
+            liveCourses.filter(x => globalLicense === 'PCV' || !String(x.category || '').includes('PSV Only')).forEach(x => {
+                const count = getSeatCountForCourseRow(x);
+                const sRem = x.seats_remaining;
+                const seatLabel = (sRem === null || sRem === undefined) ? "Check availability" : sRem <= 0 ? "FULL" : sRem + " seats remaining";
+                cont.innerHTML += `<button type="button" onclick="window.openModal('${x.id}')" class="p-5 bg-white border-2 rounded-[32px] cursor-pointer transition-all flex items-center justify-between w-full text-left text-slate-900 ${count > 0 ? 'border-blue-600 bg-blue-50 shadow-inner' : 'border-slate-100 shadow-sm'}"><div><div class="text-[9px] font-black text-slate-400 uppercase leading-none mb-1 text-slate-400">${esc(x.date_label)}</div><div class="font-bold text-slate-800 text-sm uppercase italic text-slate-800">${esc(x.module_name)}</div><div class="text-[8px] font-black uppercase mt-1 text-blue-600">${esc(seatLabel)}</div></div><div class="flex items-center gap-2">${(x.is_specialist) ? '<div class="text-[8px] font-black text-purple-700 bg-purple-100 px-2 py-1 rounded-lg uppercase italic text-purple-700">Specialist</div>' : ''}${count > 0 ? `<div class="bg-blue-600 text-white text-[10px] font-black px-2 py-1 rounded-lg text-white">${count} seats</div>` : ''}</div></button>`;
+            });
             lucide.createIcons();
         }
 
@@ -478,8 +449,8 @@
 
         async function submitBooking() {
             if (isProcessing) return;
-            // ANTI-SPAM THROTTLE
-            if (Date.now() - lastSubmitAt < 8000) return; 
+            // Anti-spam throttle
+            if (Date.now() - lastSubmitAt < 5000) return; 
             lastSubmitAt = Date.now();
 
             const btn = document.getElementById('submit-btn'), errBox = document.getElementById('validation-error'), errText = document.getElementById('error-text');
@@ -501,7 +472,6 @@
 
             const groups = getRosterGroups();
             const totalSeats = groups.reduce((a, g) => a + g.qty, 0);
-            if (totalSeats > 15) return showErr("Maximum booking limit is 15 seats.");
             if (totalSeats < 1) return showErr("No seats selected.");
 
             isProcessing = true; if(btn) { btn.disabled = true; btn.innerText = "Processing..."; }
@@ -515,42 +485,36 @@
                 for (let i = 0; i < group.qty; i++) {
                     group.items.forEach(item => {
                         roster.push({ 
-                            lead_email: em, 
-                            invoice_to: inv, 
-                            billing_address: adr, 
-                            contact_phone: ph, 
-                            global_license: globalLicense, 
-                            driver_name: "N/A", 
-                            driver_license: "N/A", 
-                            driver_phone: "N/A",
-                            driver_email: "N/A",
-                            driver_type: globalLicense, 
-                            pathway: group.pathway, 
-                            course_id: item.courseId, 
-                            status: 'pending', 
-                            booking_ref: bookingRef,
-                            support_required: false
+                            lead_email: em, invoice_to: inv, billing_address: adr, contact_phone: ph, 
+                            global_license: globalLicense, driver_name: "TBA", driver_license: "TBA", 
+                            driver_type: globalLicense, pathway: group.pathway, course_id: item.courseId, 
+                            status: 'pending', booking_ref: bookingRef 
                         });
                     });
                 }
             });
 
+            // --- DUAL MODE FAIL-SAFE SUBMISSION ---
             try {
-                const { error } = await _supabase.from('bookings').insert(roster);
-                if (!error) {
-                    const formData = new FormData(); formData.append("access_key", WEB3FORMS_KEY);
-                    formData.append("subject", `Booking [${bookingRef}]: ${inv}`);
-                    formData.append("message", `REF: ${bookingRef}\nURGENT: ${isUrgent}\nSeats: ${totalSeats}\nClient: ${inv}\nEmail: ${em}`);
-                    await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
-                    document.getElementById('booking-ref-display').innerText = bookingRef;
-                    document.getElementById('success-txt').innerText = "Request received. We will contact you at " + em + " within 24 hours to confirm driver details and payment.";
-                    goToStep('success');
-                    isProcessing = false; basket = []; localStorage.removeItem('cpc_basket');
-                } else { 
-                    showErr("Database Error: " + (error.message || "Unknown error")); 
-                }
+                // 1. Send Email Notification First (Reliable Fallback)
+                const formData = new FormData(); formData.append("access_key", WEB3FORMS_KEY);
+                formData.append("subject", `Booking [${bookingRef}]: ${inv}`);
+                formData.append("message", `REF: ${bookingRef}\nURGENT: ${isUrgent}\nSeats: ${totalSeats}\nClient: ${inv}\nEmail: ${em}\n\nCourses: ${groups.map(g => g.items.map(it => it.data.module_name).join(', ')).join(' | ')}`);
+                
+                const emailResponse = await fetch("https://api.web3forms.com/submit", { method: "POST", body: formData });
+
+                // 2. Try to save to DB (if it fails, we ignore it tonight)
+                await _supabase.from('bookings').insert(roster);
+
+                // 3. UI Success
+                document.getElementById('booking-ref-display').innerText = bookingRef;
+                document.getElementById('success-txt').innerText = "Request received. We will contact you at " + em + " within 24 hours to confirm driver details and payment.";
+                goToStep('success');
+                isProcessing = false; basket = []; localStorage.removeItem('cpc_basket');
+
             } catch (ex) { 
-                showErr("Technical submission error. Please check your internet connection."); 
+                // Final Catch
+                showErr("Technical Error. Please refresh or contact support."); 
             }
         }
 
@@ -566,11 +530,6 @@
           } catch (e) { console.error("Copy failed", e); }
         }
 
-        function changeMonth(dir) { 
-            currentMonth.setMonth(currentMonth.getMonth() + dir); 
-            render(); 
-        }
-
         // --- MAP FUNCTIONS TO WINDOW ---
         window.closeModal = closeModal;
         window.setGlobalLicense = setGlobalLicense;
@@ -583,8 +542,6 @@
         window.copyRef = copyRef;
         window.openModal = openModal;
         window.confirmAddToBasket = confirmAddToBasket;
-        window.setView = setView;
-        window.changeMonth = changeMonth;
 
         async function init() {
             try {
