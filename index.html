@@ -5,10 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>myCPC.online | Booking Portal</title>
   <meta name="description" content="Reserve your Driver CPC course dates. Request an invoice and receive enrolment instructions.">
+
   <link rel="icon" type="image/png" href="https://psvct.co.uk/wp-content/uploads/2025/11/ChatGPT-Image-Nov-23-2025-04_28_35-PM-1.png">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
     html{scroll-behavior:smooth;overflow-x:hidden}
@@ -16,11 +19,90 @@
     ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#f1f5f9}::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}::-webkit-scrollbar-thumb:hover{background:#94a3b8}
     .wrap-safe{overflow-wrap:anywhere;word-break:break-word}
     .cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.5rem}
+    .clamp-2{
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
+      overflow:hidden;
+    }
+
+    /* Cookie Banner Styling (matches main site pattern) */
+    .cookie-banner{
+      position:fixed;
+      bottom:0;left:0;right:0;
+      background:#0f172a;
+      color:#fff;
+      padding:1.25rem;
+      z-index:120;
+      display:none;
+      border-top:4px solid #2563eb;
+    }
+
+    /* Floating basket button (always visible) */
+    .floating-basket{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:85;
+    }
   </style>
 </head>
+
 <body class="bg-slate-50 text-slate-900">
 
+  <!-- Cookie Consent Banner -->
+  <div id="cookie-banner" class="cookie-banner shadow-2xl">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+      <div class="flex items-start gap-3">
+        <i data-lucide="shield-info" class="text-blue-500 w-5 h-5 shrink-0 mt-0.5"></i>
+        <div>
+          <p class="text-xs font-black uppercase tracking-tight">
+            Optional analytics cookies
+          </p>
+          <p class="text-xs font-bold text-slate-200">
+            If you accept, we use Google Analytics & Meta Pixel to understand general site usage and improve the experience.
+            <span class="text-blue-200 underline underline-offset-4">We do not click-track your wellbeing/support resource links.</span>
+          </p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button onclick="rejectCookies()"
+                class="bg-white/10 px-6 py-2.5 rounded-xl text-xs font-black uppercase italic shadow-lg active:scale-95 transition-all whitespace-nowrap hover:bg-white/15">
+          Reject
+        </button>
+        <button onclick="acceptCookies()"
+                class="bg-blue-600 px-8 py-2.5 rounded-xl text-xs font-black uppercase italic shadow-lg active:scale-95 transition-all whitespace-nowrap hover:bg-blue-700">
+          Accept
+        </button>
+      </div>
+    </div>
+  </div>
+
 <header class="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-slate-200">
+
+  <!-- Contact + Payments bar -->
+  <div class="bg-slate-900 text-white border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] sm:text-xs font-bold">
+        <span class="inline-flex items-center gap-1.5">
+          <i data-lucide="phone" class="w-4 h-4 text-blue-300"></i>
+          <a class="hover:text-blue-200 transition-colors" href="tel:01174278967">0117 427 8967</a>
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <i data-lucide="message-square" class="w-4 h-4 text-green-300"></i>
+          <a class="hover:text-green-200 transition-colors" href="https://wa.me/447359941879" target="_blank" rel="noopener noreferrer">WhatsApp: 07359 941879</a>
+        </span>
+        <span class="inline-flex items-center gap-1.5">
+          <i data-lucide="mail" class="w-4 h-4 text-purple-200"></i>
+          <a class="hover:text-purple-100 transition-colors" href="mailto:info@my-cpc.online">info@my-cpc.online</a>
+        </span>
+      </div>
+      <div class="text-[10px] sm:text-xs font-black uppercase tracking-widest text-slate-300">
+        Payments processed as <span class="text-white">PSV Compliance and Training Limited</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Fixed Course Times Bar -->
   <div class="bg-slate-900 text-white border-b border-white/10">
     <div class="max-w-7xl mx-auto px-4 py-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
@@ -38,7 +120,7 @@
   </div>
 
   <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
-    <a href="https://www.my-cpc.online" class="inline-flex items-center gap-2 font-black uppercase italic text-slate-900">
+    <a href="https://my-cpc.online" class="inline-flex items-center gap-2 font-black uppercase italic text-slate-900">
       <span class="bg-blue-600 p-2 rounded-xl text-white"><i data-lucide="arrow-left" class="w-5 h-5"></i></span>
       <span class="hidden sm:inline">Back to myCPC.online</span><span class="sm:hidden">Home</span>
     </a>
@@ -76,8 +158,8 @@
           <span class="inline-flex items-center gap-2"><i data-lucide="calendar" class="w-4 h-4"></i> Calendar</span>
         </button>
         <div class="hidden md:flex items-center gap-2 ml-2 text-[10px] font-black uppercase tracking-widest text-slate-500">
-          <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> National</span>
-          <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> Pairable (7h)</span>
+          <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span> National (3.5h) </span>
+          <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span> International (7h)</span>
           <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> PSV only</span>
         </div>
       </div>
@@ -112,7 +194,8 @@
             <li>• Add course dates to your basket (one seat per course).</li>
             <li>• Submit your details to request an invoice and payment link.</li>
             <li>• We’ll confirm the best possible price (including 7h pairings where applicable).</li>
-            <li>• You’ll receive enrolment instructions and a student enrolment form.</li>
+            <li>• Seats are held for <strong>48 hours</strong> from invoice issue (unless otherwise agreed).</li>
+            <li>• Payments show on statements as <strong>PSV Compliance and Training Limited</strong>.</li>
           </ul>
         </div>
       </div>
@@ -120,11 +203,16 @@
 
     <div class="bg-slate-900 text-white rounded-[28px] border border-white/10 p-6 shadow-sm overflow-hidden">
       <div class="flex items-start gap-3">
-        <div class="bg-white/10 border border-white/10 p-3 rounded-2xl text-blue-200"><i data-lucide="alert-triangle" class="w-6 h-6"></i></div>
+        <div class="bg-white/10 border border-white/10 p-3 rounded-2xl text-blue-200"><i data-lucide="help-circle" class="w-6 h-6"></i></div>
         <div class="min-w-0">
-          <h3 class="font-black uppercase italic tracking-tighter text-lg">Courses within 4 days</h3>
+          <h3 class="font-black uppercase italic tracking-tighter text-lg">Need help booking?</h3>
           <p class="mt-2 text-sm font-semibold text-slate-200 leading-relaxed">
-            If you request a course date running within <strong>4 days</strong>, it may not be confirmed until we contact you.
+            Call <a class="underline text-white" href="tel:01174278967">0117 427 8967</a> or WhatsApp
+            <a class="underline text-white" href="https://wa.me/447359941879" target="_blank" rel="noopener noreferrer">07359 941879</a>.
+            Email <a class="underline text-white" href="mailto:info@my-cpc.online">info@my-cpc.online</a>.
+          </p>
+          <p class="mt-2 text-xs font-bold text-slate-300">
+            If a selected course is within 4 days, we may need to confirm it with you before it runs.
           </p>
         </div>
       </div>
@@ -180,7 +268,47 @@
       <div id="cal-day-items" class="mt-4 grid gap-3"></div>
     </div>
   </section>
+
+  <footer class="mt-10 pb-12">
+    <div class="bg-white rounded-[28px] border border-slate-200 p-6 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="space-y-1">
+          <p class="text-[10px] font-black uppercase tracking-widest text-slate-500">Support</p>
+          <p class="text-sm font-semibold text-slate-700">
+            Need help booking? Call <a class="text-blue-600 underline font-black" href="tel:01174278967">0117 427 8967</a>,
+            WhatsApp <a class="text-blue-600 underline font-black" href="https://wa.me/447359941879" target="_blank" rel="noopener noreferrer">07359 941879</a>,
+            or email <a class="text-blue-600 underline font-black" href="mailto:info@my-cpc.online">info@my-cpc.online</a>.
+          </p>
+          <p class="text-xs font-bold text-slate-500">
+            Payments are processed under the company name <span class="text-slate-900 font-black">PSV Compliance and Training Limited</span>.
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button type="button" onclick="openTerms()"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 font-black uppercase italic text-xs">
+            <i data-lucide="file-text" class="w-4 h-4"></i> Terms & Privacy
+          </button>
+          <button type="button" onclick="openCart()"
+                  class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase italic text-xs shadow-lg">
+            <i data-lucide="shopping-basket" class="w-4 h-4"></i> View basket
+            <span id="cart-count-footer" class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full bg-white text-blue-700 text-[11px] font-black">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </footer>
 </main>
+
+<!-- Floating basket (always visible) -->
+<div class="floating-basket">
+  <button type="button" onclick="openCart()"
+          class="relative inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase italic text-xs shadow-2xl border-4 border-white">
+    <i data-lucide="shopping-basket" class="w-4 h-4"></i>
+    View basket
+    <span id="floating-total" class="ml-1 text-[11px] font-black bg-white/15 px-2 py-1 rounded-xl">£0.00</span>
+    <span id="cart-count-floating" class="ml-1 inline-flex items-center justify-center w-6 h-6 rounded-full bg-white text-blue-700 text-[11px] font-black">0</span>
+  </button>
+</div>
 
 <!-- Cart Drawer -->
 <div id="cart-drawer" class="fixed inset-0 z-[90] hidden">
@@ -204,13 +332,30 @@
         <p class="mt-3 font-black uppercase italic tracking-tighter text-lg">Basket empty</p>
         <p class="mt-1 text-sm font-semibold text-slate-600">Add course dates from the list or calendar.</p>
       </div>
+
       <div class="mt-6 p-4 rounded-2xl border border-slate-200 bg-slate-50">
         <div class="flex items-center justify-between">
           <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">Summary</span>
           <span id="cart-summary" class="text-xs font-black text-slate-900"></span>
         </div>
-        <p class="mt-2 text-xs font-semibold text-slate-600 leading-relaxed">
+
+        <div class="mt-3 grid gap-2 text-xs font-bold text-slate-700">
+          <div class="flex items-center justify-between">
+            <span>Estimated guide total</span>
+            <span id="cart-total" class="font-black text-slate-900">£0.00</span>
+          </div>
+          <div id="cart-saving-row" class="hidden flex items-center justify-between text-emerald-700">
+            <span>Saving with pairing</span>
+            <span id="cart-saving" class="font-black">£0.00</span>
+          </div>
+        </div>
+
+        <p class="mt-3 text-xs font-semibold text-slate-600 leading-relaxed">
           Your invoice will reflect the best available price (including 7h pairings where applicable).
+          Seats are held for <strong>48 hours</strong> from invoice issue.
+        </p>
+        <p class="mt-2 text-[11px] font-bold text-slate-500">
+          Payments show as <span class="font-black text-slate-900">PSV Compliance and Training Limited</span>.
         </p>
       </div>
     </div>
@@ -239,6 +384,9 @@
           <p class="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Step 2</p>
           <h3 id="checkout-title" class="text-xl md:text-2xl font-black uppercase italic tracking-tighter text-slate-900">Request invoice</h3>
           <p class="text-xs font-bold text-slate-500 mt-1">We’ll email a payment link and enrolment instructions.</p>
+          <p class="text-xs font-bold text-slate-600 mt-2">
+            Payments are processed under <span class="font-black text-slate-900">PSV Compliance and Training Limited</span>.
+          </p>
         </div>
         <button type="button" onclick="closeCheckout()" class="p-2 rounded-xl hover:bg-slate-100" aria-label="Close checkout">
           <i data-lucide="x" class="w-6 h-6"></i>
@@ -249,6 +397,17 @@
         <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
           <p class="text-xs font-bold text-slate-700"><span class="font-black text-slate-900">Reference:</span> <span id="ref-preview">—</span></p>
           <div id="checkout-selected" class="mt-3 grid gap-2"></div>
+
+          <div class="mt-3 pt-3 border-t border-slate-200 text-xs font-bold text-slate-700">
+            <div class="flex items-center justify-between">
+              <span>Estimated guide total</span>
+              <span id="checkout-total" class="font-black text-slate-900">£0.00</span>
+            </div>
+            <div id="checkout-saving-row" class="hidden flex items-center justify-between text-emerald-700 mt-1">
+              <span>Saving with pairing</span>
+              <span id="checkout-saving" class="font-black">£0.00</span>
+            </div>
+          </div>
         </div>
 
         <form id="invoice-form" class="mt-6 grid md:grid-cols-2 gap-4">
@@ -274,11 +433,20 @@
               <option>Email</option><option>Phone</option><option>WhatsApp</option>
             </select>
           </div>
+
+          <!-- Pre-paid code (optional) -->
+          <div class="md:col-span-2">
+            <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Pre-paid code (optional)</label>
+            <input name="prepaid_code" class="mt-1 w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white font-semibold" placeholder="If you have a pre-paid code, enter it here">
+            <p class="mt-1 text-[11px] font-bold text-slate-500">We’ll apply this to your invoice where valid.</p>
+          </div>
+
           <div class="md:col-span-2">
             <label class="text-[10px] font-black uppercase tracking-widest text-slate-500">Notes (optional)</label>
             <textarea name="notes" rows="3" class="mt-1 w-full px-4 py-3 rounded-2xl border border-slate-200 bg-white font-semibold"
                       placeholder="Anything we should know…"></textarea>
           </div>
+
           <div class="md:col-span-2">
             <label class="inline-flex items-start gap-3 cursor-pointer">
               <input required type="checkbox" class="mt-1 w-5 h-5 rounded border-slate-300">
@@ -296,7 +464,8 @@
           </div>
 
           <p class="md:col-span-2 text-[11px] font-bold text-slate-500 mt-2">
-            Payment is taken via a secure payment link on your invoice.
+            Seats are held for <strong>48 hours</strong> from invoice issue. Payments are taken via a secure payment link and show as <span class="font-black text-slate-900">PSV Compliance and Training Limited</span>.
+            Need help? Call <a class="text-blue-600 underline font-black" href="tel:01174278967">0117 427 8967</a>.
           </p>
         </form>
 
@@ -310,9 +479,12 @@
                 We’ll email you with an invoice/payment link and enrolment instructions. If any selected course is within 4 days, we’ll contact you first.
               </p>
               <div class="mt-4 flex flex-col sm:flex-row gap-3">
-                <a href="https://www.my-cpc.online" class="bg-slate-900 text-white px-6 py-3 rounded-2xl font-black uppercase italic text-xs text-center hover:bg-black">Back to home</a>
+                <a href="https://my-cpc.online" class="bg-slate-900 text-white px-6 py-3 rounded-2xl font-black uppercase italic text-xs text-center hover:bg-black">Back to home</a>
                 <button type="button" onclick="closeCheckout(true)" class="border border-green-200 bg-white px-6 py-3 rounded-2xl font-black uppercase italic text-xs hover:bg-green-100">Continue browsing</button>
               </div>
+              <p class="mt-3 text-[11px] font-bold text-green-900/70">
+                Payments will show as PSV Compliance and Training Limited.
+              </p>
             </div>
           </div>
         </div>
@@ -333,20 +505,405 @@
         <div class="space-y-1">
           <p class="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">Legal</p>
           <h3 id="terms-title" class="text-xl md:text-2xl font-black uppercase italic tracking-tighter text-slate-900">Terms of Booking & Privacy Notice</h3>
-          <p class="text-xs font-bold text-slate-500">Paste your formatted Terms + Privacy HTML in this window.</p>
+          <p class="text-xs font-bold text-slate-500">
+            This is the same content as the main site. You can also view it online:
+            <a class="text-blue-600 underline font-black" href="https://my-cpc.online/#terms-of-booking" target="_blank" rel="noopener noreferrer">my-cpc.online/#terms-of-booking</a>
+          </p>
         </div>
         <button type="button" onclick="closeTerms()" class="p-2 rounded-xl hover:bg-slate-100" aria-label="Close Terms">
           <i data-lucide="x" class="w-6 h-6"></i>
         </button>
       </div>
+
       <div class="p-6 md:p-8 max-h-[70vh] overflow-y-auto">
-        <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50">
-          <p class="text-sm font-semibold text-slate-700">Add your Terms of Booking and Privacy Notice here (same content as my-cpc.online).</p>
-          <p class="text-sm font-semibold text-slate-700 mt-2">
-            Interim link: <a class="text-blue-600 underline font-black" href="https://www.my-cpc.online" target="_blank" rel="noopener noreferrer">my-cpc.online</a>
+        <!-- =============================
+             PASTE YOUR TERMS/PRIVACY HTML
+             ============================= -->
+<section id="terms-of-booking">
+  <h2>Terms of Booking (CPC Courses)</h2>
+
+  <div class="not-prose mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <dl class="grid gap-2 text-sm font-semibold text-slate-700">
+      <div class="flex flex-col sm:flex-row sm:gap-2">
+        <dt class="text-slate-500 font-black uppercase text-[10px] tracking-widest sm:w-44">Website</dt>
+        <dd class="wrap-safe">mycpc.online</dd>
+      </div>
+      <div class="flex flex-col sm:flex-row sm:gap-2">
+        <dt class="text-slate-500 font-black uppercase text-[10px] tracking-widest sm:w-44">Trading name</dt>
+        <dd class="wrap-safe">mycpc.online (PSV Compliance and Training) (“we”, “us”, “our”)</dd>
+      </div>
+      <div class="flex flex-col sm:flex-row sm:gap-2">
+        <dt class="text-slate-500 font-black uppercase text-[10px] tracking-widest sm:w-44">Address</dt>
+        <dd class="wrap-safe">44 Bath Hill, Keynsham, Bristol, BS31 1HG</dd>
+      </div>
+      <div class="flex flex-col sm:flex-row sm:gap-2">
+        <dt class="text-slate-500 font-black uppercase text-[10px] tracking-widest sm:w-44">Email</dt>
+        <dd class="wrap-safe"><a href="mailto:info@my-cpc.online">info@my-cpc.online</a></dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="not-prose mt-4 rounded-2xl border border-blue-200 bg-blue-50 p-4">
+    <p class="text-sm font-semibold text-slate-800">
+      <strong>Important:</strong> These Terms set out how bookings for CPC Courses are handled.
+      If you are booking as a consumer, nothing in these Terms affects your statutory rights.
+    </p>
+  </div>
+
+  <h3>1) Definitions</h3>
+  <ul>
+    <li><strong>Booking:</strong> A reservation for a place on a CPC course made via our website (or otherwise confirmed by us in writing).</li>
+    <li><strong>Course / CPC Course:</strong> Periodic training delivered by us (including any classroom/online delivery where offered).</li>
+    <li><strong>Customer / You:</strong> The person booking and/or paying for the Course, or the delegate attending.</li>
+    <li><strong>Delegate:</strong> The person attending the Course.</li>
+    <li><strong>Invoice:</strong> Our request for payment sent to you by email or made available on your account.</li>
+  </ul>
+
+  <h3>2) About our services</h3>
+  <p>
+    We provide CPC periodic training and related compliance/training services. Course content, schedule, location,
+    and joining instructions are described on our website and/or in communications with you.
+  </p>
+
+  <h3>3) Forming the contract</h3>
+  <ol>
+    <li>A Booking request is made when you place an order via mycpc.online (or request a place by phone/email and we confirm it).</li>
+    <li>A contract is formed when we confirm the Booking in writing (email is acceptable) and you accept these Terms.</li>
+    <li>
+      If there is any conflict between these Terms and any Course description, these Terms take priority unless we agree otherwise in writing.
+    </li>
+  </ol>
+
+  <h3>4) Prices, VAT, and discounted rates</h3>
+  <ol>
+    <li>Prices are shown on our website or quoted to you in writing.</li>
+    <li>
+      Discounted CPC rates (including any promotional, group, or concession pricing) are subject to our approval and acceptance.
+      We may request evidence of eligibility.
+    </li>
+    <li>
+      We may refuse, withdraw, or amend a discount if eligibility cannot be verified or if it has been applied incorrectly.
+      Where this happens, we will tell you what the correct price is.
+    </li>
+    <li>Our decision on discount eligibility is final.</li>
+  </ol>
+
+  <h3>5) Payment, invoices, and securing your place</h3>
+  <ol>
+    <li>Your place on a Course is only secured once the Invoice is paid in full (unless we agree different terms in writing).</li>
+    <li>Where we allow payment by invoice, payment terms are as stated on the Invoice.</li>
+    <li>
+      <strong>Last-minute bookings:</strong> for late bookings close to the Course date, we require payment by the end of the Course.
+      If payment is not received by the end of the Course, periodic training hours (including any 5.4 hours credited for that Course)
+      will not be uploaded/processed until payment is received.
+    </li>
+    <li>
+      If payment is not received when due, we may (at our discretion and where permitted by law):
+      <ul>
+        <li>cancel the Booking;</li>
+        <li>refuse entry/attendance; and/or</li>
+        <li>withhold upload/processing of CPC hours until payment is received.</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3>6) Attendance, punctuality, and course requirements</h3>
+  <ol>
+    <li>Delegates must attend for the full required duration and comply with any sign-in/sign-out or identification requirements.</li>
+    <li>
+      Late arrival, early departure, failure to participate, or failure to follow trainer instructions may result in:
+      <ul>
+        <li>reduced/zero eligible training time; and/or</li>
+        <li>removal from the Course.</li>
+      </ul>
+    </li>
+    <li>
+      Where required by the training rules, delegates may need to provide proof of identity (for example, driving licence)
+      and/or driver details required to record hours.
+    </li>
+    <li>
+      <strong>Enrolment form:</strong> we will send a course enrolment form before the start of the Course. Each Delegate must complete
+      and return it (and provide any required details) by the deadline we specify.
+    </li>
+    <li>
+      <strong>Delegate email address:</strong> each Delegate is required to have their own email address so that course details,
+      joining instructions, and important updates can be sent directly to them. If a Delegate does not have their own email address,
+      you must tell us as soon as possible; we may not be able to accept the Booking if we cannot provide required course communications
+      in a compliant way.
+    </li>
+  </ol>
+
+  <h3>7) Non-attendance, missed courses, and rebooking</h3>
+  <ol>
+    <li>Non-attendance is not automatically entitled to a refund.</li>
+    <li>
+      If you or the Delegate cannot attend, we will consider moving the Booking to the next possible suitable Course (rebooking),
+      subject to availability.
+    </li>
+    <li>Rebooking is discretionary and may be subject to an administration fee and/or difference in price.</li>
+    <li>
+      <strong>Notice periods:</strong> If you give 3 days’ notice or more before the Course start date/time, we will aim to accommodate
+      a transfer to the next available suitable Course (subject to availability). If you give less than 3 days’ notice, we may be unable
+      to transfer your Booking and/or may have reduced flexibility.
+    </li>
+  </ol>
+
+  <h3>8) Cancellations, transfers and refunds</h3>
+
+  <h4>8.1 Statutory cancellation rights (consumers booking online/phone/email)</h4>
+  <ol>
+    <li>
+      If you are a consumer and you book a Course online, by phone, or by email (a “distance contract”), you will usually have a legal right
+      to cancel within 14 days from the day after the contract is made.
+    </li>
+    <li>
+      Some service contracts do not have a 14-day cancellation right (for example certain leisure activities provided on a specific date).
+      If an exemption applies to your booking, we will tell you.
+    </li>
+    <li>
+      If you ask us to start providing the service within the 14-day cancellation period (for example because your course date is sooner),
+      you may still cancel during the 14 days but you may have to pay for the proportion of the service provided up to cancellation.
+    </li>
+    <li>If the service is fully performed within the 14-day period at your request, you may lose the right to cancel.</li>
+  </ol>
+
+  <h4>8.2 Cancellation / transfer by you (policy)</h4>
+  <ol>
+    <li>If you wish to cancel or request a transfer, you must notify us in writing (email to <a href="mailto:info@my-cpc.online">info@my-cpc.online</a>).</li>
+    <li>Non-attendance is not automatically entitled to a refund.</li>
+    <li>Transfers/rebooking: we will consider moving your Booking to the next possible suitable Course, subject to availability.</li>
+    <li>
+      <strong>Notice periods:</strong> Where you give 3 days’ notice or more, we will aim to accommodate a transfer. Where you give less than
+      3 days’ notice, we may (depending on availability and operational constraints) decline the request or have reduced flexibility.
+    </li>
+    <li>Any transfer may be subject to an administration fee and/or any difference in price.</li>
+  </ol>
+
+  <h4>8.3 Refunds and processing fees</h4>
+  <ol>
+    <li>Where a refund is legally due (for example under statutory consumer cancellation rights), we will calculate and make the refund in line with the applicable law.</li>
+    <li>
+      Where a refund is offered as a goodwill gesture or under this policy (rather than because the law requires it), refunds may be subject
+      to any non-refundable third-party payment processing fees we are charged. We will disclose the amount of any such fee to you before processing the refund.
+    </li>
+  </ol>
+
+  <h4>8.4 Cancellation or changes by us</h4>
+  <ol>
+    <li>
+      We may cancel, reschedule, or change a Course (including venue/trainer) where necessary (for example, low numbers, trainer illness,
+      venue issues, or events outside our reasonable control).
+    </li>
+    <li>
+      If we cancel a Course, we will offer you either:
+      <ul>
+        <li>a transfer to an alternative date (subject to availability), or</li>
+        <li>a refund of the Course fee paid for that cancelled Course.</li>
+      </ul>
+    </li>
+    <li>We are not responsible for your travel, accommodation, loss of earnings, or other consequential costs.</li>
+  </ol>
+
+  <h3>9) Removal from a course and behaviour</h3>
+  <ol>
+    <li>We expect professional and respectful behaviour. We may remove a Delegate from a Course for reasons including (without limitation):</li>
+  </ol>
+  <ul>
+    <li>disruptive, abusive, threatening, or unsafe behaviour;</li>
+    <li>harassment or discrimination;</li>
+    <li>attending under the influence of alcohol/drugs;</li>
+    <li>breach of venue rules or trainer instructions;</li>
+    <li>suspected fraud or misrepresentation;</li>
+    <li>non-payment where payment is required.</li>
+  </ul>
+  <p>
+    If you are removed from the Course for any reason, you will not be entitled to a new date or a refund,
+    unless we agree otherwise case-by-case in writing.
+  </p>
+
+  <h3>10) CPC hours upload / processing</h3>
+  <ol>
+    <li>Where applicable, and subject to training rules, we will take steps to upload/process periodic training hours with the relevant authority/system.</li>
+    <li>
+      Upload/processing is subject to:
+      <ul>
+        <li>verified attendance and participation; and</li>
+        <li>receipt of full payment (including the last-minute booking rule in section 5.3).</li>
+      </ul>
+    </li>
+    <li>We are not responsible for delays caused by third-party systems, incorrect driver details provided by you, or factors outside our control.</li>
+  </ol>
+
+  <h3>11) Your responsibilities</h3>
+  <p>You (the booker) agree to:</p>
+  <ul>
+    <li>ensure the information we hold is accurate and up to date (including Bookings, contact details, and driver details);</li>
+    <li>ensure the Delegate/driver is entitled and eligible to attend the relevant Course (including meeting any prerequisites and providing correct details needed to record training);</li>
+    <li>provide accurate Booking and driver details;</li>
+    <li>ensure the Delegate meets any prerequisites stated for the Course;</li>
+    <li>comply with joining instructions and venue requirements; and</li>
+    <li>tell us promptly if you cannot attend.</li>
+  </ul>
+
+  <h3>12) Intellectual property</h3>
+  <p>
+    Course materials (slides, handouts, recordings, and other content) are our intellectual property (or that of our licensors).
+    You may use them for personal training purposes only and must not copy, distribute, or sell them without our written permission.
+  </p>
+
+  <h3>13) Liability</h3>
+  <ol>
+    <li>We do not exclude or limit liability where it would be unlawful to do so (including for death or personal injury caused by negligence, fraud, or fraudulent misrepresentation).</li>
+    <li>Subject to 13.1, our total liability to you in connection with a Course is limited to the Course fee paid for the affected Booking.</li>
+    <li>We are not liable for indirect or consequential loss (such as loss of profit, business, or opportunity).</li>
+  </ol>
+
+  <h3>14) Complaints</h3>
+  <p>
+    If you have a complaint, please contact us at <a href="mailto:info@my-cpc.online">info@my-cpc.online</a> with details of the issue.
+    We aim to respond within a reasonable time and work with you to resolve concerns fairly.
+  </p>
+
+  <h3>15) Governing law</h3>
+  <p>
+    These Terms are governed by the laws of England and Wales. The courts of England and Wales will have exclusive jurisdiction,
+    unless mandatory consumer rules in your country of residence apply.
+  </p>
+</section>
+
+<hr class="my-10" />
+
+<section id="privacy-notice">
+  <h2>Privacy Notice (How we process your data)</h2>
+  <p>
+    This Privacy Notice explains how mycpc.online (PSV Compliance and Training) processes personal data when you visit our website,
+    make enquiries, or book a Course.
+  </p>
+
+  <h3>1) Who we are</h3>
+  <ul>
+    <li><strong>Data Controller:</strong> PSV Compliance and Training (trading as mycpc.online)</li>
+    <li><strong>Address:</strong> 44 Bath Hill, Keynsham, Bristol, BS31 1HG</li>
+    <li><strong>Email:</strong> <a href="mailto:info@my-cpc.online">info@my-cpc.online</a></li>
+  </ul>
+
+  <h3>2) Personal data we collect</h3>
+  <ul>
+    <li><strong>Identity/contact details:</strong> name, company name (if applicable), postal address, email address, phone number.</li>
+    <li><strong>Booking details:</strong> course date, course type, attendance records, communications.</li>
+    <li><strong>Driver/training details:</strong> information needed to record periodic training hours (for example driver number/licence details, where required).</li>
+    <li><strong>Payment and transaction details:</strong> amounts, invoice details, payment status, and references from payment providers (we do not normally store full card details).</li>
+    <li><strong>Website usage data:</strong> IP address, device information, browser type, pages visited, referral source, and cookies.</li>
+  </ul>
+
+  <h3>3) Where we get data from</h3>
+  <ul>
+    <li>Directly from you (forms, bookings, emails, calls).</li>
+    <li>From your employer/booking agent (where they book on your behalf).</li>
+    <li>From website analytics and cookie technologies.</li>
+    <li>From payment providers confirming payment status.</li>
+  </ul>
+
+  <h3>4) How we use your personal data</h3>
+  <p>We use personal data to:</p>
+  <ul>
+    <li>provide Courses and manage Bookings (including confirmations, joining instructions, and attendance);</li>
+    <li>invoice and take payments;</li>
+    <li>upload/process CPC training hours where applicable;</li>
+    <li>respond to enquiries and provide customer support;</li>
+    <li>improve our website and services (analytics, troubleshooting, security);</li>
+    <li>send service messages (e.g., changes to course dates, important updates);</li>
+    <li>send marketing communications where permitted.</li>
+  </ul>
+
+  <h3>5) Lawful bases for processing (UK GDPR)</h3>
+  <p>We rely on one or more of the following lawful bases:</p>
+  <ul>
+    <li><strong>Contract:</strong> to provide the Course and manage the Booking.</li>
+    <li><strong>Legal obligation:</strong> to meet regulatory/accounting requirements and (where applicable) record training as required.</li>
+    <li><strong>Legitimate interests:</strong> running and improving our business, preventing fraud, network security, and customer service.</li>
+    <li><strong>Consent:</strong> for certain cookies and, where required, marketing communications.</li>
+  </ul>
+
+  <h3>6) Who we share data with</h3>
+  <p>We may share data with:</p>
+  <ul>
+    <li>Training administration/recording systems or relevant authorities where required to record periodic training hours.</li>
+    <li>Payment providers and banks to process payments and confirm payment status.</li>
+    <li>IT and hosting providers who support our website/email systems.</li>
+    <li>Professional advisers (accountants, insurers, solicitors) where necessary.</li>
+    <li>Regulators, law enforcement, or courts where we are legally required to do so.</li>
+  </ul>
+  <p><strong>We do not sell your personal data.</strong></p>
+
+  <h3>7) International transfers</h3>
+  <p>
+    If any of our suppliers process data outside the UK, we will take steps to ensure appropriate safeguards are in place
+    (such as UK adequacy regulations or approved contractual terms).
+  </p>
+
+  <h3>8) Data retention</h3>
+  <p>We keep personal data only as long as needed for the purposes set out above, including:</p>
+  <ul>
+    <li>to deliver training and manage Bookings;</li>
+    <li>to meet legal, tax, and accounting requirements; and</li>
+    <li>to handle complaints and disputes.</li>
+  </ul>
+  <p>Retention periods may vary depending on the type of data and the reason we hold it.</p>
+
+  <h3>9) Your rights</h3>
+  <p>Subject to legal conditions, you may have the right to:</p>
+  <ul>
+    <li>access your personal data;</li>
+    <li>correct inaccurate data;</li>
+    <li>request deletion;</li>
+    <li>restrict processing;</li>
+    <li>object to processing (including marketing);</li>
+    <li>data portability; and</li>
+    <li>withdraw consent (where processing is based on consent).</li>
+  </ul>
+  <p>To exercise your rights, email <a href="mailto:info@my-cpc.online">info@my-cpc.online</a>.</p>
+
+  <h3>10) Cookies</h3>
+  <p>
+    Our website may use cookies and similar technologies for functionality, analytics, and (where used) marketing.
+    You can manage cookies through your browser settings and any cookie banner/tool provided on our website.
+  </p>
+
+  <h3>11) Marketing preferences</h3>
+  <p>
+    If you receive marketing emails from us, you can opt out at any time by using the unsubscribe link (where available)
+    or contacting us.
+  </p>
+
+  <h3>12) Security</h3>
+  <p>
+    We take appropriate technical and organisational measures to protect personal data. However, no online system is 100% secure;
+    please take care when sending information by email.
+  </p>
+
+  <h3>13) Complaints</h3>
+  <p>
+    If you are unhappy with how we handle your data, please contact us first at
+    <a href="mailto:info@my-cpc.online">info@my-cpc.online</a> so we can try to resolve the issue.
+    You also have the right to complain to the Information Commissioner’s Office (ICO).
+  </p>
+
+  <h3>14) Changes to this Privacy Notice</h3>
+  <p>
+    We may update this Privacy Notice from time to time. The latest version will be available on our website.
+  </p>
+</section>
+
+        <div class="prose prose-slate max-w-none">
+          <h4>Paste your Terms of Booking + Privacy Notice here</h4>
+          <p>
+            Replace this block with your formatted Terms/Privacy HTML (copied from your main website).
           </p>
         </div>
+        <!-- ============================= -->
       </div>
+
       <div class="p-6 border-t border-slate-200 flex items-center justify-between">
         <p class="text-[11px] font-bold text-slate-500">Press <span class="font-black">Esc</span> to close.</p>
         <button type="button" onclick="closeTerms()" class="bg-slate-900 text-white px-6 py-3 rounded-2xl font-black uppercase italic text-xs hover:bg-black">Close</button>
@@ -357,17 +914,59 @@
 
 <script>
   // =========================
+  // PRICING (guide prices)
+  // =========================
+  const PRICE_NATIONAL = 21.99;   // National CPC (3.5h)
+  const PRICE_PAIRING  = 38.99;   // International CPC (7h)
+
+  function fmtGBP(n){
+    return new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP"}).format(Number(n||0));
+  }
+
+  function computePricing(items){
+    const byBlock=new Map();
+    for(const s of items){
+      if(!s.block_id) continue;
+      if(!byBlock.has(s.block_id)) byBlock.set(s.block_id,[]);
+      byBlock.get(s.block_id).push(s);
+    }
+
+    let pairCount=0;
+    const pairedBlocks=new Set();
+    for(const [bid,list] of byBlock.entries()){
+      const n=list.length;
+      const pairs=Math.floor(n/2);
+      if(pairs>0){ pairCount += pairs; pairedBlocks.add(bid); }
+    }
+
+    const totalItems = items.length;
+    const singles = totalItems - (pairCount*2);
+
+    const total = (pairCount*PRICE_PAIRING) + (singles*PRICE_NATIONAL);
+    const fullNational = totalItems*PRICE_NATIONAL;
+    const saving = Math.max(0, fullNational - total);
+
+    return { totalItems, pairCount, singles, total, saving, pairedBlocks };
+  }
+
+  // =========================
   // CONFIG — YOU MUST EDIT THESE
   // =========================
   const CONFIG = {
     SUPABASE_URL: "https://jvbitnykgjasweugqgks.supabase.co",
     SUPABASE_ANON_KEY: "sb_publishable_Bu0qel0FaGCSq-r4mE9Xsw_M5O_C-DY",
-    SCHEDULE_SOURCE: "public_course_schedule",      // recommended view
+    SCHEDULE_SOURCE: "public_course_schedule",
     BOOKINGS_TABLE: "booking_requests",
     BOOKING_ITEMS_TABLE: "booking_request_items",
+
     WEB3FORMS_KEY: "eea7a374-f421-4e9e-ba23-e3d0f67ba412",
     WEB3FORMS_ENDPOINT: "https://api.web3forms.com/submit",
-    DAYS_WARNING: 4
+
+    DAYS_WARNING: 4,
+
+    // Tracking IDs (same pattern as main site)
+    GA4_ID: "G-1MQZE671GK",
+    META_PIXEL_ID: "1937159790533296"
   };
 
   const { createClient } = supabase;
@@ -379,11 +978,26 @@
   let viewMode = "list";
   let calMonth = new Date(); calMonth.setDate(1);
 
-  function esc(s){return String(s??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;")}
+  function esc(s){
+    return String(s??"")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#39;");
+  }
   function fmtDate(d){return new Date(d).toLocaleDateString("en-GB",{weekday:"short",day:"2-digit",month:"short",year:"numeric"})}
   function daysUntil(date){const now=new Date();const t=new Date(date);return Math.ceil((t-now)/(1000*60*60*24))}
   function isWithinWarningWindow(startAt){const d=daysUntil(startAt);return d>=0 && d<=CONFIG.DAYS_WARNING}
-  function refCode(){const d=new Date();const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,"0");const day=String(d.getDate()).padStart(2,"0");const buf=new Uint32Array(1);crypto.getRandomValues(buf);const rand=String(buf[0]%1000000).padStart(6,"0");return `CPC-${y}${m}${day}-${rand}`}
+  function refCode(){
+    const d=new Date();
+    const y=d.getFullYear();
+    const m=String(d.getMonth()+1).padStart(2,"0");
+    const day=String(d.getDate()).padStart(2,"0");
+    const buf=new Uint32Array(1);crypto.getRandomValues(buf);
+    const rand=String(buf[0]%1000000).padStart(6,"0");
+    return `CPC-${y}${m}${day}-${rand}`;
+  }
 
   function normalizeRow(r){
     return {
@@ -402,9 +1016,26 @@
 
   function buildPairableMap(sessions){
     const map=new Map();
-    sessions.forEach(s=>{if(!s.block_id) return; if(!map.has(s.block_id)) map.set(s.block_id,[]); map.get(s.block_id).push(s);});
+    sessions.forEach(s=>{
+      if(!s.block_id) return;
+      if(!map.has(s.block_id)) map.set(s.block_id,[]);
+      map.get(s.block_id).push(s);
+    });
     for(const [k,arr] of map) arr.sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
     return map;
+  }
+
+  function renderGuidePriceLine(pairable){
+    const saving = (2*PRICE_NATIONAL) - PRICE_PAIRING;
+    if(pairable){
+      return `<p class="mt-2 text-xs sm:text-sm font-black text-slate-800">
+        Guide price: <span class="text-slate-900">${fmtGBP(PRICE_NATIONAL)}</span> National CPC •
+        <span class="text-purple-700">${fmtGBP(PRICE_PAIRING)}</span> International CPC (save <span class="text-emerald-700">${fmtGBP(saving)}</span>)
+      </p>`;
+    }
+    return `<p class="mt-2 text-xs sm:text-sm font-black text-slate-800">
+      Guide price: <span class="text-slate-900">${fmtGBP(PRICE_NATIONAL)}</span>
+    </p>`;
   }
 
   function setView(mode){
@@ -413,8 +1044,13 @@
     const cal=document.getElementById("calendar-view");
     const btnList=document.getElementById("view-list-btn");
     const btnCal=document.getElementById("view-cal-btn");
-    if(mode==="calendar"){list.classList.add("hidden");cal.classList.remove("hidden");btnCal.classList.add("shadow-sm");btnList.classList.remove("shadow-sm");}
-    else{cal.classList.add("hidden");list.classList.remove("hidden");btnList.classList.add("shadow-sm");btnCal.classList.remove("shadow-sm");}
+    if(mode==="calendar"){
+      list.classList.add("hidden");cal.classList.remove("hidden");
+      btnCal.classList.add("shadow-sm");btnList.classList.remove("shadow-sm");
+    } else {
+      cal.classList.add("hidden");list.classList.remove("hidden");
+      btnList.classList.add("shadow-sm");btnCal.classList.remove("shadow-sm");
+    }
     renderCalendar(); lucide.createIcons();
   }
 
@@ -425,7 +1061,7 @@
 
     filteredSessions=allSessions.filter(s=>{
       const pairable=!!(s.block_id && pairMap.get(s.block_id)?.length>=2);
-      const hay=`${s.module_title} ${s.block_id||""} ${s.delivery||""}`.toLowerCase();
+      const hay=`${s.module_no} ${s.module_title} ${s.block_id||""} ${s.delivery||""}`.toLowerCase();
       if(q && !hay.includes(q)) return false;
       if(f==="psv") return s.psv_only===true;
       if(f==="mixed") return s.psv_only===false;
@@ -499,6 +1135,8 @@
                 <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-slate-900 text-white">${esc(String(s.delivery).toUpperCase())}</span>
                 ${seatsLeft!=null ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-white border border-slate-200 text-slate-700">Spaces left: ${seatsLeft}</span>` : ``}
               </div>
+
+              ${renderGuidePriceLine(pairable)}
               ${pairable ? renderPairHint(s, pairMap) : ``}
             </div>
 
@@ -524,12 +1162,17 @@
     const a=cart.has(String(s.id));
     const b=cart.has(String(other.id));
     const both=a && b;
+
+    const saving = (2*PRICE_NATIONAL) - PRICE_PAIRING;
+
     const hint=both
-      ? "Pairing selected — this will be treated as a 7h (International) option on your invoice."
-      : "This date is part of a pairable 7h option. Add both linked modules to request an International (7h) pairing.";
+      ? `Pairing selected — guide price ${fmtGBP(PRICE_PAIRING)} (save ${fmtGBP(saving)} vs two singles).`
+      : `This date is part of a pairable 7h option. Add both linked modules to request an International (7h) pairing and save ${fmtGBP(saving)}.`;
+
     const action=both ? "" : `
       <button class="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-black uppercase italic text-[11px]"
               onclick="addPair('${esc(String(s.id))}','${esc(String(other.id))}')">Add linked module <i data-lucide="plus" class="w-4 h-4"></i></button>`;
+
     return `
       <div class="mt-3 p-3 rounded-2xl border border-purple-200 bg-purple-50">
         <p class="text-xs font-bold text-purple-900/80 leading-relaxed">${hint}</p>
@@ -541,23 +1184,62 @@
   }
 
   function updateCartUI(){
-    document.getElementById("cart-count").textContent=String(cart.size);
+    const count = cart.size;
+    document.getElementById("cart-count").textContent=String(count);
+    document.getElementById("cart-count-footer").textContent=String(count);
+    document.getElementById("cart-count-floating").textContent=String(count);
+
     const itemsEl=document.getElementById("cart-items");
     const emptyEl=document.getElementById("cart-empty");
     const btn=document.getElementById("checkout-btn");
     const summaryEl=document.getElementById("cart-summary");
     itemsEl.innerHTML="";
-    if(cart.size===0){emptyEl.classList.remove("hidden");btn.disabled=true;summaryEl.textContent="0 selected";return;}
-    emptyEl.classList.add("hidden");btn.disabled=false;
 
-    const items=Array.from(cart.values()).sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
-    const byBlock=new Map();
-    items.forEach(s=>{if(!s.block_id) return; byBlock.set(s.block_id,(byBlock.get(s.block_id)||0)+1);});
-    const pairings=Array.from(byBlock.values()).filter(n=>n>=2).length;
-    summaryEl.textContent=`${items.length} module${items.length===1?"":"s"} • ${pairings} pairing${pairings===1?"":"s"}`;
+    const items = Array.from(cart.values()).sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
+    const pricing = computePricing(items);
+
+    // Update totals everywhere
+    document.getElementById("cart-total").textContent = fmtGBP(pricing.total);
+    document.getElementById("floating-total").textContent = fmtGBP(pricing.total);
+
+    const savingRow = document.getElementById("cart-saving-row");
+    const savingEl  = document.getElementById("cart-saving");
+    if(pricing.saving > 0.01){
+      savingRow.classList.remove("hidden");
+      savingEl.textContent = fmtGBP(pricing.saving);
+    } else {
+      savingRow.classList.add("hidden");
+    }
+
+    // Checkout preview totals
+    const checkoutTotal = document.getElementById("checkout-total");
+    const checkoutSavingRow = document.getElementById("checkout-saving-row");
+    const checkoutSaving = document.getElementById("checkout-saving");
+    if(checkoutTotal) checkoutTotal.textContent = fmtGBP(pricing.total);
+    if(checkoutSavingRow && checkoutSaving){
+      if(pricing.saving > 0.01){
+        checkoutSavingRow.classList.remove("hidden");
+        checkoutSaving.textContent = fmtGBP(pricing.saving);
+      } else {
+        checkoutSavingRow.classList.add("hidden");
+      }
+    }
+
+    if(count===0){
+      emptyEl.classList.remove("hidden");
+      btn.disabled=true;
+      summaryEl.textContent="0 selected";
+      return;
+    }
+    emptyEl.classList.add("hidden");
+    btn.disabled=false;
+
+    summaryEl.textContent = `${pricing.totalItems} module${pricing.totalItems===1?"":"s"} • ${pricing.pairCount} pairing${pricing.pairCount===1?"":"s"} • ${pricing.singles} single${pricing.singles===1?"":"s"}`;
 
     items.forEach(s=>{
       const warn=isWithinWarningWindow(s.start_at);
+      const isPaired = !!(s.block_id && pricing.pairedBlocks.has(s.block_id));
+
       const card=document.createElement("div");
       card.className="p-4 rounded-[22px] border border-slate-200 bg-white";
       card.innerHTML=`
@@ -567,13 +1249,25 @@
               ${esc(fmtDate(s.start_at))}
             </p>
             <p class="mt-1 font-black uppercase italic tracking-tighter text-base text-slate-900 wrap-safe">${esc(s.module_title)}</p>
+
             <div class="mt-2 flex flex-wrap gap-2">
               ${s.psv_only ? '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-orange-500 text-white">PSV ONLY</span>'
                           : '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-600 text-white">MIXED</span>'}
-              ${s.block_id ? '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-purple-600 text-white">PAIRABLE</span>'
-                          : '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-blue-600 text-white">NATIONAL</span>'}
+
+              ${isPaired
+                ? '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-purple-600 text-white">IN PAIRING (7H)</span>'
+                : (s.block_id
+                  ? '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-purple-600 text-white">PAIRABLE</span>'
+                  : '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-blue-600 text-white">NATIONAL</span>'
+                )
+              }
+
               ${warn ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-orange-100 text-orange-700">Within ${CONFIG.DAYS_WARNING} days</span>` : ``}
             </div>
+
+            <p class="mt-2 text-xs font-bold text-slate-600">
+              ${isPaired ? `Guide price applied as a pairing: <span class="font-black text-slate-900">${fmtGBP(PRICE_PAIRING)}</span>` : `Guide price: <span class="font-black text-slate-900">${fmtGBP(PRICE_NATIONAL)}</span>`}
+            </p>
           </div>
           <button class="p-2 rounded-xl hover:bg-slate-100" onclick="removeFromCart('${esc(String(s.id))}')" aria-label="Remove">
             <i data-lucide="trash-2" class="w-5 h-5 text-slate-500"></i>
@@ -581,14 +1275,21 @@
         </div>`;
       itemsEl.appendChild(card);
     });
+
     lucide.createIcons();
   }
 
   function renderCheckoutSelected(){
     const el=document.getElementById("checkout-selected");
     el.innerHTML="";
-    Array.from(cart.values()).sort((a,b)=>new Date(a.start_at)-new Date(b.start_at)).forEach(s=>{
+
+    const items = Array.from(cart.values()).sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
+    const pricing = computePricing(items);
+
+    items.forEach(s=>{
       const warn=isWithinWarningWindow(s.start_at);
+      const isPaired = !!(s.block_id && pricing.pairedBlocks.has(s.block_id));
+
       const row=document.createElement("div");
       row.className="p-3 rounded-2xl border border-slate-200 bg-white flex items-start justify-between gap-3";
       row.innerHTML=`
@@ -598,18 +1299,25 @@
             ${warn ? ` • <span class="text-orange-700">Within ${CONFIG.DAYS_WARNING} days</span>` : ``}
           </p>
           <p class="mt-1 font-black uppercase italic tracking-tighter text-sm text-slate-900 wrap-safe">${esc(s.module_title)}</p>
+          <p class="mt-1 text-[11px] font-bold text-slate-600">
+            ${isPaired ? `International (7h pairing)` : `National (3.5h)`} • ${isPaired ? fmtGBP(PRICE_PAIRING) : fmtGBP(PRICE_NATIONAL)} guide
+          </p>
         </div>
         <button class="p-2 rounded-xl hover:bg-slate-100" onclick="removeFromCart('${esc(String(s.id))}')" aria-label="Remove">
           <i data-lucide="trash-2" class="w-5 h-5 text-slate-500"></i>
         </button>`;
       el.appendChild(row);
     });
+
     lucide.createIcons();
   }
 
   function toggleCart(id){
     if(cart.has(id)) cart.delete(id);
-    else{const s=allSessions.find(x=>String(x.id)===String(id)); if(s) cart.set(String(s.id),s);}
+    else{
+      const s=allSessions.find(x=>String(x.id)===String(id));
+      if(s) cart.set(String(s.id),s);
+    }
     updateCartUI(); renderList(); renderCalendar(); renderCheckoutSelected();
   }
   function addPair(aId,bId){
@@ -619,15 +1327,39 @@
     if(b) cart.set(String(b.id),b);
     updateCartUI(); renderList(); renderCalendar(); renderCheckoutSelected(); openCart();
   }
-  function removeFromCart(id){cart.delete(String(id)); updateCartUI(); renderList(); renderCalendar(); renderCheckoutSelected();}
-  function openCart(){document.getElementById("cart-drawer").classList.remove("hidden"); document.body.style.overflow="hidden";}
-  function closeCart(){document.getElementById("cart-drawer").classList.add("hidden"); document.body.style.overflow="";}
+  function removeFromCart(id){
+    cart.delete(String(id));
+    updateCartUI(); renderList(); renderCalendar(); renderCheckoutSelected();
+  }
+  function openCart(){
+    document.getElementById("cart-drawer").classList.remove("hidden");
+    document.body.style.overflow="hidden";
+  }
+  function closeCart(){
+    document.getElementById("cart-drawer").classList.add("hidden");
+    document.body.style.overflow="";
+  }
 
-  function goCheckout(){if(!cart.size) return; closeCart(); renderCheckoutSelected();
-    const m=document.getElementById("checkout-modal"); m.classList.remove("hidden"); m.setAttribute("aria-hidden","false"); document.body.style.overflow="hidden"; lucide.createIcons();}
+  function goCheckout(){
+    if(!cart.size) return;
+    closeCart();
+    renderCheckoutSelected();
+    const m=document.getElementById("checkout-modal");
+    m.classList.remove("hidden");
+    m.setAttribute("aria-hidden","false");
+    document.body.style.overflow="hidden";
+    lucide.createIcons();
+  }
   function closeCheckout(reset=false){
-    const m=document.getElementById("checkout-modal"); m.classList.add("hidden"); m.setAttribute("aria-hidden","true"); document.body.style.overflow="";
-    if(reset){document.getElementById("submit-result").classList.add("hidden"); document.getElementById("invoice-form").classList.remove("hidden"); document.getElementById("submit-btn").disabled=false;}
+    const m=document.getElementById("checkout-modal");
+    m.classList.add("hidden");
+    m.setAttribute("aria-hidden","true");
+    document.body.style.overflow="";
+    if(reset){
+      document.getElementById("submit-result").classList.add("hidden");
+      document.getElementById("invoice-form").classList.remove("hidden");
+      document.getElementById("submit-btn").disabled=false;
+    }
   }
 
   let __termsOpen=false; let __termsPrevFocus=null;
@@ -649,6 +1381,7 @@
 
   function calPrev(){calMonth.setMonth(calMonth.getMonth()-1); renderCalendar();}
   function calNext(){calMonth.setMonth(calMonth.getMonth()+1); renderCalendar();}
+
   function renderCalendar(){
     if(viewMode!=="calendar") return;
     const label=document.getElementById("cal-label");
@@ -660,27 +1393,63 @@
     const daysInMonth=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();
 
     const byDate=new Map();
-    filteredSessions.forEach(s=>{const k=new Date(s.start_at).toISOString().slice(0,10); if(!byDate.has(k)) byDate.set(k,[]); byDate.get(k).push(s);});
+    filteredSessions.forEach(s=>{
+      const k=new Date(s.start_at).toISOString().slice(0,10);
+      if(!byDate.has(k)) byDate.set(k,[]);
+      byDate.get(k).push(s);
+    });
 
-    for(let i=0;i<startDay;i++){const cell=document.createElement("div"); cell.className="h-20 sm:h-24 rounded-2xl border border-transparent"; grid.appendChild(cell);}
+    for(let i=0;i<startDay;i++){
+      const cell=document.createElement("div");
+      cell.className="h-24 sm:h-28 rounded-2xl border border-transparent";
+      grid.appendChild(cell);
+    }
+
     for(let day=1;day<=daysInMonth;day++){
       const dt=new Date(first.getFullYear(),first.getMonth(),day);
       const k=dt.toISOString().slice(0,10);
-      const items=byDate.get(k)||[];
-      const dots=items.slice(0,3).map(s=>{const c=s.psv_only?"bg-orange-500":(s.block_id?"bg-purple-600":"bg-blue-600"); return `<span class="inline-block w-2 h-2 rounded-full ${c}"></span>`;}).join("");
+      const items=(byDate.get(k)||[]).sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
+
+      // Stronger visual cue for days with courses
+      let accent = "blue";
+      if(items.some(x=>x.psv_only)) accent = "orange";
+      else if(items.some(x=>x.block_id)) accent = "purple";
+
+      const accentCls = items.length
+        ? (accent==="orange" ? "border-2 border-orange-200 bg-orange-50/60"
+           : accent==="purple" ? "border-2 border-purple-200 bg-purple-50/60"
+           : "border-2 border-blue-200 bg-blue-50/60")
+        : "border border-slate-200 bg-white";
+
+      const dots=items.slice(0,4).map(s=>{
+        const c=s.psv_only?"bg-orange-500":(s.block_id?"bg-purple-600":"bg-blue-600");
+        return `<span class="inline-block w-2.5 h-2.5 rounded-full ${c}"></span>`;
+      }).join("");
+
+      const preview = items.length ? esc(items[0].module_title) : "";
+      const more = items.length > 1 ? `+${items.length-1} more` : "";
+
       const cell=document.createElement("button");
       cell.type="button";
-      cell.className="h-20 sm:h-24 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-left p-3 flex flex-col gap-2 min-w-0";
+      cell.className=`h-24 sm:h-28 rounded-2xl ${accentCls} hover:bg-white transition-all text-left p-3 flex flex-col gap-2 min-w-0 shadow-sm`;
       cell.onclick=()=>openDayPanel(dt,items);
+
       cell.innerHTML=`
-        <div class="flex items-start justify-between">
-          <span class="text-sm font-black text-slate-900">${day}</span>
-          ${items.length?`<span class="text-[10px] font-black text-slate-500">${items.length}</span>`:""}
+        <div class="flex items-start justify-between gap-2">
+          <span class="text-lg sm:text-xl font-black text-slate-900 leading-none">${day}</span>
+          ${items.length?`<span class="text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-slate-900 text-white">${items.length} course${items.length===1?"":"s"}</span>`:""}
         </div>
-        <div class="flex gap-1">${dots}</div>
-        <div class="text-[10px] font-bold text-slate-400 truncate">${items.length?esc(items[0].module_title):""}</div>`;
+
+        <div class="flex items-center gap-1.5">${dots}</div>
+
+        <div class="mt-auto">
+          <div class="text-xs sm:text-sm font-extrabold text-slate-800 clamp-2">${preview}</div>
+          ${more ? `<div class="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">${more}</div>` : ``}
+        </div>
+      `;
       grid.appendChild(cell);
     }
+
     lucide.createIcons();
   }
 
@@ -692,13 +1461,17 @@
     title.textContent=dateObj.toLocaleDateString("en-GB",{weekday:"long",day:"2-digit",month:"long",year:"numeric"});
 
     if(!items.length){
-      const div=document.createElement("div"); div.className="text-sm font-semibold text-slate-600"; div.textContent="No courses on this date."; list.appendChild(div);
+      const div=document.createElement("div");
+      div.className="text-sm font-semibold text-slate-600";
+      div.textContent="No courses on this date.";
+      list.appendChild(div);
     } else {
       const pairMap=buildPairableMap(filteredSessions);
       items.sort((a,b)=>new Date(a.start_at)-new Date(b.start_at)).forEach(s=>{
         const pairable=!!(s.block_id && pairMap.get(s.block_id)?.length>=2);
         const inCart=cart.has(String(s.id));
         const warn=isWithinWarningWindow(s.start_at);
+
         const card=document.createElement("div");
         card.className="p-4 rounded-[22px] border border-slate-200 bg-slate-50/40 hover:bg-white transition-all overflow-hidden";
         card.innerHTML=`
@@ -714,6 +1487,7 @@
                 ${pairable ? '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-purple-600 text-white">PAIRABLE (7H)</span>' :
                             '<span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-blue-600 text-white">NATIONAL</span>'}
               </div>
+              ${renderGuidePriceLine(pairable)}
             </div>
             <button class="${inCart?"bg-slate-900 hover:bg-black":"bg-blue-600 hover:bg-blue-700"} text-white px-4 py-2 rounded-2xl font-black uppercase italic text-xs"
                     onclick="toggleCart('${esc(String(s.id))}')">${inCart?"Remove":"Add"}</button>
@@ -742,32 +1516,49 @@
       phone:String(fd.get("phone")||"").trim(),
       company:String(fd.get("company")||"").trim(),
       contact_pref:String(fd.get("contact_pref")||"Email").trim(),
+      prepaid_code:String(fd.get("prepaid_code")||"").trim(),
       notes:String(fd.get("notes")||"").trim(),
     };
 
     const items=Array.from(cart.values()).sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
+    const pricing = computePricing(items);
+
     const itemsPayload=items.map(s=>({
-      session_id:s.id,module_no:s.module_no,module_title:s.module_title,start_at:s.start_at,end_at:s.end_at,
-      block_id:s.block_id,psv_only:s.psv_only,delivery:s.delivery,within_4_days:isWithinWarningWindow(s.start_at)
+      session_id:s.id,
+      module_no:s.module_no,
+      module_title:s.module_title,
+      start_at:s.start_at,
+      end_at:s.end_at,
+      block_id:s.block_id,
+      psv_only:s.psv_only,
+      delivery:s.delivery,
+      within_4_days:isWithinWarningWindow(s.start_at)
     }));
 
-    const byBlock=new Map();
-    itemsPayload.forEach(i=>{if(!i.block_id) return; byBlock.set(i.block_id,(byBlock.get(i.block_id)||0)+1);});
-    const pairings=Array.from(byBlock.entries()).filter(([_,n])=>n>=2).map(([bid])=>bid);
+    const pairings = Array.from(pricing.pairedBlocks.values());
 
-// Add an explicit CPC type label per selected item for emails / storage
-const itemsPayload2 = itemsPayload.map(i => ({
-  ...i,
-  cpc_type: (i.block_id && pairings.includes(i.block_id)) ? "International (7h)" : "National (3.5h)"
-}));
+    const itemsPayload2 = itemsPayload.map(i => ({
+      ...i,
+      cpc_type: (i.block_id && pricing.pairedBlocks.has(i.block_id)) ? "International (7h)" : "National (3.5h)",
+      guide_price_gbp: (i.block_id && pricing.pairedBlocks.has(i.block_id)) ? PRICE_PAIRING : PRICE_NATIONAL
+    }));
 
     let booking_id=null;
     try{
       const {data:bookingData,error:bookingErr}=await sb.from(CONFIG.BOOKINGS_TABLE).insert([{
         reference,
-        booker_name:booker.name, booker_email:booker.email, booker_phone:booker.phone,
-        company:booker.company||null, contact_pref:booker.contact_pref, notes:booker.notes||null,
-        pairings, status:"requested", source:"booking.my-cpc.online"
+        booker_name:booker.name,
+        booker_email:booker.email,
+        booker_phone:booker.phone,
+        company:booker.company||null,
+        contact_pref:booker.contact_pref,
+        prepaid_code: booker.prepaid_code || null,
+        notes:booker.notes||null,
+        pairings,
+        estimated_total_gbp: pricing.total,
+        estimated_saving_gbp: pricing.saving,
+        status:"requested",
+        source:"booking.my-cpc.online"
       }]).select().single();
       if(bookingErr) throw bookingErr;
       booking_id=bookingData?.id;
@@ -786,18 +1577,36 @@ const itemsPayload2 = itemsPayload.map(i => ({
         subject:`New CPC booking request — ${reference}`,
         from_name:"myCPC.online Booking Portal",
         replyto:booker.email,
+
         reference,
         booking_id:booking_id||"",
-        name:booker.name,email:booker.email,phone:booker.phone,company:booker.company||"",
-        contact_pref:booker.contact_pref,notes:booker.notes||"",
+        name:booker.name,
+        email:booker.email,
+        phone:booker.phone,
+        company:booker.company||"",
+        contact_pref:booker.contact_pref,
+        prepaid_code: booker.prepaid_code || "",
+        notes:booker.notes||"",
+
+        payments_processed_as: "PSV Compliance and Training Limited",
+        seat_hold_policy: "Seats held for 48 hours from invoice issue",
+
         summary_modules_count:String(itemsPayload2.length),
         summary_pairings_blocks:pairings.join(", ")||"None",
         has_within_4_days:itemsPayload2.some(i=>i.within_4_days)?"YES":"NO",
+
+        estimated_total_gbp: String(pricing.total),
+        estimated_saving_gbp: String(pricing.saving),
+
         courses_json:JSON.stringify(itemsPayload2,null,2),
         portal_url:location.href
       };
 
-      const res=await fetch(CONFIG.WEB3FORMS_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(emailPayload)});
+      const res=await fetch(CONFIG.WEB3FORMS_ENDPOINT,{
+        method:"POST",
+        headers:{"Content-Type":"application/json","Accept":"application/json"},
+        body:JSON.stringify(emailPayload)
+      });
       const json=await res.json();
       if(!json.success) throw new Error(json.message||"Web3Forms failed");
     } catch(err){
@@ -820,11 +1629,74 @@ const itemsPayload2 = itemsPayload.map(i => ({
     status.textContent="Loading…";
     const nowISO=new Date(Date.now()-24*60*60*1000).toISOString();
     const {data,error}=await sb.from(CONFIG.SCHEDULE_SOURCE).select("*").gte("start_at",nowISO).order("start_at",{ascending:true});
-    if(error){console.error(error);status.textContent="Schedule unavailable";alert("Could not load the schedule. Check Supabase URL/key and view/table name.");return;}
+    if(error){
+      console.error(error);
+      status.textContent="Schedule unavailable";
+      alert("Could not load the schedule. Check Supabase URL/key and view/table name.");
+      return;
+    }
     allSessions=(data||[]).map(normalizeRow);
     filteredSessions=[...allSessions];
     status.textContent=`${allSessions.length} dates loaded`;
     applyFilters(); updateCartUI(); renderCalendar(); lucide.createIcons();
+  }
+
+  // =========================
+  // Tracking: load only on consent (matches main site approach)
+  // =========================
+  function loadGA4(){
+    if(window.__gaLoaded || !CONFIG.GA4_ID) return;
+    window.__gaLoaded = true;
+
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(CONFIG.GA4_ID)}`;
+    document.head.appendChild(s);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+
+    gtag("js", new Date());
+    gtag("config", CONFIG.GA4_ID);
+  }
+
+  function loadMetaPixel(){
+    if(window.fbq || !CONFIG.META_PIXEL_ID) return;
+
+    !function(f,b,e,v,n,t,s){
+      if(f.fbq)return;
+      n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;
+      n.push=n; n.loaded=!0; n.version='2.0'; n.queue=[];
+      t=b.createElement(e); t.async=!0; t.src=v;
+      s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s);
+    }(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+
+    fbq("init", CONFIG.META_PIXEL_ID);
+    fbq("track", "PageView");
+  }
+
+  function loadTrackingIfConsented(){
+    const pref = localStorage.getItem("cpc_cookie_pref"); // 'accepted' | 'rejected' | null
+    if(pref === "accepted"){
+      loadGA4();
+      loadMetaPixel();
+    }
+  }
+
+  function acceptCookies(){
+    localStorage.setItem("cpc_cookie_pref","accepted");
+    document.getElementById("cookie-banner").style.display="none";
+    loadGA4();
+    loadMetaPixel();
+  }
+
+  function rejectCookies(){
+    localStorage.setItem("cpc_cookie_pref","rejected");
+    document.getElementById("cookie-banner").style.display="none";
   }
 
   window.addEventListener("load",()=>{
@@ -833,6 +1705,12 @@ const itemsPayload2 = itemsPayload.map(i => ({
     document.getElementById("filter").addEventListener("change",applyFilters);
     document.getElementById("invoice-form").addEventListener("submit",async (e)=>{e.preventDefault(); await submitRequest(e.target);});
     setView("list");
+
+    // Cookie banner logic
+    const pref = localStorage.getItem("cpc_cookie_pref");
+    if(!pref) document.getElementById("cookie-banner").style.display="block";
+    loadTrackingIfConsented();
+
     lucide.createIcons();
     refresh();
   });
